@@ -2,7 +2,7 @@ spring:
   application:
     name: curriculum
   datasource:
-    url: jdbc:mysql://localhost:3306/curriculum
+    url: jdbc:mysql://192.168.0.7:3306/curriculum
     username: root
     password: admin
     driver-class-name: com.mysql.cj.jdbc.Driver

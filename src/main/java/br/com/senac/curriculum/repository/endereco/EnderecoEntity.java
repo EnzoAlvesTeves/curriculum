@@ -1,7 +1,10 @@
 package br.com.senac.curriculum.repository.endereco;
 
+import br.com.senac.curriculum.repository.candidato.CandidatoEntity;
 import jakarta.persistence.*;
 import lombok.*;
+
+import java.util.List;
 
 @Entity
 @Data
@@ -12,7 +15,7 @@ public class EnderecoEntity {
 	@Id
 	@Column(name = "id")
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private int id;
+	private Long id;
 
 	@Column(name = "rua", nullable = false, length = 250)
 	private String rua;
@@ -31,4 +34,7 @@ public class EnderecoEntity {
 
 	@Column(name = "cep", nullable = false, length = 10)
 	private String cep;
+
+	@OneToMany(mappedBy = "endereco")
+	private List<CandidatoEntity> candidatos;
 }
