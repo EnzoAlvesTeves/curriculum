@@ -7,4 +7,6 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping(value = "/endereco")
 public class EnderecoController{
 
+	// cadastar novo endereço
+
 }
