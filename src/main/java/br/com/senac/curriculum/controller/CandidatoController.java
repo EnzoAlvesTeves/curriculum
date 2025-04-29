@@ -4,10 +4,16 @@ package br.com.senac.curriculum.controller;
 import br.com.senac.curriculum.dto.*;
 import br.com.senac.curriculum.repository.candidato.CandidatoEntity;
 import br.com.senac.curriculum.repository.candidato.CandidatoRepository;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import br.com.senac.curriculum.repository.educacao.EducacaoEntity;
+import br.com.senac.curriculum.repository.educacao.EducacaoRepository;
+import br.com.senac.curriculum.repository.endereco.EnderecoEntity;
+import br.com.senac.curriculum.repository.endereco.EnderecoRepository;
+import br.com.senac.curriculum.repository.experiencia.ExperienciaEntity;
+import br.com.senac.curriculum.repository.experiencia.ExperienciaRepository;
+import br.com.senac.curriculum.repository.habilidade.HabilidadeEntity;
+import br.com.senac.curriculum.repository.habilidade.HabilidadeRepository;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.Optional;
 
@@ -15,11 +21,20 @@ import java.util.Optional;
 @RequestMapping(value = "/candidato")
 public class CandidatoController {
 
+	@Autowired
 	private CandidatoRepository candidatoRepository;
 
-	CandidatoController(CandidatoRepository candidatoRepository) {
-		this.candidatoRepository =  candidatoRepository;
-	}
+	@Autowired
+	private EnderecoRepository enderecoRepository;
+
+	@Autowired
+	private EducacaoRepository educacaoRepository;
+
+	@Autowired
+	private ExperienciaRepository experienciaRepository;
+
+	@Autowired
+	private HabilidadeRepository habilidadeRepository;
 
 	@GetMapping("/{id}")
 	public CandidatoDTO buscar(@PathVariable Long id) {
@@ -78,10 +93,68 @@ public class CandidatoController {
 		candidatoDTO.setDataNascimento(candidato.getDataNascimento());
 		candidatoDTO.setEndereco(enderecoDTO);
 
-
-
 		return candidatoDTO;
 
 	}
 
+	@PostMapping
+	public CandidatoDTO cadastrar(@RequestBody CandidatoDTO candidatoDTO){
+		EnderecoEntity endereco = new EnderecoEntity();
+		endereco.setRua(candidatoDTO.getEndereco().getRua());
+		endereco.setNumero(candidatoDTO.getEndereco().getNumero());
+		endereco.setComplemento(candidatoDTO.getEndereco().getComplemento());
+		endereco.setCidade(candidatoDTO.getEndereco().getCidade());
+		endereco.setEstado(candidatoDTO.getEndereco().getEstado());
+		endereco.setCep(candidatoDTO.getEndereco().getCep());
+
+		endereco = enderecoRepository.save(endereco);
+
+		CandidatoEntity candidato = new CandidatoEntity();
+		candidato.setNome(candidatoDTO.getNome());
+		candidato.setEmail(candidatoDTO.getEmail());
+		candidato.setSexo(candidatoDTO.getSexo());
+		candidato.setTelefone(candidatoDTO.getTelefone());
+		candidato.setDataNascimento(candidatoDTO.getDataNascimento());
+		candidato.setEndereco(endereco);
+
+		final CandidatoEntity novoCandidato = candidatoRepository.save(candidato);
+
+		candidatoDTO.getEducacoes().forEach(educacaoDTO -> {
+			EducacaoEntity educacao = new EducacaoEntity();
+			educacao.setGrau(educacaoDTO.getGrau());
+			educacao.setDataInicio(educacaoDTO.getDataInicio());
+			educacao.setDataFim(educacaoDTO.getDataFim());
+			educacao.setInstituicao(educacaoDTO.getInstituicao());
+			educacao.setCurso(educacaoDTO.getCurso());
+			educacao.setCandidato(novoCandidato);
+
+			educacao = educacaoRepository.save(educacao);
+			educacaoDTO.setId(educacao.getId());
+		});
+
+		candidatoDTO.getExperiencias().forEach(experienciaDTO -> {
+			ExperienciaEntity experiencia = new ExperienciaEntity();
+				experiencia.setCargo(experienciaDTO.getCargo());
+				experiencia.setEmpresa(experienciaDTO.getEmpresa());
+				experiencia.setDataInicio(experienciaDTO.getDataInicio());
+				experiencia.setDataFim(experienciaDTO.getDataFim());
+				experiencia.setCandidato(novoCandidato);
+
+				experiencia = experienciaRepository.save(experiencia);
+				experienciaDTO.setId(experiencia.getId());
+		});
+
+		candidatoDTO.getHabilidades().forEach(habilidadeDTO -> {
+			HabilidadeEntity habilidade = new HabilidadeEntity();
+			habilidade.setDescricao(habilidadeDTO.getDescricao());
+			habilidade.setNivel(habilidadeDTO.getNivel());
+			habilidade.setEspecialidade(habilidadeDTO.getEspecialidade());
+
+			habilidade = habilidadeRepository.save(habilidade);
+			habilidadeDTO.setId(habilidade.getId());
+		});
+
+		return new CandidatoDTO(candidato);
+	}
 }
+

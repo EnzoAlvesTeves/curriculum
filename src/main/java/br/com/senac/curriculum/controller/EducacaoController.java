@@ -68,12 +68,4 @@ public class EducacaoController {
 
 }
 
-// cadastrar educacao do candidato
-// um endpoint POST, vai ter um path variable com o ID do candidato e um BODY com o JSON da educacao que vai ser cadastrada
-// um método que vai receber como parametro um ID de candidato e cadastrar uma educacao para esse candidato
-// buscar o candidato
-// cadastrar a educacao para o candidato
 
-// editar educacao
-
-// deletar educacao
