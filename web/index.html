@@ -6,9 +6,69 @@
     <link rel="stylesheet" href="css/style.css">
     <meta name="description" content="">
   </head>
-
   <body>
-    <p>Hello world!</p>
+    <form>
+      <h2>Dados Pessoais</h2>
+      <label>Nome: <input type="text" name="nome"></label><br>
+      <label>Email: <input type="email" name="email"></label><br>
+      <label>Sexo:
+        <select name="sexo">
+          <option>Masculino</option>
+          <option>Feminino</option>
+          <option>Outro</option>
+        </select>
+      </label><br>
+      <label>Telefone: <input type="tel" name="telefone"></label><br>
+      <label>Data de Nascimento: <input type="date" name="dataNascimento"></label><br>
+
+      <h2>Endereço</h2>
+      <label>Rua: <input type="text" name="endereco.rua"></label><br>
+      <label>Número: <input type="number" name="endereco.numero"></label><br>
+      <label>Complemento: <input type="text" name="endereco.complemento"></label><br>
+      <label>Cidade: <input type="text" name="endereco.cidade"></label><br>
+      <label>Estado:
+        <select name="endereco.estado">
+          <option>SP</option>
+          <option>RJ</option>
+          <option>MG</option>
+          <option>RS</option>
+          <!-- adicione mais estados conforme necessário -->
+        </select>
+      </label><br>
+      <label>CEP: <input type="text" name="endereco.cep"></label><br>
+
+      <h2>Experiências</h2>
+      <div class="experiencias">
+        <div class="experiencia">
+          <label>Cargo: <input type="text" name="experiencias[0].cargo"></label><br>
+          <label>Empresa: <input type="text" name="experiencias[0].empresa"></label><br>
+          <label>Data Início: <input type="date" name="experiencias[0].dataInicio"></label><br>
+          <label>Data Fim: <input type="date" name="experiencias[0].dataFim"></label><br>
+        </div>
+      </div>
+
+      <h2>Educações</h2>
+      <div class="educacoes">
+        <div class="educacao">
+          <label>Grau: <input type="text" name="educacoes[0].grau"></label><br>
+          <label>Curso: <input type="text" name="educacoes[0].curso"></label><br>
+          <label>Instituição: <input type="text" name="educacoes[0].instituicao"></label><br>
+          <label>Data Início: <input type="date" name="educacoes[0].dataInicio"></label><br>
+          <label>Data Fim: <input type="date" name="educacoes[0].dataFim"></label><br>
+        </div>
+      </div>
+
+      <h2>Habilidades</h2>
+      <div class="habilidades">
+        <div class="habilidade">
+          <label>Descrição: <input type="text" name="habilidades[0].descricao"></label><br>
+          <label>Nível: <input type="text" name="habilidades[0].nivel"></label><br>
+          <label>Especialidade: <input type="text" name="habilidades[0].especialidade"></label><br>
+        </div>
+      </div>
+
+      <button type="submit">Enviar</button>
+    </form>
     <script src="js/app.js"></script>
   </body>
 </html>

@@ -108,6 +108,7 @@ public class CandidatoController {
 		endereco.setCep(candidatoDTO.getEndereco().getCep());
 
 		endereco = enderecoRepository.save(endereco);
+		candidatoDTO.getEndereco().setId(endereco.getId());
 
 		CandidatoEntity candidato = new CandidatoEntity();
 		candidato.setNome(candidatoDTO.getNome());
