@@ -156,7 +156,6 @@ public class CandidatoController {
 			habilidadeDTO.setId(habilidade.getId());
 		});
 		return candidatoDTO;
-		return new CandidatoDTO(candidato);
 	}
 }
 
