@@ -118,6 +118,7 @@ public class CandidatoController {
 		candidato.setEndereco(endereco);
 
 		final CandidatoEntity novoCandidato = candidatoRepository.save(candidato);
+		candidatoDTO.setId(novoCandidato.getId());
 
 		candidatoDTO.getEducacoes().forEach(educacaoDTO -> {
 			EducacaoEntity educacao = new EducacaoEntity();
@@ -149,11 +150,12 @@ public class CandidatoController {
 			habilidade.setDescricao(habilidadeDTO.getDescricao());
 			habilidade.setNivel(habilidadeDTO.getNivel());
 			habilidade.setEspecialidade(habilidadeDTO.getEspecialidade());
+			habilidade.setCandidato(novoCandidato);
 
 			habilidade = habilidadeRepository.save(habilidade);
 			habilidadeDTO.setId(habilidade.getId());
 		});
-
+		return candidatoDTO;
 		return new CandidatoDTO(candidato);
 	}
 }
