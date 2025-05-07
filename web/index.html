@@ -1,74 +1,112 @@
-<!doctype html>
-<html>
-  <head>
-    <meta charset="utf-8">
-    <title></title>
-    <link rel="stylesheet" href="css/style.css">
-    <meta name="description" content="">
-  </head>
-  <body>
-    <form>
-      <h2>Dados Pessoais</h2>
-      <label>Nome: <input type="text" name="nome"></label><br>
-      <label>Email: <input type="email" name="email"></label><br>
-      <label>Sexo:
-        <select name="sexo">
-          <option>Masculino</option>
-          <option>Feminino</option>
-          <option>Outro</option>
-        </select>
-      </label><br>
-      <label>Telefone: <input type="tel" name="telefone"></label><br>
-      <label>Data de Nascimento: <input type="date" name="dataNascimento"></label><br>
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>WiseCorp</title>
+  <link rel=" icon" href=" ">
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
 
-      <h2>Endereço</h2>
-      <label>Rua: <input type="text" name="endereco.rua"></label><br>
-      <label>Número: <input type="number" name="endereco.numero"></label><br>
-      <label>Complemento: <input type="text" name="endereco.complemento"></label><br>
-      <label>Cidade: <input type="text" name="endereco.cidade"></label><br>
-      <label>Estado:
-        <select name="endereco.estado">
-          <option>SP</option>
-          <option>RJ</option>
-          <option>MG</option>
-          <option>RS</option>
-          <!-- adicione mais estados conforme necessário -->
-        </select>
-      </label><br>
-      <label>CEP: <input type="text" name="endereco.cep"></label><br>
+    body {
+      font-family: Arial, sans-serif;
+      background: linear-gradient(to right, #FFA500, #FF7514);
+      height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
 
-      <h2>Experiências</h2>
-      <div class="experiencias">
-        <div class="experiencia">
-          <label>Cargo: <input type="text" name="experiencias[0].cargo"></label><br>
-          <label>Empresa: <input type="text" name="experiencias[0].empresa"></label><br>
-          <label>Data Início: <input type="date" name="experiencias[0].dataInicio"></label><br>
-          <label>Data Fim: <input type="date" name="experiencias[0].dataFim"></label><br>
-        </div>
-      </div>
+    .login-container {
+      background-color: #fff;
+      padding: 40px;
+      border-radius: 12px;
+      box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+      width: 100%;
+      max-width: 400px;
+    }
 
-      <h2>Educações</h2>
-      <div class="educacoes">
-        <div class="educacao">
-          <label>Grau: <input type="text" name="educacoes[0].grau"></label><br>
-          <label>Curso: <input type="text" name="educacoes[0].curso"></label><br>
-          <label>Instituição: <input type="text" name="educacoes[0].instituicao"></label><br>
-          <label>Data Início: <input type="date" name="educacoes[0].dataInicio"></label><br>
-          <label>Data Fim: <input type="date" name="educacoes[0].dataFim"></label><br>
-        </div>
-      </div>
+    .login-container h2 {
+      text-align: center;
+      margin-bottom: 24px;
+      color: #333;
+    }
 
-      <h2>Habilidades</h2>
-      <div class="habilidades">
-        <div class="habilidade">
-          <label>Descrição: <input type="text" name="habilidades[0].descricao"></label><br>
-          <label>Nível: <input type="text" name="habilidades[0].nivel"></label><br>
-          <label>Especialidade: <input type="text" name="habilidades[0].especialidade"></label><br>
-        </div>
-      </div>
+    .form-group {
+      margin-bottom: 20px;
+    }
 
-      <button type="submit">Enviar</button>
-    </form>
-    <script src="js/app.js"></script>
-  </body>
+    label {
+      display: block;
+      margin-bottom: 6px;
+      font-weight: bold;
+      color: #555;
+    }
+
+    input[type="email"],
+    input[type="password"] {
+      width: 100%;
+      padding: 10px;
+      border: 1px solid #ccc;
+      border-radius: 8px;
+      font-size: 16px;
+    }
+
+    .login-btn {
+      width: 100%;
+      background-color: #FFA500;
+      color: white;
+      padding: 12px;
+      border: none;
+      border-radius: 8px;
+      font-size: 16px;
+      cursor: pointer;
+      transition: background 0.3s;
+    }
+
+    .login-btn:hover {
+      background-color: #00c6ff;
+    }
+
+    .footer {
+      margin-top: 20px;
+      text-align: center;
+      font-size: 14px;
+    }
+
+    .footer a {
+      color: #4facfe;
+      text-decoration: none;
+    }
+
+    .footer a:hover {
+      text-decoration: underline;
+    }
+  </style>
+</head>
+<body>
+
+<div class="login-container">
+  <h2>Faça seu login</h2>
+  <form>
+    <div class="form-group">
+      <label for="email">E-mail</label>
+      <input type="email" id="email" placeholder="Digite seu e-mail" required>
+    </div>
+    <div class="form-group">
+      <label for="password">Senha</label>
+      <input type="password" id="password" placeholder="Digite sua senha" required>
+    </div>
+    <button type="submit" class="login-btn">Entrar</button>
+  </form>
+  <div class="footer">
+    <p>Não tem uma conta? <a href="#">Cadastre-se</a></p>
+  </div>
+</div>
+
+</body>
 </html>
