@@ -1,0 +1,220 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <title>WiseCorp</title>
+    <link rel="icon" href="img/logo.jpg" type="image/jpg">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f8fb;
+            margin: 0;
+            padding: 0;
+        }
+
+        .navbar {
+            background-color: #FFA500;
+            color: white;
+            padding: 16px 24px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .navbar .logo {
+            font-size: 20px;
+            font-weight: bold;
+        }
+
+        .navbar .username {
+            font-size: 16px;
+        }
+
+        .content {
+            padding: 40px 24px;
+            text-align: center;
+        }
+
+        h1 {
+            color: #333;
+            margin-bottom: 20px;
+        }
+
+        p {
+            font-size: 18px;
+            color: #666;
+        }
+    </style>
+</head>
+<body>
+
+<div class="navbar">
+    <div class="logo">Sistema de Currículos</div>
+    <div class="username" id="user-name">Usuário</div>
+</div>
+
+<div class="content">
+    <h1>Bem-vindo ao seu cadastro de Curriculo</h1>
+    <p>Aqui você poderá editar seu currículo</p>
+</div>
+
+<div class="curriculo-container">
+    <h2>Cadastro de Currículo</h2>
+    <form id="form-curriculo" onsubmit="salvarCurriculo(event)">
+        <label for="nome">Nome completo</label>
+        <input type="text" id="nome" required>
+
+        <label for="email">E-mail</label>
+        <input type="email" id="email" required>
+
+        <label for="telefone">Telefone</label>
+        <input type="text" id="telefone" required>
+
+        <label for="resumo">Resumo Profissional</label>
+        <textarea id="resumo" rows="4" required></textarea>
+
+        <div id="experiencias">
+            <label>Experiência Profissional</label>
+            <div class="input-group">
+                <textarea name="experiencia[]" rows="2" required></textarea>
+            </div>
+        </div>
+        <button type="button" onclick="addCampo('experiencias', 'experiencia[]')">+ Adicionar Experiência</button>
+
+        <div id="formacoes">
+            <label>Formação Acadêmica</label>
+            <div class="input-group">
+                <textarea name="formacao[]" rows="2" required></textarea>
+            </div>
+        </div>
+        <button type="button" onclick="addCampo('formacoes', 'formacao[]')">+ Adicionar Formação</button>
+
+        <div id="cursos">
+            <label>Cursos</label>
+            <div class="input-group">
+                <textarea name="curso[]" rows="2"></textarea>
+            </div>
+        </div>
+        <button type="button" onclick="addCampo('cursos', 'curso[]')">+ Adicionar Curso</button>
+
+        <button type="submit" class="btn">Salvar Currículo</button>
+    </form>
+</div>
+
+<style>
+    .curriculo-container {
+        background-color: #fff;
+        padding: 40px;
+        margin: 40px auto;
+        max-width: 800px;
+        border-radius: 16px;
+        box-shadow: 0 6px 16px rgba(0, 0, 0, 0.2);
+    }
+
+    h2 {
+        text-align: center;
+        color: #FF7514;
+        margin-bottom: 30px;
+    }
+
+    label {
+        font-weight: bold;
+        color: #333;
+        display: block;
+        margin-top: 20px;
+        margin-bottom: 6px;
+    }
+
+    input,
+    textarea {
+        width: 100%;
+        padding: 12px;
+        border: 1px solid #ccc;
+        border-radius: 8px;
+        font-size: 15px;
+    }
+
+    .input-group {
+        margin-bottom: 10px;
+    }
+
+    button[type="button"] {
+        background-color: #FFA500;
+        color: #fff;
+        border: none;
+        padding: 8px 12px;
+        margin-top: 8px;
+        margin-bottom: 20px;
+        border-radius: 6px;
+        cursor: pointer;
+        font-size: 14px;
+    }
+
+    button[type="button"]:hover {
+        background-color: #ff8c00;
+    }
+
+    .btn {
+        width: 100%;
+        background-color: #FF7514;
+        color: white;
+        padding: 14px;
+        border: none;
+        border-radius: 10px;
+        font-size: 16px;
+        margin-top: 30px;
+        cursor: pointer;
+    }
+
+    .btn:hover {
+        background-color: #e86800;
+    }
+</style>
+
+<script>
+    function addCampo(id, name) {
+        const container = document.getElementById(id);
+        const div = document.createElement('div');
+        div.className = 'input-group';
+        div.innerHTML = `<textarea name="${name}" rows="2" required></textarea>`;
+        container.appendChild(div);
+    }
+
+    function salvarCurriculo(event) {
+        event.preventDefault();
+
+        const nome = document.getElementById('nome').value;
+        const email = document.getElementById('email').value;
+        const telefone = document.getElementById('telefone').value;
+        const resumo = document.getElementById('resumo').value;
+
+        const experiencias = Array.from(document.getElementsByName('experiencia[]')).map(e => e.value);
+        const formacoes = Array.from(document.getElementsByName('formacao[]')).map(f => f.value);
+        const cursos = Array.from(document.getElementsByName('curso[]')).map(c => c.value);
+
+        const curriculo = {
+            nome,
+            email,
+            telefone,
+            resumo,
+            experiencias,
+            formacoes,
+            cursos
+        };
+
+        localStorage.setItem('curriculoCompleto', JSON.stringify(curriculo));
+        alert('Currículo salvo com sucesso!');
+        document.getElementById('form-curriculo').reset();
+    }
+</script>
+
+
+<script>
+
+    const nomeUsuario = localStorage.getItem("nomeUsuario") || "Usuário";
+    document.getElementById("user-name").textContent = nomeUsuario;
+</script>
+
+</body>
+</html>

@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>WiseCorp</title>
-  <link rel=" icon" href=" ">
+  <link rel="icon" href="img/logo.jpg" type="image/jpg">
   <style>
     * {
       box-sizing: border-box;
@@ -69,7 +69,7 @@
     }
 
     .login-btn:hover {
-      background-color: #00c6ff;
+      background-color: #ff9900;
     }
 
     .footer {
@@ -79,7 +79,7 @@
     }
 
     .footer a {
-      color: #4facfe;
+      color: #FFA500;
       text-decoration: none;
     }
 
@@ -92,7 +92,7 @@
 
 <div class="login-container">
   <h2>Faça seu login</h2>
-  <form>
+  <form onsubmit="salvarNome(event)">
     <div class="form-group">
       <label for="email">E-mail</label>
       <input type="email" id="email" placeholder="Digite seu e-mail" required>
@@ -103,10 +103,20 @@
     </div>
     <button type="submit" class="login-btn">Entrar</button>
   </form>
+
   <div class="footer">
-    <p>Não tem uma conta? <a href="#">Cadastre-se</a></p>
+    <p>Não tem uma conta? <a href="cadasstro.html">Cadastre-se</a></p>
   </div>
 </div>
+
+<script>
+  function salvarNome(event) {
+    event.preventDefault();
+    const nome = "João da Silva";
+    localStorage.setItem("nomeUsuario", nome);
+    window.location.href = "home.html";
+  }
+</script>
 
 </body>
 </html>
