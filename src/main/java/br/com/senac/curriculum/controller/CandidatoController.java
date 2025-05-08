@@ -13,6 +13,7 @@ import br.com.senac.curriculum.repository.experiencia.ExperienciaRepository;
 import br.com.senac.curriculum.repository.habilidade.HabilidadeEntity;
 import br.com.senac.curriculum.repository.habilidade.HabilidadeRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Optional;
@@ -37,7 +38,7 @@ public class CandidatoController {
 	private HabilidadeRepository habilidadeRepository;
 
 	@GetMapping("/{id}")
-	public CandidatoDTO buscar(@PathVariable Long id) {
+	public String buscar(@PathVariable Long id, Model model) {
 		Optional<CandidatoEntity> candidatoEntity = candidatoRepository.findById(id);
 		CandidatoEntity candidato = candidatoEntity.get();
 
@@ -93,7 +94,10 @@ public class CandidatoController {
 		candidatoDTO.setDataNascimento(candidato.getDataNascimento());
 		candidatoDTO.setEndereco(enderecoDTO);
 
-		return candidatoDTO;
+
+		model.addAttribute("candidato", candidatoDTO);
+
+		return "candidato/detalhe";
 
 	}
 

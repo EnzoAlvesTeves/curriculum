@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+		<meta charset="UTF-8">
+		<title>Detalhes do Candidato</title>
+		<style>
+        body { font-family: Arial, sans-serif; margin: 30px; }
+        h2 { border-bottom: 1px solid #ccc; padding-bottom: 5px; }
+        table { width: 100%; border-collapse: collapse; margin-bottom: 20px; }
+        table, th, td { border: 1px solid #ccc; }
+        th, td { padding: 8px; text-align: left; }
+		</style>
+</head>
+<body>
+
+<h1 th:text="'Candidato: ' + ${candidato.nome}"></h1>
+
+<h2>Informações Pessoais</h2>
+<p><strong>Email:</strong> <span th:text="${candidato.email}"></span></p>
+<p><strong>Sexo:</strong> <span th:text="${candidato.sexo}"></span></p>
+<p><strong>Telefone:</strong> <span th:text="${candidato.telefone}"></span></p>
+<p><strong>Data de Nascimento:</strong> <span th:text="${candidato.dataNascimento}"></span></p>
+<p><strong>Resumo Profissional:</strong> <span th:text="${candidato.resumoProfissional}"></span></p>
+
+<h2>Endereço</h2>
+<p th:text="${candidato.endereco.rua + ', ' + candidato.endereco.numero + (candidato.endereco.complemento != null ? ' - ' + candidato.endereco.complemento : '')}"></p>
+<p><span th:text="${candidato.endereco.cidade}"></span> - <span th:text="${candidato.endereco.estado}"></span>, CEP: <span th:text="${candidato.endereco.cep}"></span></p>
+
+<h2>Experiências</h2>
+<table>
+		<thead>
+		<tr>
+				<th>Cargo</th>
+				<th>Empresa</th>
+				<th>Data Início</th>
+				<th>Data Fim</th>
+		</tr>
+		</thead>
+		<tbody>
+		<tr th:each="exp : ${candidato.experiencias}">
+				<td th:text="${exp.cargo}"></td>
+				<td th:text="${exp.empresa}"></td>
+				<td th:text="${exp.dataInicio}"></td>
+				<td th:text="${exp.dataFim}"></td>
+		</tr>
+		</tbody>
+</table>
+
+<h2>Educação</h2>
+<table>
+		<thead>
+		<tr>
+				<th>Grau</th>
+				<th>Curso</th>
+				<th>Instituição</th>
+				<th>Data Início</th>
+				<th>Data Fim</th>
+		</tr>
+		</thead>
+		<tbody>
+		<tr th:each="edu : ${candidato.educacoes}">
+				<td th:text="${edu.grau}"></td>
+				<td th:text="${edu.curso}"></td>
+				<td th:text="${edu.instituicao}"></td>
+				<td th:text="${edu.dataInicio}"></td>
+				<td th:text="${edu.dataFim}"></td>
+		</tr>
+		</tbody>
+</table>
+
+<h2>Habilidades</h2>
+<table>
+		<thead>
+		<tr>
+				<th>Descrição</th>
+				<th>Nível</th>
+				<th>Especialidade</th>
+		</tr>
+		</thead>
+		<tbody>
+		<tr th:each="hab : ${candidato.habilidades}">
+				<td th:text="${hab.descricao}"></td>
+				<td th:text="${hab.nivel}"></td>
+				<td th:text="${hab.especialidade}"></td>
+		</tr>
+		</tbody>
+</table>
+
+</body>
+</html>
