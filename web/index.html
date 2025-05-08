@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>WiseCorp</title>
+  <title>WiseCorp </title>
   <link rel="icon" href="img/logo.jpg" type="image/jpg">
   <style>
     * {
@@ -13,27 +13,47 @@
     }
 
     body {
-      font-family: Arial, sans-serif;
-      background: linear-gradient(to right, #FFA500, #FF7514);
+      font-family: 'Arial', sans-serif;
       height: 100vh;
       display: flex;
       justify-content: center;
       align-items: center;
+      background: linear-gradient(to right, #FF7514, #FFA500);
+      animation: fadeIn 1s ease-in;
     }
 
-    .login-container {
-      background-color: #fff;
+    @keyframes fadeIn {
+      from { opacity: 0; }
+      to { opacity: 1; }
+    }
+
+    .login-box {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      width: 100%;
+      max-width: 1100px;
+      background-color: white;
       padding: 40px;
       border-radius: 12px;
       box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+      overflow: hidden;
+      transition: transform 0.3s ease-out;
+    }
+
+    .login-container {
       width: 100%;
-      max-width: 400px;
+      max-width: 450px;
+      padding: 30px;
+      border-radius: 12px;
+      box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
     }
 
     .login-container h2 {
       text-align: center;
       margin-bottom: 24px;
       color: #333;
+      font-size: 24px;
     }
 
     .form-group {
@@ -50,26 +70,33 @@
     input[type="email"],
     input[type="password"] {
       width: 100%;
-      padding: 10px;
+      padding: 12px;
       border: 1px solid #ccc;
       border-radius: 8px;
       font-size: 16px;
+      transition: border 0.3s;
+    }
+
+    input[type="email"]:focus,
+    input[type="password"]:focus {
+      border: 1px solid #FF7514;
+      outline: none;
     }
 
     .login-btn {
       width: 100%;
-      background-color: #FFA500;
+      background-color: #FF7514;
       color: white;
       padding: 12px;
       border: none;
       border-radius: 8px;
       font-size: 16px;
       cursor: pointer;
-      transition: background 0.3s;
+      transition: background 0.3s ease;
     }
 
     .login-btn:hover {
-      background-color: #ff9900;
+      background-color: #e6670c;
     }
 
     .footer {
@@ -79,42 +106,96 @@
     }
 
     .footer a {
-      color: #FFA500;
+      color: #FF7514;
       text-decoration: none;
     }
 
     .footer a:hover {
       text-decoration: underline;
     }
+
+    .extra-info {
+      margin-top: 20px;
+      font-size: 14px;
+      color: #555;
+      text-align: center;
+    }
+
+    .extra-info a {
+      color: #FF7514;
+      text-decoration: none;
+    }
+
+    .extra-info a:hover {
+      text-decoration: underline;
+    }
+
+    .image-container {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      flex: 1;
+    }
+
+    .image-container img {
+      max-width: 100%;
+      max-height: 100%;
+      border-radius: 8px;
+    }
+
   </style>
 </head>
 <body>
 
-<div class="login-container">
-  <h2>Faça seu login</h2>
-  <form onsubmit="salvarNome(event)">
-    <div class="form-group">
-      <label for="email">E-mail</label>
-      <input type="email" id="email" placeholder="Digite seu e-mail" required>
-    </div>
-    <div class="form-group">
-      <label for="password">Senha</label>
-      <input type="password" id="password" placeholder="Digite sua senha" required>
-    </div>
-    <button type="submit" class="login-btn">Entrar</button>
-  </form>
+<div class="login-box">
+  <!-- Container da imagem -->
+  <div class="image-container">
+    <img src="img/pessoatrabalhando.avif" alt="Imagem de pessoas trabalhando com tecnologia">
+  </div>
 
-  <div class="footer">
-    <p>Não tem uma conta? <a href="cadasstro.html">Cadastre-se</a></p>
+  <!-- Container de login -->
+  <div class="login-container">
+    <h2>Login </h2>
+    <form onsubmit="verificarLogin(event)">
+      <div class="form-group">
+        <label for="email">E-mail</label>
+        <input type="email" id="email" placeholder="Digite seu e-mail" required>
+      </div>
+      <div class="form-group">
+        <label for="password">Senha</label>
+        <input type="password" id="password" placeholder="Digite sua senha" required>
+      </div>
+      <button type="submit" class="login-btn">Entrar</button>
+    </form>
+
+    <div class="extra-info">
+      <p><a href="#">Esqueci minha senha</a> | <a href="cadasstro.html">Cadastre-se</a></p>
+    </div>
   </div>
 </div>
 
 <script>
-  function salvarNome(event) {
+  function verificarLogin(event) {
     event.preventDefault();
-    const nome = "João da Silva";
-    localStorage.setItem("nomeUsuario", nome);
-    window.location.href = "home.html";
+
+    // Obtendo os dados de login
+    const email = document.getElementById('email').value;
+    const senha = document.getElementById('password').value;
+
+    // Dados fixos para login de admin
+    const adminEmail = 'admin@wisecorp.com';
+    const adminSenha = 'admin123';
+
+    // Verifica se o login é do admin
+    if (email === adminEmail && senha === adminSenha) {
+      // Armazenar informações do usuário no localStorage
+      localStorage.setItem('usuario', 'admin');
+      window.location.href = 'admin.html';  // Redireciona para a página de admin
+    } else {
+      // Para usuários comuns
+      localStorage.setItem('nomeUsuario', email);  // Armazena nome ou outro identificador
+      window.location.href = 'home.html.html';  // Redireciona para a página de currículos
+    }
   }
 </script>
 

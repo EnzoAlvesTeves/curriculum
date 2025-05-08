@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin - WiseCorp</title>
+    <link rel="icon" href="img/logo.jpg" type="image/jpg">
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f9fafc;
+            padding: 30px;
+        }
+
+        h1 {
+            color: #FF7514;
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .admin-container {
+            width: 100%;
+            max-width: 1200px;
+            margin: 0 auto;
+            background-color: white;
+            padding: 30px;
+            border-radius: 12px;
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+
+        th, td {
+            padding: 12px;
+            text-align: center;
+            border: 1px solid #ccc;
+            font-size: 16px;
+        }
+
+        th {
+            background-color: #FF7514;
+            color: white;
+        }
+
+        tr:nth-child(even) {
+            background-color: #f2f2f2;
+        }
+
+        .admin-actions {
+            display: flex;
+            justify-content: flex-end;
+            margin-top: 20px;
+        }
+
+        .admin-actions button {
+            background-color: #FF7514;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        .admin-actions button:hover {
+            background-color: #e6670c;
+        }
+
+        .hidden {
+            display: none;
+        }
+    </style>
+</head>
+<body>
+
+<h1>Painel Admin - WiseCorp</h1>
+
+<div class="admin-container">
+    <h2>Lista de Candidatos</h2>
+
+    <table id="candidatos-table">
+        <thead>
+        <tr>
+            <th>Nome</th>
+            <th>E-mail</th>
+            <th>Ações</th>
+        </tr>
+        </thead>
+        <tbody>
+        <!-- Os dados dos candidatos aparecerão aqui -->
+        </tbody>
+    </table>
+
+    <div class="admin-actions">
+        <button onclick="mostrarTabela()">Mostrar Tabela</button>
+        <button onclick="esconderTabela()">Esconder Tabela</button>
+    </div>
+</div>
+
+<script>
+    // Simulando os dados dos candidatos
+    const candidatos = [
+        { nome: 'João da Silva', email: 'joao@exemplo.com' },
+        { nome: 'Maria Oliveira', email: 'maria@exemplo.com' },
+        { nome: 'Pedro Souza', email: 'pedro@exemplo.com' }
+    ];
+
+    function mostrarTabela() {
+        const tabela = document.getElementById("candidatos-table");
+        tabela.classList.remove("hidden");
+    }
+
+    function esconderTabela() {
+        const tabela = document.getElementById("candidatos-table");
+        tabela.classList.add("hidden");
+    }
+
+    // Preencher a tabela com os dados dos candidatos
+    const tbody = document.querySelector('#candidatos-table tbody');
+    candidatos.forEach(candidato => {
+        const tr = document.createElement('tr');
+        tr.innerHTML = `
+      <td>${candidato.nome}</td>
+      <td>${candidato.email}</td>
+      <td>
+        <button onclick="deletarCandidato('${candidato.email}')">Excluir</button>
+      </td>
+    `;
+        tbody.appendChild(tr);
+    });
+
+    function deletarCandidato(email) {
+        const confirmacao = confirm(`Deseja excluir o candidato com e-mail: ${email}?`);
+        if (confirmacao) {
+            const index = candidatos.findIndex(c => c.email === email);
+            if (index !== -1) {
+                candidatos.splice(index, 1);
+                alert('Candidato excluído!');
+                location.reload(); // Recarrega a página para mostrar as alterações
+            }
+        }
+    }
+</script>
+
+</body>
+</html>

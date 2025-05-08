@@ -1,0 +1,271 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>WiseCorp</title>
+    <link rel="icon" href="img/logo.jpg" type="image/jpg">
+    <style>
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background-color: #fff8f0;
+            color: #333;
+        }
+
+        header {
+            background-color: #ff7a00;
+            color: white;
+            padding: 1rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo-container {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .logo-container img {
+            height: 40px;
+            width: auto;
+        }
+
+        header .actions {
+            display: flex;
+            gap: 1rem;
+            align-items: center;
+        }
+
+        header button {
+            background: white;
+            color: #ff7a00;
+            border: none;
+            padding: 0.5rem 1rem;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: background 0.3s;
+        }
+
+        header button:hover {
+            background: #ffe1c2;
+        }
+
+        h1 {
+            margin: 1rem 2rem;
+        }
+
+        .vaga {
+            background: white;
+            border-left: 5px solid #ff7a00;
+            margin: 1rem 2rem;
+            padding: 1rem;
+            border-radius: 8px;
+            transition: transform 0.3s, box-shadow 0.3s;
+            cursor: pointer;
+        }
+
+        .vaga:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        }
+
+        .vaga .detalhes {
+            display: none;
+            margin-top: 1rem;
+        }
+
+        .vaga.ativa .detalhes {
+            display: block;
+            animation: aparecer 0.3s ease-in-out;
+        }
+
+        .vaga button {
+            margin-top: 10px;
+            background: #ff7a00;
+            color: white;
+            border: none;
+            padding: 0.5rem 1rem;
+            border-radius: 6px;
+            cursor: pointer;
+        }
+
+        .vaga button:hover {
+            background: #e06600;
+        }
+
+        @keyframes aparecer {
+            from { opacity: 0; transform: scale(0.95); }
+            to { opacity: 1; transform: scale(1); }
+        }
+
+        footer {
+            text-align: center;
+            padding: 1rem;
+            background-color: #ff7a00;
+            color: white;
+            margin-top: 2rem;
+        }
+    </style>
+</head>
+<body>
+
+<header>
+    <div class="logo-container">
+        <img src="img/logo.jpg" alt="Logo WiseCorp" id="logoEmpresa" />
+        <strong>WiseCorp</strong>
+    </div>
+    <div class="actions">
+        <span id="saudacao"></span>
+        <button onclick="window.location.href='cadastrocurriculo.html'">Cadastrar Currículo</button>
+        <button onclick="window.location.href='home.html'">Home</button>
+    </div>
+</header>
+
+<h1>Vagas Disponíveis</h1>
+
+<div id="lista-vagas"></div>
+
+<footer>© 2025 WiseCorp. Todos os direitos reservados.</footer>
+
+<script>
+    const vagas = [
+        {
+            titulo: "Desenvolvedor Front-End",
+            nivel: "Júnior",
+            descricao: "Atuar no desenvolvimento de interfaces com foco em usabilidade e performance.",
+            beneficios: "Vale-refeição, plano de saúde, horário flexível.",
+            salario: "R$ 4.000 - R$ 5.500"
+        },
+        {
+            titulo: "Engenheiro de Software",
+            nivel: "Pleno",
+            descricao: "Construção de sistemas escaláveis com foco em arquitetura e boas práticas.",
+            beneficios: "Plano de saúde premium, participação nos lucros, home office.",
+            salario: "R$ 7.000 - R$ 9.000"
+        },
+        {
+            titulo: "Analista de Dados",
+            nivel: "Júnior",
+            descricao: "Coletar, organizar e analisar dados para apoiar decisões estratégicas.",
+            benefícios: "Vale-transporte, vale-alimentação, plano odontológico.",
+            salario: "R$ 3.800 - R$ 5.000"
+        },
+        {
+            titulo: "DevOps Engineer",
+            nivel: "Sênior",
+            descricao: "Automatizar pipelines e manter infraestrutura em nuvem.",
+            beneficios: "Home office, ajuda de custo, plano de carreira.",
+            salario: "R$ 10.000 - R$ 12.000"
+        },
+        {
+            titulo: "Product Owner",
+            nivel: "Pleno",
+            descricao: "Gerenciar backlog e alinhar entregas com o time de desenvolvimento.",
+            beneficios: "Gympass, plano de saúde, bônus por metas.",
+            salario: "R$ 8.000 - R$ 10.000"
+        },
+        {
+            titulo: "UX/UI Designer",
+            nivel: "Júnior",
+            descricao: "Criar experiências intuitivas e agradáveis para o usuário.",
+            beneficios: "Horário flexível, plano de saúde, ambiente criativo.",
+            salario: "R$ 4.200 - R$ 5.800"
+        },
+        {
+            titulo: "Engenheiro de Qualidade",
+            nivel: "Pleno",
+            descricao: "Desenvolver testes automatizados e garantir a qualidade do produto.",
+            beneficios: "Vale-alimentação, home office parcial, seguro de vida.",
+            salario: "R$ 6.000 - R$ 7.500"
+        },
+        {
+            titulo: "Arquiteto de Soluções",
+            nivel: "Sênior",
+            descricao: "Definir soluções técnicas para sistemas corporativos de grande porte.",
+            beneficios: "Plano executivo, participação acionária, notebook de última geração.",
+            salario: "R$ 12.000 - R$ 15.000"
+        },
+        {
+            titulo: "Cientista de Dados",
+            nivel: "Pleno",
+            descricao: "Modelar dados, criar predições e aplicar machine learning.",
+            beneficios: "Cursos pagos pela empresa, trabalho remoto, bônus anual.",
+            salario: "R$ 9.000 - R$ 11.000"
+        },
+        {
+            titulo: "Desenvolvedor Mobile",
+            nivel: "Júnior",
+            descricao: "Criar e manter aplicativos Android/iOS com React Native.",
+            beneficios: "Plano de saúde, VR, possibilidade de crescimento rápido.",
+            salario: "R$ 4.500 - R$ 6.000"
+        },
+        {
+            titulo: "Tech Lead",
+            nivel: "Sênior",
+            descricao: "Liderar tecnicamente o time de desenvolvimento de sistemas web.",
+            beneficios: "Stock options, plano familiar de saúde, bônus de performance.",
+            salario: "R$ 13.000 - R$ 16.000"
+        },
+        {
+            titulo: "Especialista em Segurança",
+            nivel: "Sênior",
+            descricao: "Analisar vulnerabilidades e garantir segurança das aplicações.",
+            beneficios: "Home office total, certificações pagas, seguro de vida.",
+            salario: "R$ 11.000 - R$ 14.000"
+        },
+        {
+            titulo: "Desenvolvedor Full Stack",
+            nivel: "Pleno",
+            descricao: "Desenvolver aplicações web do front-end ao back-end.",
+            beneficios: "VR, plano de saúde, cursos e eventos pagos.",
+            salario: "R$ 7.500 - R$ 9.000"
+        },
+        {
+            titulo: "Scrum Master",
+            nivel: "Pleno",
+            descricao: "Facilitar as cerimônias ágeis e remover impedimentos do time.",
+            beneficios: "Plano odontológico, incentivo à certificação, equipe colaborativa.",
+            salario: "R$ 6.500 - R$ 8.000"
+        },
+        {
+            titulo: "Administrador de Banco de Dados",
+            nivel: "Pleno",
+            descricao: "Gerenciar bancos de dados, backups e desempenho.",
+            beneficios: "Estacionamento, auxílio educação, plano de saúde.",
+            salario: "R$ 7.000 - R$ 9.000"
+        }
+    ];
+
+    const lista = document.getElementById("lista-vagas");
+
+    vagas.forEach((vaga, index) => {
+        const vagaDiv = document.createElement("div");
+        vagaDiv.className = "vaga";
+        vagaDiv.innerHTML = `
+        <h3>${vaga.titulo}</h3>
+        <p>Empresa: WiseCorp • Local: Remoto • Nível: ${vaga.nivel}</p>
+        <div class="detalhes">
+          <p><strong>Descrição:</strong> ${vaga.descricao}</p>
+          <p><strong>Benefícios:</strong> ${vaga.beneficios}</p>
+          <p><strong>Salário estimado:</strong> ${vaga.salario}</p>
+          <button onclick="event.stopPropagation(); alert('Inscrição enviada para ${vaga.titulo}!')">Inscrever-se</button>
+        </div>
+      `;
+        vagaDiv.addEventListener("click", () => {
+            vagaDiv.classList.toggle("ativa");
+        });
+        lista.appendChild(vagaDiv);
+    });
+
+    // Saudação com nome do usuário
+    const nome = localStorage.getItem("nomeUsuario");
+    if (nome) {
+        document.getElementById("saudacao").textContent = `Olá, ${nome}!`;
+    }
+</script>
+</body>
+</html>
