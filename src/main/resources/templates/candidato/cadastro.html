@@ -1,10 +1,51 @@
 <!DOCTYPE html>
-<html lang="en">
+<html xmlns:th="http://www.thymeleaf.org">
 <head>
-		<meta charset="UTF-8">
-		<title>Cadastro Candidato</title>
+		<title>Novo Candidato</title>
 </head>
 <body>
+<h1>Novo Candidato</h1>
+
+<form th:action="@{/candidato/cadastrar}" th:object="${candidato}" method="post">
+		<label>Nome:</label>
+		<input type="text" th:field="*{nome}" /><br/>
+
+		<label>Email:</label>
+		<input type="email" th:field="*{email}" /><br/>
+
+		<label>Sexo:</label>
+		<input type="text" th:field="*{sexo}" /><br/>
+
+		<label>Telefone:</label>
+		<input type="text" th:field="*{telefone}" /><br/>
+
+		<label>Data de Nascimento:</label>
+		<input type="date" th:field="*{dataNascimento}" /><br/>
+
+		<label>Resumo Profissional:</label>
+		<textarea th:field="*{resumoProfissional}"></textarea><br/>
+
+		<h3>Endereço</h3>
+		<label>Rua:</label>
+		<input type="text" th:field="*{endereco.rua}" /><br/>
+
+		<label>Número:</label>
+		<input type="number" th:field="*{endereco.numero}" /><br/>
+
+		<label>Complemento:</label>
+		<input type="text" th:field="*{endereco.complemento}" /><br/>
+
+		<label>Cidade:</label>
+		<input type="text" th:field="*{endereco.cidade}" /><br/>
+
+		<label>Estado:</label>
+		<input type="text" th:field="*{endereco.estado}" /><br/>
+
+		<label>CEP:</label>
+		<input type="text" th:field="*{endereco.cep}" /><br/>
+
+		<button type="submit">Salvar</button>
+</form>
 
 </body>
 </html>

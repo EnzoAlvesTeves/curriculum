@@ -101,8 +101,20 @@ public class CandidatoController {
 
 	}
 
-	@PostMapping
-	public CandidatoDTO cadastrar(@RequestBody CandidatoDTO candidatoDTO){
+	@GetMapping("/cadastrar")
+	public String novoCandidato(Model model) {
+		CandidatoDTO candidatoDTO = new CandidatoDTO();
+		candidatoDTO.setEndereco(new EnderecoDTO());
+		candidatoDTO.getEducacoes().add(new EducacaoDTO());
+		candidatoDTO.getExperiencias().add(new ExperienciaDTO());
+		candidatoDTO.getHabilidades().add(new HabilidadeDTO());
+
+		model.addAttribute("candidato", candidatoDTO);
+		return "candidato/cadastro";
+	}
+
+	@PostMapping("/cadastrar")
+	public String cadastrar(@ModelAttribute CandidatoDTO candidatoDTO, Model model){
 		EnderecoEntity endereco = new EnderecoEntity();
 		endereco.setRua(candidatoDTO.getEndereco().getRua());
 		endereco.setNumero(candidatoDTO.getEndereco().getNumero());
@@ -160,7 +172,8 @@ public class CandidatoController {
 			habilidade = habilidadeRepository.save(habilidade);
 			habilidadeDTO.setId(habilidade.getId());
 		});
-		return candidatoDTO;
+
+		return "redirect:/candidato/" + candidatoDTO.getId();
 	}
 }
 
