@@ -13,12 +13,14 @@ import br.com.senac.curriculum.repository.experiencia.ExperienciaRepository;
 import br.com.senac.curriculum.repository.habilidade.HabilidadeEntity;
 import br.com.senac.curriculum.repository.habilidade.HabilidadeRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
 import java.util.Optional;
 
-@RestController
+@Controller
 @RequestMapping(value = "/candidato")
 public class CandidatoController {
 
@@ -97,7 +99,7 @@ public class CandidatoController {
 
 		model.addAttribute("candidato", candidatoDTO);
 
-		return "candidato/detalhe";
+		return "candidato/curriculo";
 
 	}
 
@@ -111,6 +113,13 @@ public class CandidatoController {
 
 		model.addAttribute("candidato", candidatoDTO);
 		return "candidato/cadastro";
+	}
+
+	@GetMapping("/lista")
+	public String listaCandidato(Model model) {
+		List<CandidatoEntity> candidatoEntityList = candidatoRepository.findAll();
+		model.addAttribute("candidatos", candidatoEntityList);
+		return "candidato/lista";
 	}
 
 	@PostMapping("/cadastrar")

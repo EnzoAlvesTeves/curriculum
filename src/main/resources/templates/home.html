@@ -119,9 +119,10 @@
     <div class="logo">WiseCorp</div>
     <div class="menu">
         <span id="user-name">Bem-vindo</span>
-        <button onclick="window.location.href='cadasstro.html'">Cadastro</button>
+        <a th:href="@{/candidato/cadastrar}">
+            <button>Cadastrar Curriculo</button>
+        </a>
         <button onclick="window.location.href='pagecurriculo.html'">Vagas</button>
-        <button onclick="window.location.href='cadastrocurriculo.html'">Cadastrar Currículo</button>
     </div>
 </div>
 
