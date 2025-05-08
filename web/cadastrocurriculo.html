@@ -11,6 +11,7 @@
             --laranja-claro: #ffe2ca;
             --cinza-fundo: #f9fafc;
             --sombra: rgba(0, 0, 0, 0.1);
+            --cinza-borda: #ddd;
         }
 
         body {
@@ -74,13 +75,13 @@
         }
 
         .content {
-            padding: 40px 24px;
+            padding: 40px 24px 0;
             text-align: center;
         }
 
         h1 {
             color: #333;
-            margin-bottom: 20px;
+            margin-bottom: 10px;
         }
 
         p {
@@ -91,8 +92,8 @@
         .curriculo-container {
             background-color: #fff;
             padding: 40px;
-            margin: 40px auto;
-            max-width: 800px;
+            margin: 20px auto 60px;
+            max-width: 850px;
             border-radius: 16px;
             box-shadow: 0 6px 16px var(--sombra);
             animation: fadeInUp 0.7s ease-in-out;
@@ -122,38 +123,57 @@
         input[type="file"] {
             width: 100%;
             padding: 12px;
-            border: 1px solid #ccc;
+            border: 1px solid var(--cinza-borda);
             border-radius: 8px;
             font-size: 15px;
             box-sizing: border-box;
         }
 
         .input-group {
-            margin-bottom: 10px;
+            position: relative;
+            margin-bottom: 12px;
+        }
+
+        .input-group button.remove-btn {
+            position: absolute;
+            right: 8px;
+            top: 8px;
+            background-color: #ff5e5e;
+            color: white;
+            border: none;
+            padding: 6px 10px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 12px;
         }
 
         button[type="button"] {
             background-color: var(--laranja);
             color: #fff;
             border: none;
-            padding: 8px 12px;
-            margin-top: 8px;
-            margin-bottom: 20px;
+            padding: 10px 16px;
+            margin: 10px 0;
             border-radius: 6px;
             cursor: pointer;
             font-size: 14px;
+            transition: background 0.3s;
+        }
+
+        button[type="button"]:hover {
+            background-color: #e6670c;
         }
 
         .btn {
             width: 100%;
             background-color: var(--laranja);
             color: white;
-            padding: 14px;
+            padding: 16px;
             border: none;
             border-radius: 10px;
             font-size: 16px;
             margin-top: 30px;
             cursor: pointer;
+            transition: background 0.3s;
         }
 
         .btn:hover {
@@ -228,7 +248,10 @@
         const container = document.getElementById(id);
         const div = document.createElement('div');
         div.className = 'input-group';
-        div.innerHTML = `<textarea name="${name}" rows="2" required></textarea>`;
+        div.innerHTML = `
+            <textarea name="${name}" rows="2" required></textarea>
+            <button type="button" class="remove-btn" onclick="this.parentElement.remove()">Remover</button>
+        `;
         container.appendChild(div);
     }
 
