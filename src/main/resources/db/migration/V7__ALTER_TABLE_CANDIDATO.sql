@@ -1,0 +1,1 @@
+ALTER TABLE candidato ADD COLUMN  resumo_profissional VARCHAR(500);

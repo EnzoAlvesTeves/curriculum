@@ -24,6 +24,7 @@ public class CandidatoDTO {
 	private String sexo;
 	private String telefone;
 	private LocalDate dataNascimento;
+	private String resumoProfissional;
 	private EnderecoDTO endereco;
 	private List<ExperienciaDTO> experiencias;
 	private List<EducacaoDTO> educacoes;
@@ -36,6 +37,7 @@ public class CandidatoDTO {
 		this.sexo = candidato.getSexo();
 		this.telefone = candidato.getTelefone();
 		this.dataNascimento = candidato.getDataNascimento();
+		this.resumoProfissional = candidato.getResumoProfissional();
 		this.endereco = new EnderecoDTO(candidato.getEndereco());
 
 		List<ExperienciaDTO> experiencias = new ArrayList<>();

@@ -39,6 +39,9 @@ public class CandidatoEntity {
 	@Column(name = "data_nascimento")
 	private LocalDate dataNascimento;
 
+	@Column(name = "resumo_profissional")
+	private String resumoProfissional;
+
 	@ManyToOne
 	@JoinColumn(name = "endereco_id")
 	private EnderecoEntity endereco;
