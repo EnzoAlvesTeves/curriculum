@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+		<title>Cadastro de Candidato</title>
+		<meta charset="UTF-8"/>
+		<style>
+        fieldset {
+            margin-bottom: 1em;
+            padding: 1em;
+            border: 1px solid #ccc;
+        }
+		</style>
+</head>
+<body>
+<h1>Cadastro de Candidato</h1>
+
+<form th:action="@{/candidato/cadastrar}" th:object="${candidato}" method="post">
+
+		<fieldset>
+				<legend>Informações Pessoais</legend>
+				<label>Nome:</label>
+				<input type="text" th:field="*{nome}" /><br/>
+
+				<label>Email:</label>
+				<input type="email" th:field="*{email}" /><br/>
+
+				<label>Sexo:</label>
+				<input type="text" th:field="*{sexo}" /><br/>
+
+				<label>Telefone:</label>
+				<input type="text" th:field="*{telefone}" /><br/>
+
+				<label>Data de Nascimento:</label>
+				<input type="date" th:field="*{dataNascimento}" /><br/>
+
+				<label>Resumo Profissional:</label>
+				<textarea th:field="*{resumoProfissional}"></textarea><br/>
+		</fieldset>
+
+		<fieldset>
+				<legend>Endereço</legend>
+				<label>Rua:</label>
+				<input type="text" th:field="*{endereco.rua}" /><br/>
+
+				<label>Número:</label>
+				<input type="number" th:field="*{endereco.numero}" /><br/>
+
+				<label>Complemento:</label>
+				<input type="text" th:field="*{endereco.complemento}" /><br/>
+
+				<label>Cidade:</label>
+				<input type="text" th:field="*{endereco.cidade}" /><br/>
+
+				<label>Estado:</label>
+				<input type="text" th:field="*{endereco.estado}" /><br/>
+
+				<label>CEP:</label>
+				<input type="text" th:field="*{endereco.cep}" /><br/>
+		</fieldset>
+
+		<fieldset>
+				<legend>Experiências</legend>
+				<div th:each="exp, iterStat : *{experiencias}">
+						<label>Cargo:</label>
+						<input type="text" th:field="*{experiencias[__${iterStat.index}__].cargo}" /><br/>
+
+						<label>Empresa:</label>
+						<input type="text" th:field="*{experiencias[__${iterStat.index}__].empresa}" /><br/>
+
+						<label>Data Início:</label>
+						<input type="date" th:field="*{experiencias[__${iterStat.index}__].dataInicio}" /><br/>
+
+						<label>Data Fim:</label>
+						<input type="date" th:field="*{experiencias[__${iterStat.index}__].dataFim}" /><br/><br/>
+				</div>
+		</fieldset>
+
+		<fieldset>
+				<legend>Educação</legend>
+				<div th:each="edu, iterStat : *{educacoes}">
+						<label>Grau:</label>
+						<input type="text" th:field="*{educacoes[__${iterStat.index}__].grau}" /><br/>
+
+						<label>Instituição:</label>
+						<input type="text" th:field="*{educacoes[__${iterStat.index}__].instituicao}" /><br/>
+
+						<label>Curso:</label>
+						<input type="text" th:field="*{educacoes[__${iterStat.index}__].curso}" /><br/>
+
+						<label>Data Início:</label>
+						<input type="date" th:field="*{educacoes[__${iterStat.index}__].dataInicio}" /><br/>
+
+						<label>Data Fim:</label>
+						<input type="date" th:field="*{educacoes[__${iterStat.index}__].dataFim}" /><br/><br/>
+				</div>
+		</fieldset>
+
+		<fieldset>
+				<legend>Habilidades</legend>
+				<div th:each="hab, iterStat : *{habilidades}">
+						<label>Descrição:</label>
+						<input type="text" th:field="*{habilidades[__${iterStat.index}__].descricao}" /><br/>
+
+						<label>Nível:</label>
+						<input type="text" th:field="*{habilidades[__${iterStat.index}__].nivel}" /><br/>
+
+						<label>Especialidade:</label>
+						<input type="text" th:field="*{habilidades[__${iterStat.index}__].especialidade}" /><br/><br/>
+				</div>
+		</fieldset>
+
+		<button type="submit">Salvar</button>
+</form>
+</body>
+</html>

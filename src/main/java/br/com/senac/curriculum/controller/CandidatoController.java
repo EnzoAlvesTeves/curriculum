@@ -13,11 +13,14 @@ import br.com.senac.curriculum.repository.experiencia.ExperienciaRepository;
 import br.com.senac.curriculum.repository.habilidade.HabilidadeEntity;
 import br.com.senac.curriculum.repository.habilidade.HabilidadeRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
 import java.util.Optional;
 
-@RestController
+@Controller
 @RequestMapping(value = "/candidato")
 public class CandidatoController {
 
@@ -37,7 +40,7 @@ public class CandidatoController {
 	private HabilidadeRepository habilidadeRepository;
 
 	@GetMapping("/{id}")
-	public CandidatoDTO buscar(@PathVariable Long id) {
+	public String buscar(@PathVariable Long id, Model model) {
 		Optional<CandidatoEntity> candidatoEntity = candidatoRepository.findById(id);
 		CandidatoEntity candidato = candidatoEntity.get();
 
@@ -93,12 +96,34 @@ public class CandidatoController {
 		candidatoDTO.setDataNascimento(candidato.getDataNascimento());
 		candidatoDTO.setEndereco(enderecoDTO);
 
-		return candidatoDTO;
+
+		model.addAttribute("candidato", candidatoDTO);
+
+		return "candidato/curriculo";
 
 	}
 
-	@PostMapping
-	public CandidatoDTO cadastrar(@RequestBody CandidatoDTO candidatoDTO){
+	@GetMapping("/cadastrar")
+	public String novoCandidato(Model model) {
+		CandidatoDTO candidatoDTO = new CandidatoDTO();
+		candidatoDTO.setEndereco(new EnderecoDTO());
+		candidatoDTO.getEducacoes().add(new EducacaoDTO());
+		candidatoDTO.getExperiencias().add(new ExperienciaDTO());
+		candidatoDTO.getHabilidades().add(new HabilidadeDTO());
+
+		model.addAttribute("candidato", candidatoDTO);
+		return "candidato/cadastro";
+	}
+
+	@GetMapping("/lista")
+	public String listaCandidato(Model model) {
+		List<CandidatoEntity> candidatoEntityList = candidatoRepository.findAll();
+		model.addAttribute("candidatos", candidatoEntityList);
+		return "candidato/lista";
+	}
+
+	@PostMapping("/cadastrar")
+	public String cadastrar(@ModelAttribute CandidatoDTO candidatoDTO, Model model){
 		EnderecoEntity endereco = new EnderecoEntity();
 		endereco.setRua(candidatoDTO.getEndereco().getRua());
 		endereco.setNumero(candidatoDTO.getEndereco().getNumero());
@@ -156,7 +181,8 @@ public class CandidatoController {
 			habilidade = habilidadeRepository.save(habilidade);
 			habilidadeDTO.setId(habilidade.getId());
 		});
-		return candidatoDTO;
+
+		return "redirect:/candidato/" + candidatoDTO.getId();
 	}
 }
 

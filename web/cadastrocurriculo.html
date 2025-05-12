@@ -1,293 +1,187 @@
 <!DOCTYPE html>
-<html lang="pt-br">
+<html lang="pt-BR">
 <head>
-    <meta charset="UTF-8">
-    <title>WiseCorp</title>
-    <link rel="icon" href="img/logo.jpg" type="image/jpg">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>Página de Vagas</title>
     <style>
-        :root {
-            --laranja: #FF7514;
-            --laranja-claro: #ffe2ca;
-            --cinza-fundo: #f9fafc;
-            --sombra: rgba(0, 0, 0, 0.1);
-            --cinza-borda: #ddd;
-        }
-
         body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background-color: var(--cinza-fundo);
+            font-family: Arial, sans-serif;
             margin: 0;
-            padding: 0;
-            animation: fadeIn 1s ease-in;
-        }
-
-        @keyframes fadeIn {
-            from { opacity: 0; }
-            to { opacity: 1; }
-        }
-
-        .navbar {
-            background-color: var(--laranja);
-            color: white;
-            padding: 16px 24px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            box-shadow: 0 4px 10px var(--sombra);
-            animation: slideDown 0.5s ease-out;
-        }
-
-        @keyframes slideDown {
-            from { transform: translateY(-100%); }
-            to { transform: translateY(0); }
-        }
-
-        .navbar .logo {
-            font-size: 24px;
-            font-weight: bold;
-        }
-
-        .navbar .right {
-            display: flex;
-            align-items: center;
-            gap: 16px;
-        }
-
-        .username {
-            font-size: 16px;
-            font-weight: 500;
-        }
-
-        .navbar button {
-            background-color: white;
-            color: var(--laranja);
-            border: none;
-            padding: 8px 14px;
-            border-radius: 6px;
-            cursor: pointer;
-            font-weight: bold;
-            transition: background 0.3s;
-        }
-
-        .navbar button:hover {
-            background-color: var(--laranja-claro);
-        }
-
-        .content {
-            padding: 40px 24px 0;
-            text-align: center;
-        }
-
-        h1 {
+            background: #fff6e5;
             color: #333;
-            margin-bottom: 10px;
         }
 
-        p {
-            font-size: 18px;
-            color: #666;
+        header {
+            background-color: #ff6b00;
+            padding: 20px;
+            text-align: center;
+            color: white;
         }
 
-        .curriculo-container {
-            background-color: #fff;
-            padding: 40px;
-            margin: 20px auto 60px;
-            max-width: 850px;
-            border-radius: 16px;
-            box-shadow: 0 6px 16px var(--sombra);
-            animation: fadeInUp 0.7s ease-in-out;
+        nav {
+            display: flex;
+            justify-content: center;
+            background-color: #ffe0b2;
+            gap: 20px;
+            padding: 10px;
         }
 
-        @keyframes fadeInUp {
-            from { transform: translateY(20px); opacity: 0; }
-            to { transform: translateY(0); opacity: 1; }
+        nav a {
+            text-decoration: none;
+            color: #ff6b00;
+            font-weight: bold;
+        }
+
+        section {
+            padding: 40px 20px;
+            display: none;
+        }
+
+        #home:target,
+        #cadastro:target,
+        #vagas:target,
+        #confirmacao:target {
+            display: block;
         }
 
         h2 {
-            text-align: center;
-            color: var(--laranja);
-            margin-bottom: 30px;
+            color: #ff6b00;
         }
 
-        label {
-            font-weight: bold;
-            color: #333;
-            display: block;
-            margin-top: 20px;
-            margin-bottom: 6px;
+        form {
+            max-width: 600px;
+            margin: auto;
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
         }
 
-        input,
-        textarea,
-        input[type="file"] {
-            width: 100%;
-            padding: 12px;
-            border: 1px solid var(--cinza-borda);
+        input, select, textarea {
+            padding: 10px;
+            border: 1px solid #ccc;
             border-radius: 8px;
-            font-size: 15px;
-            box-sizing: border-box;
         }
 
-        .input-group {
-            position: relative;
-            margin-bottom: 12px;
-        }
-
-        .input-group button.remove-btn {
-            position: absolute;
-            right: 8px;
-            top: 8px;
-            background-color: #ff5e5e;
+        button {
+            background-color: #ff6b00;
             color: white;
+            padding: 10px;
             border: none;
-            padding: 6px 10px;
-            border-radius: 6px;
+            border-radius: 8px;
             cursor: pointer;
-            font-size: 12px;
+            font-weight: bold;
         }
 
-        button[type="button"] {
-            background-color: var(--laranja);
-            color: #fff;
-            border: none;
-            padding: 10px 16px;
-            margin: 10px 0;
-            border-radius: 6px;
-            cursor: pointer;
-            font-size: 14px;
-            transition: background 0.3s;
+        .vagas {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 20px;
+            justify-content: center;
         }
 
-        button[type="button"]:hover {
-            background-color: #e6670c;
+        .vaga {
+            background: white;
+            border: 2px solid #ff6b00;
+            border-radius: 16px;
+            padding: 20px;
+            width: 250px;
+            box-shadow: 2px 2px 8px #ffd6a0;
         }
 
-        .btn {
+        .vaga h3 {
+            margin-top: 0;
+            color: #ff6b00;
+        }
+
+        .vaga button {
+            margin-top: 10px;
             width: 100%;
-            background-color: var(--laranja);
-            color: white;
-            padding: 16px;
-            border: none;
-            border-radius: 10px;
-            font-size: 16px;
-            margin-top: 30px;
-            cursor: pointer;
-            transition: background 0.3s;
         }
 
-        .btn:hover {
-            background-color: #e6670c;
+        footer {
+            text-align: center;
+            padding: 20px;
+            background-color: #ff6b00;
+            color: white;
         }
     </style>
 </head>
 <body>
 
-<div class="navbar">
-    <div class="logo">Sistema de Currículos</div>
-    <div class="right">
-        <div class="username" id="user-name">Usuário</div>
-        <button onclick="window.location.href='home.html'">Home</button>
-        <button onclick="window.location.href='pagecurriculo.html'">Vagas</button>
-    </div>
-</div>
+<header>
+    <h1>Portal de Vagas em Tecnologia</h1>
+</header>
 
-<div class="content">
-    <h1>Bem-vindo ao seu cadastro de Currículo</h1>
-    <p>Aqui você poderá editar seu currículo</p>
-</div>
+<nav>
+    <a href="#home">Home</a>
+    <a href="#cadastro">Cadastrar Currículo</a>
+    <a href="#vagas">Ver Vagas</a>
+</nav>
 
-<div class="curriculo-container">
+<section id="home">
+    <h2>Bem-vindo ao Portal de Vagas</h2>
+    <p>Aqui você encontra oportunidades incríveis na área de tecnologia.</p>
+</section>
+
+<section id="cadastro">
     <h2>Cadastro de Currículo</h2>
-    <form id="form-curriculo" onsubmit="salvarCurriculo(event)">
-        <label for="nome">Nome completo</label>
-        <input type="text" id="nome" required>
+    <form action="#confirmacao" method="get">
+        <label for="nome">Nome Completo:</label>
+        <input type="text" id="nome" name="nome" required>
 
-        <label for="email">E-mail</label>
-        <input type="email" id="email" required>
+        <label for="email">E-mail:</label>
+        <input type="email" id="email" name="email" required>
 
-        <label for="telefone">Telefone</label>
-        <input type="text" id="telefone" required>
+        <label for="telefone">Telefone:</label>
+        <input type="tel" id="telefone" name="telefone" required>
 
-        <label for="resumo">Resumo Profissional</label>
-        <textarea id="resumo" rows="4" required></textarea>
+        <label for="area">Área de Interesse:</label>
+        <select id="area" name="area">
+            <option>Desenvolvimento Web</option>
+            <option>Suporte Técnico</option>
+            <option>Banco de Dados</option>
+            <option>Infraestrutura</option>
+        </select>
 
-        <div id="experiencias">
-            <label>Experiência Profissional</label>
-            <div class="input-group">
-                <textarea name="experiencia[]" rows="2" required></textarea>
-            </div>
-        </div>
-        <button type="button" onclick="addCampo('experiencias', 'experiencia[]')">+ Adicionar Experiência</button>
+        <label for="sobre">Fale um pouco sobre você:</label>
+        <textarea id="sobre" name="sobre" rows="4"></textarea>
 
-        <div id="formacoes">
-            <label>Formação Acadêmica</label>
-            <div class="input-group">
-                <textarea name="formacao[]" rows="2" required></textarea>
-            </div>
-        </div>
-        <button type="button" onclick="addCampo('formacoes', 'formacao[]')">+ Adicionar Formação</button>
-
-        <div id="cursos">
-            <label>Cursos</label>
-            <div class="input-group">
-                <textarea name="curso[]" rows="2"></textarea>
-            </div>
-        </div>
-        <button type="button" onclick="addCampo('cursos', 'curso[]')">+ Adicionar Curso</button>
-
-        <label for="arquivo">Anexar Currículo (PDF)</label>
-        <input type="file" id="arquivo" accept=".pdf" required>
-
-        <button type="submit" class="btn">Salvar Currículo</button>
+        <button type="submit">Enviar Currículo</button>
     </form>
-</div>
+</section>
 
-<script>
-    function addCampo(id, name) {
-        const container = document.getElementById(id);
-        const div = document.createElement('div');
-        div.className = 'input-group';
-        div.innerHTML = `
-            <textarea name="${name}" rows="2" required></textarea>
-            <button type="button" class="remove-btn" onclick="this.parentElement.remove()">Remover</button>
-        `;
-        container.appendChild(div);
-    }
+<section id="vagas">
+    <h2>Vagas Disponíveis</h2>
+    <div class="vagas">
+        <div class="vaga">
+            <h3>Desenvolvedor Front-End</h3>
+            <p>HTML, CSS, JavaScript, React</p>
+            <button>Inscrever-se</button>
+        </div>
+        <div class="vaga">
+            <h3>Analista de Suporte</h3>
+            <p>Atendimento, redes, manutenção</p>
+            <button>Inscrever-se</button>
+        </div>
+        <div class="vaga">
+            <h3>DBA Júnior</h3>
+            <p>MySQL, PostgreSQL, modelagem</p>
+            <button>Inscrever-se</button>
+        </div>
 
-    function salvarCurriculo(event) {
-        event.preventDefault();
+    </div>
+</section>
 
-        const nome = document.getElementById('nome').value;
-        const email = document.getElementById('email').value;
-        const telefone = document.getElementById('telefone').value;
-        const resumo = document.getElementById('resumo').value;
-        const arquivo = document.getElementById('arquivo').files[0];
+<section id="confirmacao">
+    <h2>Currículo Enviado!</h2>
+    <p>Obrigado por se cadastrar. Em breve entraremos em contato.</p>
+    <a href="#home"><button>Voltar à Página Inicial</button></a>
+</section>
 
-        const experiencias = Array.from(document.getElementsByName('experiencia[]')).map(e => e.value);
-        const formacoes = Array.from(document.getElementsByName('formacao[]')).map(f => f.value);
-        const cursos = Array.from(document.getElementsByName('curso[]')).map(c => c.value);
-
-        const curriculo = {
-            nome,
-            email,
-            telefone,
-            resumo,
-            experiencias,
-            formacoes,
-            cursos,
-            arquivoNome: arquivo ? arquivo.name : null
-        };
-
-        localStorage.setItem('curriculoCompleto', JSON.stringify(curriculo));
-        localStorage.setItem('nomeUsuario', nome);
-        alert('Currículo salvo com sucesso!');
-        document.getElementById('form-curriculo').reset();
-    }
-
-    const nomeUsuario = localStorage.getItem("nomeUsuario") || "Usuário";
-    document.getElementById("user-name").textContent = nomeUsuario;
-</script>
+<footer>
+    <p>&copy; 2025 Portal de Vagas em Tecnologia</p>
+</footer>
 
 </body>
 </html>

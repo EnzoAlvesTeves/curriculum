@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <title>WiseCorp - Home</title>
+    <link rel="icon" href="img/logo.jpg" type="image/jpg">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+        :root {
+            --laranja: #FF7514;
+            --laranja-claro: #ffe2ca;
+            --cinza-fundo: #f9fafc;
+            --sombra: rgba(0, 0, 0, 0.1);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: var(--cinza-fundo);
+            animation: fadeIn 1.2s ease-in;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        .navbar {
+            background-color: var(--laranja);
+            padding: 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            color: white;
+            box-shadow: 0 4px 12px var(--sombra);
+        }
+
+        .navbar .logo {
+            font-size: 28px;
+            font-weight: bold;
+        }
+
+        .navbar .menu button {
+            background-color: white;
+            color: var(--laranja);
+            border: none;
+            padding: 10px 16px;
+            margin-left: 12px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: background 0.3s;
+        }
+
+        .navbar .menu button:hover {
+            background-color: var(--laranja-claro);
+        }
+
+        .hero {
+            background: linear-gradient(to right, var(--laranja), #ff944d);
+            color: white;
+            padding: 80px 20px;
+            text-align: center;
+            animation: slideUp 0.8s ease-out;
+        }
+
+        @keyframes slideUp {
+            from { transform: translateY(30px); opacity: 0; }
+            to { transform: translateY(0); opacity: 1; }
+        }
+
+        .hero h1 {
+            font-size: 40px;
+            margin-bottom: 20px;
+        }
+
+        .hero p {
+            font-size: 20px;
+            max-width: 700px;
+            margin: 0 auto;
+        }
+
+        .content {
+            padding: 60px 20px;
+            max-width: 1000px;
+            margin: auto;
+            text-align: center;
+        }
+
+        .content h2 {
+            color: var(--laranja);
+            font-size: 32px;
+            margin-bottom: 20px;
+        }
+
+        .content p {
+            font-size: 18px;
+            color: #555;
+            line-height: 1.6;
+        }
+
+        footer {
+            background-color: var(--laranja);
+            color: white;
+            padding: 20px;
+            text-align: center;
+            margin-top: 40px;
+        }
+    </style>
+</head>
+<body>
+
+<div class="navbar">
+    <div class="logo">WiseCorp</div>
+    <div class="menu">
+        <span id="user-name">Bem-vindo</span>
+        <a th:href="@{/candidato/cadastrar}">
+            <button>Cadastrar Curriculo</button>
+        </a>
+        <button onclick="window.location.href='pagecurriculo.html'">Vagas</button>
+    </div>
+</div>
+
+<div class="content">
+    <h1>Especialistas em Tecnologia da Informação</h1>
+    <p>Na WiseCorp, conectamos talentos a grandes oportunidades no mundo da TI. Descubra vagas, cadastre seu currículo e dê o próximo passo na sua carreira!</p>
+</div>
+
+<div class="hero">
+    <h2>Sobre a WiseCorp</h2>
+    <p>
+        Somos uma empresa dedicada 100% à área de Tecnologia da Informação, com foco em aproximar profissionais qualificados das melhores vagas do mercado.
+        Acreditamos que o talento certo no lugar certo transforma empresas e carreiras. Junte-se a nós e faça parte dessa revolução digital.
+    </p>
+</div>
+
+<div class="content">
+    <h1> Por que escolher a WiseCorp?</h1>
+    <p>Na WiseCorp, acreditamos que a tecnologia transforma vidas. Nossa missão é conectar talentos apaixonados por inovação com oportunidades que desafiem seus limites e ampliem seus horizontes. Trabalhamos com empresas líderes do setor, oferecendo posições nas áreas mais promissoras da TI, como desenvolvimento de software, análise de dados, cibersegurança e muito mais. Aqui, você não encontra apenas uma vaga — encontra um futuro.</p>
+</div>
+<footer>
+    &copy; 2025 WiseCorp. Todos os direitos reservados.
+</footer>
+
+<script>
+    const nomeUsuario = localStorage.getItem("nomeUsuario");
+    const userNameSpan = document.getElementById("user-name");
+    if (nomeUsuario) {
+        userNameSpan.textContent = `Olá, ${nomeUsuario}`;
+    }
+</script>
+
+</body>
+</html>
+</html>

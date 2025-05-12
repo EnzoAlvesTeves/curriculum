@@ -189,11 +189,11 @@
     if (email === adminEmail && senha === adminSenha) {
       // Armazenar informações do usuário no localStorage
       localStorage.setItem('usuario', 'admin');
-      window.location.href = 'admin.html';  // Redireciona para a página de admin
+      window.location.href = '/candidato/lista';  // Redireciona para a página de admin
     } else {
       // Para usuários comuns
       localStorage.setItem('nomeUsuario', email);  // Armazena nome ou outro identificador
-      window.location.href = 'home.html.html';  // Redireciona para a página de currículos
+      window.location.href = '/home';  // Redireciona para a página de currículos
     }
   }
 </script>
