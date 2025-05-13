@@ -1,6 +1,7 @@
 package br.com.senac.curriculum.repository.candidato;
 
 
+import br.com.senac.curriculum.repository.candidatoVaga.CandidatoVagaEntity;
 import br.com.senac.curriculum.repository.educacao.EducacaoEntity;
 import br.com.senac.curriculum.repository.endereco.EnderecoEntity;
 import br.com.senac.curriculum.repository.experiencia.ExperienciaEntity;
@@ -55,4 +56,6 @@ public class CandidatoEntity {
 	@OneToMany(mappedBy = "candidato")
 	private List<HabilidadeEntity> habilidades;
 
+	@OneToMany(mappedBy = "candidato")
+	private List<CandidatoVagaEntity> candidatoVagas;
 }
