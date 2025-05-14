@@ -1,22 +1,17 @@
 <!DOCTYPE html>
-<html lang="pt-br">
+<html lang="pt-BR" xmlns:th="http://www.thymeleaf.org">
 <head>
-    <meta charset="UTF-8">
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
     <title>WiseCorp - Home</title>
     <link rel="icon" href="img/logo.jpg" type="image/jpg">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="css/style.css" />
     <style>
         :root {
             --laranja: #FF7514;
             --laranja-claro: #ffe2ca;
             --cinza-fundo: #f9fafc;
             --sombra: rgba(0, 0, 0, 0.1);
-        }
-
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
         }
 
         body {
@@ -30,121 +25,198 @@
             to { opacity: 1; }
         }
 
-        .navbar {
+        .topo {
             background-color: var(--laranja);
             padding: 20px;
             display: flex;
             justify-content: space-between;
             align-items: center;
-            color: white;
             box-shadow: 0 4px 12px var(--sombra);
         }
 
-        .navbar .logo {
+        .logo {
             font-size: 28px;
             font-weight: bold;
+            color: white;
         }
 
-        .navbar .menu button {
-            background-color: white;
-            color: var(--laranja);
-            border: none;
-            padding: 10px 16px;
-            margin-left: 12px;
-            border-radius: 8px;
-            cursor: pointer;
+        nav ul {
+            list-style: none;
+            display: flex;
+            gap: 16px;
+        }
+
+        nav a {
+            text-decoration: none;
+            color: white;
             font-weight: 600;
+            padding: 10px 14px;
+            border-radius: 8px;
             transition: background 0.3s;
         }
 
-        .navbar .menu button:hover {
+        nav a:hover {
             background-color: var(--laranja-claro);
         }
 
-        .hero {
-            background: linear-gradient(to right, var(--laranja), #ff944d);
-            color: white;
-            padding: 80px 20px;
-            text-align: center;
-            animation: slideUp 0.8s ease-out;
+        .botao-laranja {
+            background-color: white;
+            color: var(--laranja);
         }
 
-        @keyframes slideUp {
-            from { transform: translateY(30px); opacity: 0; }
-            to { transform: translateY(0); opacity: 1; }
-        }
-
-        .hero h1 {
-            font-size: 40px;
-            margin-bottom: 20px;
-        }
-
-        .hero p {
-            font-size: 20px;
-            max-width: 700px;
-            margin: 0 auto;
-        }
-
-        .content {
+        .principal, .sobre, .porque, .beneficios {
             padding: 60px 20px;
             max-width: 1000px;
             margin: auto;
             text-align: center;
         }
 
-        .content h2 {
+        .botoes {
+            margin-top: 20px;
+        }
+
+        .btn-claro, .btn-escuro {
+            padding: 12px 20px;
+            border-radius: 8px;
+            margin: 0 10px;
+            text-decoration: none;
+            font-weight: bold;
+        }
+
+        .btn-claro {
+            background-color: white;
             color: var(--laranja);
-            font-size: 32px;
-            margin-bottom: 20px;
+            border: 2px solid var(--laranja);
         }
 
-        .content p {
-            font-size: 18px;
-            color: #555;
-            line-height: 1.6;
+        .btn-escuro {
+            background-color: var(--laranja);
+            color: white;
+            border: none;
         }
 
-        footer {
+        .cards {
+            display: flex;
+            justify-content: space-around;
+            flex-wrap: wrap;
+            gap: 20px;
+        }
+
+        .card {
+            background-color: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 2px 8px var(--sombra);
+            flex: 1 1 280px;
+        }
+
+        .emoji {
+            font-size: 36px;
+            margin-bottom: 10px;
+        }
+
+        .grid-porques {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+            gap: 20px;
+        }
+
+        .rodape {
             background-color: var(--laranja);
             color: white;
             padding: 20px;
             text-align: center;
-            margin-top: 40px;
+        }
+
+        .redes a {
+            color: white;
+            margin: 0 10px;
+            text-decoration: none;
+            font-weight: bold;
+        }
+
+        #user-name {
+            margin-right: 10px;
         }
     </style>
 </head>
 <body>
 
-<div class="navbar">
+<header class="topo">
     <div class="logo">WiseCorp</div>
-    <div class="menu">
-        <span id="user-name">Bem-vindo</span>
-        <a th:href="@{/candidato/cadastrar}">
-            <button>Cadastrar Curriculo</button>
-        </a>
-        <button onclick="window.location.href='pagecurriculo.html'">Vagas</button>
-    </div>
-</div>
+    <nav>
+        <ul>
+            <li><span id="user-name">Bem-vindo</span></li>
+            <li><a th:href="@{/candidato/cadastrar}" class="botao-laranja">Cadastrar Currículo</a></li>
+            <li><a th:href="@{/vagas}">Vagas</a></li>
+            <li><a th:href="@{/cadastro}">Cadastro</a></li>
+        </ul>
+    </nav>
+</header>
 
-<div class="content">
+<section class="principal">
     <h1>Especialistas em Tecnologia da Informação</h1>
     <p>Na WiseCorp, conectamos talentos a grandes oportunidades no mundo da TI. Descubra vagas, cadastre seu currículo e dê o próximo passo na sua carreira!</p>
-</div>
+    <div class="botoes">
+        <a th:href="@{/vagas}" class="btn-claro">Ver Vagas Disponíveis</a>
+        <a th:href="@{/candidato/cadastrar}" class="btn-escuro">Cadastrar Currículo</a>
+    </div>
+</section>
 
-<div class="hero">
+<section class="beneficios">
+    <div class="cards">
+        <div class="card">
+            <div class="emoji">💼</div>
+            <h3>Vagas Premium</h3>
+            <p>Acesso às melhores oportunidades em empresas líderes do setor de tecnologia.</p>
+        </div>
+        <div class="card">
+            <div class="emoji">🚀</div>
+            <h3>Crescimento Profissional</h3>
+            <p>Desenvolvimento de carreira com as principais tecnologias do mercado.</p>
+        </div>
+        <div class="card">
+            <div class="emoji">🤝</div>
+            <h3>Acompanhamento</h3>
+            <p>Suporte personalizado durante todo o processo seletivo.</p>
+        </div>
+    </div>
+</section>
+
+<section class="sobre">
     <h2>Sobre a WiseCorp</h2>
-    <p>
-        Somos uma empresa dedicada 100% à área de Tecnologia da Informação, com foco em aproximar profissionais qualificados das melhores vagas do mercado.
-        Acreditamos que o talento certo no lugar certo transforma empresas e carreiras. Junte-se a nós e faça parte dessa revolução digital.
-    </p>
-</div>
+    <p>Somos uma empresa dedicada 100% à área de Tecnologia da Informação, com foco em aproximar profissionais qualificados das melhores vagas do mercado. Acreditamos que o talento certo no lugar certo transforma empresas e carreiras. Junte-se a nós e faça parte dessa revolução digital.</p>
+</section>
 
-<div class="content">
-    <h1> Por que escolher a WiseCorp?</h1>
-    <p>Na WiseCorp, acreditamos que a tecnologia transforma vidas. Nossa missão é conectar talentos apaixonados por inovação com oportunidades que desafiem seus limites e ampliem seus horizontes. Trabalhamos com empresas líderes do setor, oferecendo posições nas áreas mais promissoras da TI, como desenvolvimento de software, análise de dados, cibersegurança e muito mais. Aqui, você não encontra apenas uma vaga — encontra um futuro.</p>
-</div>
-<footer>
-    &copy; 2025 WiseCorp. Todos os direitos reservados.
+<section class="porque">
+    <h2>Por que escolher a WiseCorp?</h2>
+    <div class="grid-porques">
+        <div class="card">
+            <h3>Oportunidades Exclusivas</h3>
+            <p>Acesso a vagas em empresas líderes do setor de tecnologia.</p>
+        </div>
+        <div class="card">
+            <h3>Desenvolvimento Profissional</h3>
+            <p>Projetos desafiadores que impulsionam sua carreira.</p>
+        </div>
+        <div class="card">
+            <h3>Cultura Inovadora</h3>
+            <p>Ambiente que valoriza criatividade e crescimento.</p>
+        </div>
+        <div class="card">
+            <h3>Suporte Contínuo</h3>
+            <p>Acompanhamento em todas as etapas do processo.</p>
+        </div>
+    </div>
+</section>
+
+<footer class="rodape">
+    <p>© 2025 WiseCorp. Todos os direitos reservados.</p>
+    <div class="redes">
+        <a href="#">LinkedIn</a>
+        <a href="#">Twitter</a>
+        <a href="#">Instagram</a>
+    </div>
 </footer>
 
 <script>
@@ -156,5 +228,4 @@
 </script>
 
 </body>
-</html>
 </html>
