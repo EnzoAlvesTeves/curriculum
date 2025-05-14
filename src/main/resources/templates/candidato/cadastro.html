@@ -1,7 +1,8 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
-		<title>Cadastro de Candidato</title>
+	<link rel="stylesheet" href="estilo.css" />
+	<title>Cadastro de Candidato</title>
 		<meta charset="UTF-8"/>
 		<style>
         fieldset {
@@ -10,8 +11,42 @@
             border: 1px solid #ccc;
         }
 		</style>
+	<script>
+		// Função para buscar e preencher o endereço baseado no CEP
+		function buscarCep() {
+			var cep = document.getElementById("cep").value.replace(/\D/g, ''); // Remove caracteres não numéricos
+			if (cep.length == 8) {
+				// Faz a requisição para a API ViaCEP
+				fetch(`https://viacep.com.br/ws/${cep}/json/`)
+						.then(response => response.json())
+						.then(data => {
+							if (!data.erro) {
+								// Preenche os campos do endereço com os dados da API
+								document.getElementById("rua").value = data.logradouro;
+								document.getElementById("bairro").value = data.bairro;
+								document.getElementById("cidade").value = data.localidade;
+								document.getElementById("estado").value = data.uf;
+							} else {
+								alert("CEP não encontrado.");
+							}
+						})
+						.catch(error => alert("Erro ao buscar o CEP."));
+			} else {
+				alert("CEP inválido.");
+			}
+		}
+	</script>
 </head>
 <body>
+<div class="sidebar">
+	<h2>Menu</h2>
+	<ul>
+		<li><a href="home.html">Home</a></li>
+		<li><a href="vagas.html">Vagas</a></li>
+	</ul>
+</div>
+
+<div class="content">
 <h1>Cadastro de Candidato</h1>
 
 <form th:action="@{/candidato/cadastrar}" th:object="${candidato}" method="post">
@@ -37,28 +72,32 @@
 				<textarea th:field="*{resumoProfissional}"></textarea><br/>
 		</fieldset>
 
-		<fieldset>
-				<legend>Endereço</legend>
-				<label>Rua:</label>
-				<input type="text" th:field="*{endereco.rua}" /><br/>
+	<fieldset>
+		<legend>Endereço</legend>
+		<label>CEP:</label>
+		<input type="text" id="cep" name="cep" onblur="buscarCep()" placeholder="Digite o CEP" /><br/>
 
-				<label>Número:</label>
-				<input type="number" th:field="*{endereco.numero}" /><br/>
+		<label>Rua:</label>
+		<input type="text" id="rua" th:field="*{endereco.rua}" /><br/>
 
-				<label>Complemento:</label>
-				<input type="text" th:field="*{endereco.complemento}" /><br/>
+		<label>Bairro:</label>
+		<input type="text" id="bairro" th:field="*{endereco.bairro}" /><br/>
 
-				<label>Cidade:</label>
-				<input type="text" th:field="*{endereco.cidade}" /><br/>
+		<label>Cidade:</label>
+		<input type="text" id="cidade" th:field="*{endereco.cidade}" /><br/>
 
-				<label>Estado:</label>
-				<input type="text" th:field="*{endereco.estado}" /><br/>
+		<label>Estado:</label>
+		<input type="text" id="estado" th:field="*{endereco.estado}" /><br/>
 
-				<label>CEP:</label>
-				<input type="text" th:field="*{endereco.cep}" /><br/>
-		</fieldset>
+		<label>Número:</label>
+		<input type="number" th:field="*{endereco.numero}" /><br/>
 
-		<fieldset>
+		<label>Complemento:</label>
+		<input type="text" th:field="*{endereco.complemento}" /><br/>
+	</fieldset>
+
+
+	<fieldset>
 				<legend>Experiências</legend>
 				<div th:each="exp, iterStat : *{experiencias}">
 						<label>Cargo:</label>

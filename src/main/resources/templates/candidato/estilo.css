@@ -1,0 +1,129 @@
+/* Estilo Geral */
+body {
+    font-family: Arial, sans-serif;
+    background-color: #fff8f0;
+    color: #333;
+    margin: 0;
+    padding: 0;
+    display: flex;
+}
+
+/* Sidebar */
+.sidebar {
+    width: 250px;
+    background-color: #e56a00;
+    padding: 2rem;
+    position: fixed;
+    top: 0;
+    left: 0;
+    height: 100%;
+    color: white;
+}
+
+.sidebar h2 {
+    font-size: 1.8rem;
+    margin-bottom: 1rem;
+}
+
+.sidebar ul {
+    list-style-type: none;
+    padding: 0;
+}
+
+.sidebar ul li {
+    margin: 1rem 0;
+}
+
+.sidebar ul li a {
+    color: white;
+    text-decoration: none;
+    font-size: 1.2rem;
+}
+
+/* Estilo do Conteúdo */
+.content {
+    margin-left: 270px;
+    padding: 2rem;
+    width: 100%;
+}
+
+h1 {
+    text-align: center;
+    color: #e56a00;
+    margin-bottom: 2rem;
+    font-size: 2rem;
+}
+
+form {
+    max-width: 900px;
+    margin: 0 auto;
+    background: #ffffff;
+    padding: 2rem;
+    border-radius: 12px;
+    box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
+}
+
+fieldset {
+    margin-bottom: 2rem;
+    padding: 1.5rem;
+    border: 2px solid #f1a94e;
+    border-radius: 10px;
+}
+
+legend {
+    font-weight: bold;
+    color: #e56a00;
+    padding: 0 10px;
+    font-size: 1.2rem;
+}
+
+label {
+    display: block;
+    margin-top: 1rem;
+    margin-bottom: 0.3rem;
+    color: #444;
+    font-weight: bold;
+}
+
+input[type="text"],
+input[type="email"],
+input[type="number"],
+input[type="date"],
+textarea {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    background-color: #fffdf8;
+    font-size: 1rem;
+    transition: border 0.3s ease;
+}
+
+textarea {
+    min-height: 100px;
+}
+
+input:focus,
+textarea:focus {
+    border-color: #e56a00;
+    outline: none;
+}
+
+button[type="submit"] {
+    display: block;
+    width: 100%;
+    padding: 1rem;
+    margin-top: 2rem;
+    background-color: #e56a00;
+    color: white;
+    font-size: 1.2rem;
+    font-weight: bold;
+    border: none;
+    border-radius: 10px;
+    cursor: pointer;
+    transition: background 0.3s ease;
+}
+
+button[type="submit"]:hover {
+    background-color: #cf5d00;
+}
