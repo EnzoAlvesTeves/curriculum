@@ -3,12 +3,13 @@ package br.com.senac.curriculum.controller;
 import br.com.senac.curriculum.dto.VagaDTO;
 import br.com.senac.curriculum.repository.vaga.VagaEntity;
 import br.com.senac.curriculum.repository.vaga.VagaRepository;
+import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
-@RestController
+@Controller
 @RequestMapping(value = "/vaga")
 public class VagaController {
 
