@@ -1,90 +1,166 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
-		<meta charset="UTF-8">
-		<title>Detalhes do Candidato</title>
-		<style>
-        body { font-family: Arial, sans-serif; margin: 30px; }
-        h2 { border-bottom: 1px solid #ccc; padding-bottom: 5px; }
-        table { width: 100%; border-collapse: collapse; margin-bottom: 20px; }
-        table, th, td { border: 1px solid #ccc; }
-        th, td { padding: 8px; text-align: left; }
-		</style>
+	<meta charset="UTF-8">
+	<title>Detalhes do Candidato</title>
+	<style>
+		body {
+			font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+			background-color: #fff8f0;
+			color: #333;
+			margin: 0;
+			padding: 30px;
+		}
+
+		header {
+			background-color: #ff8000;
+			color: white;
+			padding: 20px;
+			text-align: center;
+			border-radius: 8px;
+			margin-bottom: 30px;
+		}
+
+		h1 {
+			margin: 0;
+		}
+
+		h2 {
+			color: #ff8000;
+			border-bottom: 2px solid #ff8000;
+			padding-bottom: 5px;
+			margin-top: 40px;
+		}
+
+		p {
+			margin: 8px 0;
+		}
+
+		table {
+			width: 100%;
+			border-collapse: collapse;
+			margin-top: 10px;
+			background-color: white;
+			box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
+			border-radius: 8px;
+			overflow: hidden;
+		}
+
+		th {
+			background-color: #ffe0c2;
+			color: #333;
+			text-align: left;
+			padding: 12px;
+		}
+
+		td {
+			padding: 12px;
+			border-top: 1px solid #f0f0f0;
+		}
+
+		tr:nth-child(even) {
+			background-color: #fff5eb;
+		}
+
+		.section {
+			margin-bottom: 30px;
+		}
+
+		strong {
+			color: #cc5200;
+		}
+	</style>
 </head>
 <body>
 
-<h1 th:text="'Candidato: ' + ${candidato.nome}"></h1>
+<header>
+	<h1 th:text="'Candidato: ' + ${candidato.nome}">Candidato: Fulano</h1>
+</header>
 
-<h2>Informações Pessoais</h2>
-<p><strong>Email:</strong> <span th:text="${candidato.email}"></span></p>
-<p><strong>Sexo:</strong> <span th:text="${candidato.sexo}"></span></p>
-<p><strong>Telefone:</strong> <span th:text="${candidato.telefone}"></span></p>
-<p><strong>Data de Nascimento:</strong> <span th:text="${candidato.dataNascimento}"></span></p>
-<p><strong>Resumo Profissional:</strong> <span th:text="${candidato.resumoProfissional}"></span></p>
+<div class="section">
+	<h2>Informações Pessoais</h2>
+	<p><strong>Email:</strong> <span th:text="${candidato.email}"></span></p>
+	<p><strong>Sexo:</strong> <span th:text="${candidato.sexo}"></span></p>
+	<p><strong>Telefone:</strong> <span th:text="${candidato.telefone}"></span></p>
+	<p><strong>Data de Nascimento:</strong> <span th:text="${candidato.dataNascimento}"></span></p>
+	<p><strong>Resumo Profissional:</strong> <span th:text="${candidato.resumoProfissional}"></span></p>
+</div>
 
-<h2>Endereço</h2>
-<p th:text="${candidato.endereco.rua + ', ' + candidato.endereco.numero + (candidato.endereco.complemento != null ? ' - ' + candidato.endereco.complemento : '')}"></p>
-<p><span th:text="${candidato.endereco.cidade}"></span> - <span th:text="${candidato.endereco.estado}"></span>, CEP: <span th:text="${candidato.endereco.cep}"></span></p>
+<div class="section">
+	<h2>Endereço</h2>
+	<p th:text="${candidato.endereco.rua + ', ' + candidato.endereco.numero + (candidato.endereco.complemento != null ? ' - ' + candidato.endereco.complemento : '')}"></p>
+	<p>
+		<span th:text="${candidato.endereco.cidade}"></span> -
+		<span th:text="${candidato.endereco.estado}"></span>,
+		CEP: <span th:text="${candidato.endereco.cep}"></span>
+	</p>
+</div>
 
-<h2>Experiências</h2>
-<table>
+<div class="section">
+	<h2>Experiências</h2>
+	<table>
 		<thead>
 		<tr>
-				<th>Cargo</th>
-				<th>Empresa</th>
-				<th>Data Início</th>
-				<th>Data Fim</th>
+			<th>Cargo</th>
+			<th>Empresa</th>
+			<th>Data Início</th>
+			<th>Data Fim</th>
 		</tr>
 		</thead>
 		<tbody>
 		<tr th:each="exp : ${candidato.experiencias}">
-				<td th:text="${exp.cargo}"></td>
-				<td th:text="${exp.empresa}"></td>
-				<td th:text="${exp.dataInicio}"></td>
-				<td th:text="${exp.dataFim}"></td>
+			<td th:text="${exp.cargo}"></td>
+			<td th:text="${exp.empresa}"></td>
+			<td th:text="${exp.dataInicio}"></td>
+			<td th:text="${exp.dataFim}"></td>
 		</tr>
 		</tbody>
-</table>
+	</table>
+</div>
 
-<h2>Educação</h2>
-<table>
+<div class="section">
+	<h2>Educação</h2>
+	<table>
 		<thead>
 		<tr>
-				<th>Grau</th>
-				<th>Curso</th>
-				<th>Instituição</th>
-				<th>Data Início</th>
-				<th>Data Fim</th>
+			<th>Grau</th>
+			<th>Curso</th>
+			<th>Instituição</th>
+			<th>Data Início</th>
+			<th>Data Fim</th>
 		</tr>
 		</thead>
 		<tbody>
 		<tr th:each="edu : ${candidato.educacoes}">
-				<td th:text="${edu.grau}"></td>
-				<td th:text="${edu.curso}"></td>
-				<td th:text="${edu.instituicao}"></td>
-				<td th:text="${edu.dataInicio}"></td>
-				<td th:text="${edu.dataFim}"></td>
+			<td th:text="${edu.grau}"></td>
+			<td th:text="${edu.curso}"></td>
+			<td th:text="${edu.instituicao}"></td>
+			<td th:text="${edu.dataInicio}"></td>
+			<td th:text="${edu.dataFim}"></td>
 		</tr>
 		</tbody>
-</table>
+	</table>
+</div>
 
-<h2>Habilidades</h2>
-<table>
+<div class="section">
+	<h2>Habilidades</h2>
+	<table>
 		<thead>
 		<tr>
-				<th>Descrição</th>
-				<th>Nível</th>
-				<th>Especialidade</th>
+			<th>Descrição</th>
+			<th>Nível</th>
+			<th>Especialidade</th>
 		</tr>
 		</thead>
 		<tbody>
 		<tr th:each="hab : ${candidato.habilidades}">
-				<td th:text="${hab.descricao}"></td>
-				<td th:text="${hab.nivel}"></td>
-				<td th:text="${hab.especialidade}"></td>
+			<td th:text="${hab.descricao}"></td>
+			<td th:text="${hab.nivel}"></td>
+			<td th:text="${hab.especialidade}"></td>
 		</tr>
 		</tbody>
-</table>
+	</table>
+</div>
 
 </body>
 </html>

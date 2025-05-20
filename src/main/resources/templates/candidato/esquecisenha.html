@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <title>Esqueceu a Senha</title>
+    <style>
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background-color: #fff5eb;
+        }
+
+        /* Sidebar no topo */
+        .topbar {
+            background-color: #ff7f27;
+            padding: 15px;
+            text-align: left;
+            color: white;
+            font-size: 20px;
+        }
+
+        .topbar a {
+            color: white;
+            text-decoration: none;
+            font-weight: bold;
+        }
+
+        /* Área principal */
+        .container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            margin-top: 50px;
+        }
+
+        h1 {
+            color: #ff7f27;
+        }
+
+        form {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            background-color: white;
+            border: 2px solid #ff7f27;
+            padding: 30px;
+            border-radius: 10px;
+        }
+
+        input[type="email"] {
+            padding: 10px;
+            width: 250px;
+            margin: 10px 0;
+            border: 2px solid #ccc;
+            border-radius: 5px;
+        }
+
+        input[type="submit"] {
+            background-color: #ff7f27;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            font-size: 16px;
+            cursor: pointer;
+            border-radius: 5px;
+            margin-top: 10px;
+        }
+
+        .alerta {
+            display: none;
+            margin-top: 20px;
+        }
+
+        form:invalid .alerta {
+            display: block;
+        }
+
+        .alerta img {
+            width: 200px;
+            height: auto;
+        }
+    </style>
+</head>
+<body>
+
+<!-- Sidebar superior -->
+<div class="topbar">
+    <a href="login.html">&larr; Voltar para o Login</a>
+</div>
+
+<!-- Conteúdo principal -->
+<div class="container">
+    <h1>Recuperar Senha</h1>
+    <form>
+        <input type="email" name="email" placeholder="Digite seu e-mail" required>
+        <input type="submit" value="Enviar">
+        <div class="alerta">
+
+        </div>
+    </form>
+</div>
+
+</body>
+</html>
