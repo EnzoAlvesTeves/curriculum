@@ -17,6 +17,7 @@ public class EnderecoDTO {
 	private String cidade;
 	private String estado;
 	private String cep;
+	private String bairro;
 
 	public EnderecoDTO(EnderecoEntity endereco) {
 		this.id = endereco.getId();
@@ -26,5 +27,6 @@ public class EnderecoDTO {
 		this.cidade = endereco.getCidade();
 		this.estado = endereco.getEstado();
 		this.cep = endereco.getCep();
+		this.bairro = entity.getBairro();
 	}
 }

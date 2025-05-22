@@ -2,7 +2,7 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
 	<meta charset="UTF-8">
-	<title>Detalhes do Candidato</title>
+	<title>Editar Candidato</title>
 	<style>
 		body {
 			font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
@@ -11,7 +11,6 @@
 			margin: 0;
 			padding: 30px;
 		}
-
 		header {
 			background-color: #ff8000;
 			color: white;
@@ -20,147 +19,222 @@
 			border-radius: 8px;
 			margin-bottom: 30px;
 		}
-
-		h1 {
-			margin: 0;
-		}
-
+		h1 { margin: 0; }
 		h2 {
 			color: #ff8000;
 			border-bottom: 2px solid #ff8000;
 			padding-bottom: 5px;
 			margin-top: 40px;
 		}
-
-		p {
+		label, input, textarea {
+			display: block;
 			margin: 8px 0;
-		}
-
-		table {
 			width: 100%;
-			border-collapse: collapse;
+		}
+		input, textarea {
+			padding: 8px;
+			border: 1px solid #ccc;
+			border-radius: 4px;
+		}
+		button {
+			background-color: #ff8000;
+			color: white;
+			border: none;
+			padding: 10px 20px;
+			border-radius: 4px;
+			cursor: pointer;
 			margin-top: 10px;
-			background-color: white;
-			box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
-			border-radius: 8px;
-			overflow: hidden;
 		}
-
-		th {
-			background-color: #ffe0c2;
-			color: #333;
-			text-align: left;
-			padding: 12px;
-		}
-
-		td {
-			padding: 12px;
-			border-top: 1px solid #f0f0f0;
-		}
-
-		tr:nth-child(even) {
-			background-color: #fff5eb;
-		}
-
 		.section {
 			margin-bottom: 30px;
+			padding-bottom: 20px;
+			border-bottom: 1px solid #ddd;
 		}
-
-		strong {
-			color: #cc5200;
+		.entry {
+			border: 1px solid #ccc;
+			padding: 10px;
+			border-radius: 6px;
+			margin-bottom: 10px;
+			background-color: #fffaf3;
 		}
 	</style>
 </head>
 <body>
 
 <header>
-	<h1 th:text="'Candidato: ' + ${candidato.nome}">Candidato: Fulano</h1>
+	<h1 th:text="'Editar Candidato: ' + ${candidato.nome}">Editar Candidato</h1>
 </header>
 
-<div class="section">
-	<h2>Informações Pessoais</h2>
-	<p><strong>Email:</strong> <span th:text="${candidato.email}"></span></p>
-	<p><strong>Sexo:</strong> <span th:text="${candidato.sexo}"></span></p>
-	<p><strong>Telefone:</strong> <span th:text="${candidato.telefone}"></span></p>
-	<p><strong>Data de Nascimento:</strong> <span th:text="${candidato.dataNascimento}"></span></p>
-	<p><strong>Resumo Profissional:</strong> <span th:text="${candidato.resumoProfissional}"></span></p>
-</div>
+<form th:action="@{/candidato/salvar}" th:object="${candidato}" method="post">
 
-<div class="section">
-	<h2>Endereço</h2>
-	<p th:text="${candidato.endereco.rua + ', ' + candidato.endereco.numero + (candidato.endereco.complemento != null ? ' - ' + candidato.endereco.complemento : '')}"></p>
-	<p>
-		<span th:text="${candidato.endereco.cidade}"></span> -
-		<span th:text="${candidato.endereco.estado}"></span>,
-		CEP: <span th:text="${candidato.endereco.cep}"></span>
-	</p>
-</div>
+	<input type="hidden" th:field="*{id}" />
 
-<div class="section">
-	<h2>Experiências</h2>
-	<table>
-		<thead>
-		<tr>
-			<th>Cargo</th>
-			<th>Empresa</th>
-			<th>Data Início</th>
-			<th>Data Fim</th>
-		</tr>
-		</thead>
-		<tbody>
-		<tr th:each="exp : ${candidato.experiencias}">
-			<td th:text="${exp.cargo}"></td>
-			<td th:text="${exp.empresa}"></td>
-			<td th:text="${exp.dataInicio}"></td>
-			<td th:text="${exp.dataFim}"></td>
-		</tr>
-		</tbody>
-	</table>
-</div>
+	<div class="section">
+		<h2>Informações Pessoais</h2>
+		<label>Email:</label>
+		<input type="email" th:field="*{email}" />
 
-<div class="section">
-	<h2>Educação</h2>
-	<table>
-		<thead>
-		<tr>
-			<th>Grau</th>
-			<th>Curso</th>
-			<th>Instituição</th>
-			<th>Data Início</th>
-			<th>Data Fim</th>
-		</tr>
-		</thead>
-		<tbody>
-		<tr th:each="edu : ${candidato.educacoes}">
-			<td th:text="${edu.grau}"></td>
-			<td th:text="${edu.curso}"></td>
-			<td th:text="${edu.instituicao}"></td>
-			<td th:text="${edu.dataInicio}"></td>
-			<td th:text="${edu.dataFim}"></td>
-		</tr>
-		</tbody>
-	</table>
-</div>
+		<label>Sexo:</label>
+		<input type="text" th:field="*{sexo}" />
 
-<div class="section">
-	<h2>Habilidades</h2>
-	<table>
-		<thead>
-		<tr>
-			<th>Descrição</th>
-			<th>Nível</th>
-			<th>Especialidade</th>
-		</tr>
-		</thead>
-		<tbody>
-		<tr th:each="hab : ${candidato.habilidades}">
-			<td th:text="${hab.descricao}"></td>
-			<td th:text="${hab.nivel}"></td>
-			<td th:text="${hab.especialidade}"></td>
-		</tr>
-		</tbody>
-	</table>
-</div>
+		<label>Telefone:</label>
+		<input type="text" th:field="*{telefone}" />
+
+		<label>Data de Nascimento:</label>
+		<input type="date" th:field="*{dataNascimento}" />
+
+		<label>Resumo Profissional:</label>
+		<textarea th:field="*{resumoProfissional}" rows="4"></textarea>
+	</div>
+
+	<div class="section">
+		<h2>Endereço</h2>
+		<label>CEP:</label>
+		<input type="text" id="cep" th:field="*{endereco.cep}" onblur="buscarCep()" />
+
+		<label>Rua:</label>
+		<input type="text" id="rua" th:field="*{endereco.rua}" />
+
+		<label>Número:</label>
+		<input type="text" th:field="*{endereco.numero}" />
+
+		<label>Complemento:</label>
+		<input type="text" th:field="*{endereco.complemento}" />
+
+		<label>Bairro:</label>
+		<input type="text" id="bairro" th:field="*{endereco.bairro}" />
+
+		<label>Cidade:</label>
+		<input type="text" id="cidade" th:field="*{endereco.cidade}" />
+
+		<label>Estado:</label>
+		<input type="text" id="estado" th:field="*{endereco.estado}" />
+
+	</div>
+
+	<!-- EXPERIÊNCIAS -->
+	<div class="section">
+		<h2>Experiências</h2>
+		<div id="experiencias">
+			<div class="entry" th:each="exp, iter : *{experiencias}">
+				<label>Cargo:</label>
+				<input type="text" th:field="*{experiencias[__${iter.index}__].cargo}" />
+				<label>Empresa:</label>
+				<input type="text" th:field="*{experiencias[__${iter.index}__].empresa}" />
+				<label>Data Início:</label>
+				<input type="date" th:field="*{experiencias[__${iter.index}__].dataInicio}" />
+				<label>Data Fim:</label>
+				<input type="date" th:field="*{experiencias[__${iter.index}__].dataFim}" />
+				<button type="button" onclick="remover(this)">Remover</button>
+			</div>
+		</div>
+		<button type="button" onclick="adicionar('experiencias', 'cargo,empresa,dataInicio,dataFim')">Adicionar Experiência</button>
+	</div>
+
+	<!-- EDUCAÇÃO -->
+	<div class="section">
+		<h2>Educação</h2>
+		<div id="educacoes">
+			<div class="entry" th:each="edu, iter : *{educacoes}">
+				<label>Grau:</label>
+				<input type="text" th:field="*{educacoes[__${iter.index}__].grau}" />
+				<label>Curso:</label>
+				<input type="text" th:field="*{educacoes[__${iter.index}__].curso}" />
+				<label>Instituição:</label>
+				<input type="text" th:field="*{educacoes[__${iter.index}__].instituicao}" />
+				<label>Data Início:</label>
+				<input type="date" th:field="*{educacoes[__${iter.index}__].dataInicio}" />
+				<label>Data Fim:</label>
+				<input type="date" th:field="*{educacoes[__${iter.index}__].dataFim}" />
+				<button type="button" onclick="remover(this)">Remover</button>
+			</div>
+		</div>
+		<button type="button" onclick="adicionar('educacoes', 'grau,curso,instituicao,dataInicio,dataFim')">Adicionar Educação</button>
+	</div>
+
+	<!-- HABILIDADES -->
+	<div class="section">
+		<h2>Habilidades</h2>
+		<div id="habilidades">
+			<div class="entry" th:each="hab, iter : *{habilidades}">
+				<label>Descrição:</label>
+				<input type="text" th:field="*{habilidades[__${iter.index}__].descricao}" />
+				<label>Nível:</label>
+				<input type="text" th:field="*{habilidades[__${iter.index}__].nivel}" />
+				<label>Especialidade:</label>
+				<input type="text" th:field="*{habilidades[__${iter.index}__].especialidade}" />
+				<button type="button" onclick="remover(this)">Remover</button>
+			</div>
+		</div>
+		<button type="button" onclick="adicionar('habilidades', 'descricao,nivel,especialidade')">Adicionar Habilidade</button>
+	</div>
+
+	<button type="submit">Salvar Informações</button>
+</form>
+
+<script>
+	function remover(btn) {
+		btn.parentElement.remove();
+	}
+
+	function adicionar(containerId, campos) {
+		const container = document.getElementById(containerId);
+		const camposArray = campos.split(',');
+
+		const div = document.createElement('div');
+		div.className = 'entry';
+
+		camposArray.forEach(campo => {
+			const label = document.createElement('label');
+			label.textContent = campo.charAt(0).toUpperCase() + campo.slice(1) + ':';
+
+			const input = document.createElement('input');
+			input.name = containerId + '[]';
+			input.placeholder = campo;
+			input.required = true;
+
+			if (campo.toLowerCase().includes('data')) {
+				input.type = 'date';
+			} else {
+				input.type = 'text';
+			}
+
+			div.appendChild(label);
+			div.appendChild(input);
+		});
+
+		const btn = document.createElement('button');
+		btn.type = 'button';
+		btn.textContent = 'Remover';
+		btn.onclick = function() { remover(btn); };
+
+		div.appendChild(btn);
+		container.appendChild(div);
+	}
+</script>
+<script>
+	// Função para buscar e preencher o endereço baseado no CEP
+	function buscarCep() {
+		var cep = document.getElementById("cep").value.replace(/\D/g, '');
+		if (cep.length == 8) {
+			fetch(`https://viacep.com.br/ws/${cep}/json/`)
+					.then(response => response.json())
+					.then(data => {
+						if (!data.erro) {
+							document.getElementById("rua").value = data.logradouro;
+							document.getElementById("bairro").value = data.bairro;
+							document.getElementById("cidade").value = data.localidade;
+							document.getElementById("estado").value = data.uf;
+						} else {
+							alert("CEP não encontrado.");
+						}
+					})
+					.catch(error => alert("Erro ao buscar o CEP."));
+		} else {
+			alert("CEP inválido.");
+		}
+	}
+</script>
 
 </body>
 </html>

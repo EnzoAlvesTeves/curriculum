@@ -1,147 +1,88 @@
 <!DOCTYPE html>
-<html lang="pt-BR">
+<html lang="pt-BR" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>WiseCorp</title>
-    <link rel="icon" href="../img/logo.jpg" type="image/jpg">
+    <title>Vagas Disponíveis - WiseCorp</title>
     <style>
         body {
-            margin: 0;
             font-family: Arial, sans-serif;
             background-color: #fff8f0;
-            color: #333;
+            margin: 0;
         }
-
         header {
             background-color: #ff7a00;
             color: white;
-            padding: 1rem 2rem;
+            padding: 1rem;
             display: flex;
             justify-content: space-between;
             align-items: center;
         }
-
-        .logo-container {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
-
-        .logo-container img {
-            height: 40px;
-            width: auto;
-        }
-
-        header .actions {
-            display: flex;
-            gap: 1rem;
-            align-items: center;
-        }
-
-        header a button {
-            background: white;
-            color: #ff7a00;
-            border: none;
-            padding: 0.5rem 1rem;
-            border-radius: 8px;
-            cursor: pointer;
-            font-weight: bold;
-            transition: background 0.3s;
-        }
-
-        header a button:hover {
-            background: #ffe1c2;
-        }
-
-        h1 {
-            margin: 1rem 2rem;
-        }
-
         .vaga {
-            background: white;
+            background-color: #fff;
             border-left: 5px solid #ff7a00;
-            margin: 1rem 2rem;
+            margin: 1rem;
             padding: 1rem;
             border-radius: 8px;
-            transition: transform 0.3s, box-shadow 0.3s;
+            transition: 0.3s;
             cursor: pointer;
         }
-
         .vaga:hover {
-            transform: translateY(-4px);
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            transform: scale(1.02);
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
         }
-
         .vaga .detalhes {
             display: none;
             margin-top: 1rem;
         }
-
         .vaga.ativa .detalhes {
             display: block;
-            animation: aparecer 0.3s ease-in-out;
         }
-
-        .vaga button {
-            margin-top: 10px;
-            background: #ff7a00;
+        button {
+            background-color: #ff7a00;
             color: white;
             border: none;
             padding: 0.5rem 1rem;
             border-radius: 6px;
             cursor: pointer;
         }
-
-        .vaga button:hover {
-            background: #e06600;
-        }
-
-        @keyframes aparecer {
-            from { opacity: 0; transform: scale(0.95); }
-            to { opacity: 1; transform: scale(1); }
-        }
-
-        footer {
-            text-align: center;
-            padding: 1rem;
-            background-color: #ff7a00;
-            color: white;
-            margin-top: 2rem;
-        }
     </style>
 </head>
 <body>
 
 <header>
-    <div class="logo-container">
-        <img src="../src/main/resources/templates/img/logo.jpg" alt="Logo WiseCorp" id="logoEmpresa" />
-        <strong><a th:href="@{/home}">WiseCorp</a></strong>
-    </div>
-    <div class="actions">
-        <span id="saudacao"></span>
-        <a th:href="@{/candidato/cadastrar}">
-            <button type="button">Cadastrar Currículo</button>
-        </a>
-    </div>
+    <h1>Vagas Disponíveis</h1>
+    <a th:href="@{/home}">
+        <button>Home</button>
+    </a>
 </header>
-
-<h1>Vagas Disponíveis</h1>
 
 <div id="lista-vagas">
     <div class="vaga" th:each="vaga : ${vagas}" onclick="this.classList.toggle('ativa')">
-        <h3 th:text="${vaga.titulo}"></h3>
+        <h2 th:text="${vaga.titulo}"></h2>
         <p th:text="${vaga.empresa}"></p>
         <div class="detalhes">
-            <p><strong>Descrição:</strong> <span th:text="${vaga.descricao}"></span></p>
+            <p><strong>Descrição:</strong> <span th:text=" ${vaga.descricao}"></span></p>
             <p><strong>Benefícios:</strong> <span th:text="${vaga.beneficios}"></span></p>
-            <p><strong>Salário estimado:</strong> <span th:text="'R$ ' + ${#numbers.formatDecimal(vaga.salario, 1, 'POINT', 2, 'COMMA')}"></span></p>
-            <button onclick="event.stopPropagation(); alert('Inscrição enviada para ' + this.closest('.vaga').querySelector('h3').innerText + '!')">Inscrever-se</button>
+            <p><strong>Salário:</strong> R$ <span th:text="${vaga.salario}"></span></p>
+
+            <form th:action="@{/vaga/increver}" method="post" onsubmit="event.stopPropagation();">
+                <input type="hidden" name="idVaga" th:value="${vaga.id}" />
+                <button type="submit">Inscrever-se</button>
+            </form>
         </div>
     </div>
 </div>
 
-<footer>© 2025 WiseCorp. Todos os direitos reservados.</footer>
+<script>
+    // Saudação com nome
+    const nome = localStorage.getItem("nomeUsuario");
+    if (nome) {
+        const header = document.querySelector("header");
+        const span = document.createElement("span");
+        span.textContent = `Olá, ${nome}!`;
+        header.appendChild(span);
+    }
+</script>
 
 </body>
 </html>

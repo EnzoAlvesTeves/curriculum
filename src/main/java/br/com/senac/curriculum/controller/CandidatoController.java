@@ -87,6 +87,8 @@ public class CandidatoController {
 		enderecoDTO.setCidade(candidato.getEndereco().getCidade());
 		enderecoDTO.setEstado(candidato.getEndereco().getEstado());
 		enderecoDTO.setCep(candidato.getEndereco().getCep());
+		enderecoDTO.setBairro(candidatoDTO.getEndereco().getBairro());
+
 
 		candidatoDTO.setId(candidato.getId());
 		candidatoDTO.setNome(candidato.getNome());
@@ -185,4 +187,5 @@ public class CandidatoController {
 		return "redirect:/candidato/" + candidatoDTO.getId();
 	}
 }
+
 

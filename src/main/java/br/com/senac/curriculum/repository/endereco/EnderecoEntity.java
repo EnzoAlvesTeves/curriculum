@@ -5,7 +5,6 @@ import jakarta.persistence.*;
 import lombok.*;
 
 import java.util.List;
-
 @Entity
 @Data
 @AllArgsConstructor
@@ -37,4 +36,6 @@ public class EnderecoEntity {
 
 	@OneToMany(mappedBy = "endereco")
 	private List<CandidatoEntity> candidatos;
+	@Column(name = "bairro", nullable = false, length = 100)
+	private String bairro;
 }
