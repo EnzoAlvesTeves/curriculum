@@ -169,9 +169,18 @@
     <h1>Especialistas em Tecnologia da Informação</h1>
     <p>Na WiseCorp, conectamos talentos a grandes oportunidades no mundo da TI. Descubra vagas, cadastre seu currículo e dê o próximo passo na sua carreira!</p>
     <div class="botoes">
-        <a th:if="${usuario != null && candidato == null && usuario.id != 1}" th:href="@{/candidato/cadastrar}" class="btn-escuro">Cadastrar Currículo</a>
-        <a th:if="${candidato != null && usuario.id != 1}" th:href="@{/candidato-vaga/candidato/{id}(id=${candidato.id})}" class="btn-claro">Minhas Candidaturas</a>
-        <a th:if="${usuario != null && (usuario.id == 1 || candidato != null)}" th:href="@{/vaga/lista}" class="btn-claro">Vagas</a>
+        <a th:if="${usuario != null && candidato == null && usuario.id != 1}"
+           th:href="@{/candidato/cadastrar}" class="btn-escuro">Cadastrar Currículo
+        </a>
+
+        <a th:if="${candidato != null && usuario.id != 1}"
+           th:href="@{/candidato-vaga/candidato/{id}(id=${candidato.id})}" class="btn-claro">Minhas Candidaturas
+        </a>
+
+        <a th:if="${usuario != null && (usuario.id == 1 || candidato != null)}"
+           th:href="@{/vaga/lista}" class="btn-claro">Vagas
+        </a>
+
         <a th:if="${usuario.id == 1}" class="btn-escuro">Cadastrar Vagas</a>
     </div>
 </section>
