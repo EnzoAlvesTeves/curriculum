@@ -1,69 +1,34 @@
 package br.com.senac.curriculum.controller;
 
 import br.com.senac.curriculum.dto.EducacaoDTO;
-import br.com.senac.curriculum.repository.candidato.CandidatoEntity;
-import br.com.senac.curriculum.repository.candidato.CandidatoRepository;
-import br.com.senac.curriculum.repository.educacao.EducacaoEntity;
-import br.com.senac.curriculum.repository.educacao.EducacaoRepository;
+import br.com.senac.curriculum.service.EducacaoService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping(value = "/educacao")
 public class EducacaoController {
 
-	private EducacaoRepository educacaoRepository;
-	private final CandidatoRepository candidatoRepository;
+	@Autowired
+	private EducacaoService service;
 
-	public EducacaoController(EducacaoRepository educacaoRepository, CandidatoRepository candidatoRepository) {
-		this.educacaoRepository = educacaoRepository;
-		this.candidatoRepository = candidatoRepository;
-	}
-
-	// cadastrar educacao do candidato
 	@PostMapping("/{candidatoId}")
 	public EducacaoDTO cadastrar(@PathVariable Long candidatoId, @RequestBody EducacaoDTO educacaoDTO) {
-		// buscar o candidato
-		CandidatoEntity candidato = candidatoRepository.findById(candidatoId)
-						.orElseThrow(() -> new RuntimeException("Candidato não encontrado!"));
+		EducacaoDTO educacao = service.cadastrar(candidatoId, educacaoDTO);
 
-		// cadastrar a educacao para o candidato
-		EducacaoEntity educacao = new EducacaoEntity();
-		educacao.setGrau(educacaoDTO.getGrau());
-		educacao.setDataInicio(educacaoDTO.getDataInicio());
-		educacao.setDataFim(educacaoDTO.getDataFim());
-		educacao.setInstituicao(educacaoDTO.getInstituicao());
-		educacao.setCurso(educacaoDTO.getCurso());
-		educacao.setCandidato(candidato);
-
-		educacao = educacaoRepository.save(educacao);
-
-		return new EducacaoDTO(educacao);
+		return educacao;
 	}
 
-	// editar educacao
 	@PutMapping("/{educacaoId}")
 	public EducacaoDTO editar(@PathVariable Long educacaoId, @RequestBody EducacaoDTO educacaoDTO) {
-		EducacaoEntity educacao = educacaoRepository.findById(educacaoId)
-						.orElseThrow(() -> new RuntimeException("Educação não encontrada!"));
+		EducacaoDTO educacao = service.editar(educacaoId, educacaoDTO);
 
-		educacao.setGrau(educacaoDTO.getGrau());
-		educacao.setDataInicio(educacaoDTO.getDataInicio());
-		educacao.setDataFim(educacaoDTO.getDataFim());
-		educacao.setInstituicao(educacaoDTO.getInstituicao());
-		educacao.setCurso(educacaoDTO.getCurso());
-
-		educacao = educacaoRepository.save(educacao);
-
-		return new EducacaoDTO(educacao);
+		return educacao;
 	}
 
-	// deletar educacao
 	@DeleteMapping("/{educacaoId}")
 	public void deletar(@PathVariable Long educacaoId) {
-		EducacaoEntity educacao = educacaoRepository.findById(educacaoId)
-						.orElseThrow(() -> new RuntimeException("Educação não encontrada!"));
-
-		educacaoRepository.delete(educacao);
+		service.deletar(educacaoId);
 	}
 
 }

@@ -1,8 +1,10 @@
 package br.com.senac.curriculum.dto;
 
+import br.com.senac.curriculum.enums.Sexo;
 import br.com.senac.curriculum.repository.candidato.CandidatoEntity;
 import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -12,23 +14,24 @@ import java.util.List;
 @AllArgsConstructor
 public class CandidatoDTO {
 
+	private Long id;
+	private String nome;
+	private String email;
+	private Sexo sexo;
+	private String telefone;
+	private LocalDate dataNascimento;
+	private String resumoProfissional;
+	private EnderecoDTO endereco;
+	private UsuarioDTO usuario;
+	private List<ExperienciaDTO> experiencias;
+	private List<EducacaoDTO> educacoes;
+	private List<HabilidadeDTO> habilidades;
+
 	public CandidatoDTO() {
 		this.experiencias = new ArrayList<>();
 		this.educacoes = new ArrayList<>();
 		this.habilidades = new ArrayList<>();
 	}
-
-	private Long id;
-	private String nome;
-	private String email;
-	private String sexo;
-	private String telefone;
-	private LocalDate dataNascimento;
-	private String resumoProfissional;
-	private EnderecoDTO endereco;
-	private List<ExperienciaDTO> experiencias;
-	private List<EducacaoDTO> educacoes;
-	private List<HabilidadeDTO> habilidades;
 
 	public CandidatoDTO(CandidatoEntity candidato) {
 		this.id = candidato.getId();
@@ -39,6 +42,7 @@ public class CandidatoDTO {
 		this.dataNascimento = candidato.getDataNascimento();
 		this.resumoProfissional = candidato.getResumoProfissional();
 		this.endereco = new EnderecoDTO(candidato.getEndereco());
+		this.usuario = new UsuarioDTO(candidato.getUsuario());
 
 		List<ExperienciaDTO> experiencias = new ArrayList<>();
 		candidato.getExperiencias().forEach(expecienciaEntity -> {

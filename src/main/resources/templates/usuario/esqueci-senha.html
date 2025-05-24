@@ -10,7 +10,6 @@
             background-color: #fff5eb;
         }
 
-        /* Sidebar no topo */
         .topbar {
             background-color: #ff7f27;
             padding: 15px;
@@ -25,7 +24,6 @@
             font-weight: bold;
         }
 
-        /* Área principal */
         .container {
             display: flex;
             flex-direction: column;
@@ -66,38 +64,35 @@
             margin-top: 10px;
         }
 
-        .alerta {
-            display: none;
-            margin-top: 20px;
-        }
-
-        form:invalid .alerta {
-            display: block;
-        }
-
-        .alerta img {
-            width: 200px;
-            height: auto;
+        .error-message {
+            color: red;
+            margin-top: 10px;
+            font-size: 14px;
         }
     </style>
 </head>
 <body>
 
-<!-- Sidebar superior -->
+<!-- Topbar -->
 <div class="topbar">
-    <a href="login.html">&larr; Voltar para o Login</a>
+    <a href="/">&larr; Voltar para o Login</a>
 </div>
 
 <!-- Conteúdo principal -->
-<div class="container">
+<div class="container" th:if="${esqueciSenha != null}">
     <h1>Recuperar Senha</h1>
-    <form>
-        <input type="email" name="email" placeholder="Digite seu e-mail" required>
-        <input type="submit" value="Enviar">
-        <div class="alerta">
+    <form th:action="@{/usuario/esqueci-senha}" th:object="${esqueciSenha}" method="post">
+        <input type="email" name="email" placeholder="Digite seu e-mail" required th:field="*{email}" />
 
-        </div>
+        <!-- Mensagem de erro -->
+        <p class="error-message" th:if="${error != null}" th:text="${error}"></p>
+
+        <input type="submit" value="Enviar">
     </form>
+</div>
+
+<div class="container" th:if="${senharecuperada != null}">
+    <h1>Sua senha é: <b th:text="${senharecuperada}"></b></h1>
 </div>
 
 </body>

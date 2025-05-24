@@ -6,13 +6,12 @@ spring:
     username: root
     password: admin
     driver-class-name: com.mysql.cj.jdbc.Driver
-
   jpa:
     hibernate:
       ddl-auto: none
     show-sql: true
-
   flyway:
     enabled: true
     locations: classpath:db/migration
-
+    cleanDisabled: false
+    clean-on-validation-error: true

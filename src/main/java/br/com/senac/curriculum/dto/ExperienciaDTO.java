@@ -9,6 +9,7 @@ import java.time.LocalDate;
 
 @Data
 @AllArgsConstructor
+@NoArgsConstructor
 public class ExperienciaDTO {
 
 	private Long id;
@@ -16,9 +17,6 @@ public class ExperienciaDTO {
 	private String empresa;
 	private LocalDate dataInicio;
 	private LocalDate dataFim;
-
-	public ExperienciaDTO() {
-	}
 
 	public ExperienciaDTO(ExperienciaEntity experienciaEntity) {
 		this.id = experienciaEntity.getId();

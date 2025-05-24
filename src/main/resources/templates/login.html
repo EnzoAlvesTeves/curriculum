@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>WiseCorp </title>
-  <link rel="icon" href="../img/logo.jpg" type="image/jpg">
+  <link rel="icon" href="/img/logo.jpg" type="image/jpg">
   <style>
     * {
       box-sizing: border-box;
@@ -149,54 +149,34 @@
 
 <div class="login-box">
   <div class="image-container">
-    <img src="../img/pessoatrabalhando.avif" alt="Imagem de pessoas trabalhando com tecnologia">
+    <img src="/img/pessoatrabalhando.avif" alt="Imagem de pessoas trabalhando com tecnologia">
   </div>
 
   <!-- Container de login -->
   <div class="login-container">
     <h2>Login </h2>
-    <form onsubmit="verificarLogin(event)">
+    <form th:action="@{/usuario/login}" th:object="${login}" method="post">
       <div class="form-group">
         <label for="email">E-mail</label>
-        <input type="email" id="email" placeholder="Digite seu e-mail" required>
+        <input type="email" id="email" placeholder="Digite seu e-mail" required th:field="*{email}">
       </div>
       <div class="form-group">
         <label for="password">Senha</label>
-        <input type="password" id="password" placeholder="Digite sua senha" required>
+        <input type="password" id="password" placeholder="Digite sua senha" required th:field="*{senha}">
       </div>
       <button type="submit" class="login-btn">Entrar</button>
     </form>
 
+    <!-- MENSAGEM DE ERRO -->
+    <div class="alerta-erro" th:if="${error != null}" style="margin-top: 15px; color: red; text-align: center;">
+      <p th:text="${error}"></p>
+    </div>
+
     <div class="extra-info">
-      <p><a href="esquecisenha.html">Esqueci minha senha</a> | <a href="cadastrologin.html">Cadastre-se</a></p>
+
+      <p><a th:href="@{/usuario/esqueci-senha}">Esqueci minha senha</a> | <a th:href="@{/usuario/cadastrar}">Cadastre-se</a></p>
     </div>
   </div>
 </div>
-
-<script>
-  function verificarLogin(event) {
-    event.preventDefault();
-
-    // Obtendo os dados de login
-    const email = document.getElementById('email').value;
-    const senha = document.getElementById('password').value;
-
-    // Dados fixos para login de admin
-    const adminEmail = 'admin@wisecorp.com';
-    const adminSenha = 'admin123';
-
-    // Verifica se o login é do admin
-    if (email === adminEmail && senha === adminSenha) {
-      // Armazenar informações do usuário no localStorage
-      localStorage.setItem('usuario', 'admin');
-      window.location.href = '/candidato/lista';  // Redireciona para a página de admin
-    } else {
-      // Para usuários comuns
-      localStorage.setItem('nomeUsuario', email);  // Armazena nome ou outro identificador
-      window.location.href = '/home';  // Redireciona para a página de currículos
-    }
-  }
-</script>
-
 </body>
 </html>

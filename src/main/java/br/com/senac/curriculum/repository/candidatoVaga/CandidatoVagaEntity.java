@@ -31,5 +31,4 @@ public class CandidatoVagaEntity {
 	@JoinColumn(name = "vaga_id")
 	private VagaEntity vaga;
 
-
 }

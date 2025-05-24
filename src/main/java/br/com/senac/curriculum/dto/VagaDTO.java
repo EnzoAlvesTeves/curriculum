@@ -3,9 +3,11 @@ package br.com.senac.curriculum.dto;
 import br.com.senac.curriculum.repository.vaga.VagaEntity;
 import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 @Data
 @AllArgsConstructor
+@NoArgsConstructor
 public class VagaDTO {
 
 	private Long id;
@@ -15,9 +17,6 @@ public class VagaDTO {
 	private String beneficios;
 	private double salario;
 
-	public VagaDTO() {
-	}
-
 	public VagaDTO(VagaEntity vagaEntity) {
 		this.id = vagaEntity.getId();
 		this.titulo = vagaEntity.getTitulo();
@@ -25,7 +24,6 @@ public class VagaDTO {
 		this.empresa = vagaEntity.getEmpresa();
 		this.beneficios = vagaEntity.getBeneficios();
 		this.salario = vagaEntity.getSalario();
-
 	}
 
 }

@@ -7,15 +7,13 @@ import lombok.NoArgsConstructor;
 
 @Data
 @AllArgsConstructor
+@NoArgsConstructor
 public class HabilidadeDTO {
 
 	private Long id;
 	private String descricao;
 	private String nivel;
 	private String especialidade;
-
-	public HabilidadeDTO() {
-	}
 
 	public HabilidadeDTO(HabilidadeEntity habilidadeEntity) {
 		this.id = habilidadeEntity.getId();

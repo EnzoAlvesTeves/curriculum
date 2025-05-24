@@ -3,7 +3,6 @@ package br.com.senac.curriculum.repository.educacao;
 import br.com.senac.curriculum.repository.candidato.CandidatoEntity;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
-import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -16,6 +15,7 @@ import java.time.LocalDate;
 @AllArgsConstructor
 @Table(name = "educacao")
 public class EducacaoEntity {
+
 	@Id
 	@Column(name = "id")
 	@GeneratedValue(strategy = GenerationType.IDENTITY)

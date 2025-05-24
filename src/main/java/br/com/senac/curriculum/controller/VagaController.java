@@ -1,11 +1,14 @@
 package br.com.senac.curriculum.controller;
 
 import br.com.senac.curriculum.dto.VagaDTO;
-import br.com.senac.curriculum.repository.vaga.VagaEntity;
-import br.com.senac.curriculum.repository.vaga.VagaRepository;
+import br.com.senac.curriculum.service.VagaService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
 
 import java.util.List;
 
@@ -13,31 +16,19 @@ import java.util.List;
 @RequestMapping(value = "/vaga")
 public class VagaController {
 
-	private final VagaRepository vagaRepository;
-
-	public VagaController(VagaRepository vagaRepository) {
-		this.vagaRepository = vagaRepository;
-	}
+	@Autowired
+	private VagaService service;
 
 	//salvar vaga
 	@PostMapping
 	public VagaDTO cadastrar(@RequestBody VagaDTO vagaDTO) {
-
-		VagaEntity vaga = new VagaEntity();
-		vaga.setTitulo(vagaDTO.getTitulo());
-		vaga.setDescricao(vagaDTO.getDescricao());
-		vaga.setEmpresa(vagaDTO.getEmpresa());
-		vaga.setBeneficios(vagaDTO.getBeneficios());
-		vaga.setSalario(vagaDTO.getSalario());
-
-		vaga = vagaRepository.save(vaga);
-
-		return new VagaDTO(vaga);
+		return service.cadastrar(vagaDTO);
 	}
 
 	@GetMapping("/lista")
 	public String listaVaga(Model model) {
-		List<VagaEntity> vagas = vagaRepository.findAll();
+		List<VagaDTO> vagas = service.listarVagas();
+
 		model.addAttribute("vagas", vagas);
 		return "vaga/lista";
 	}

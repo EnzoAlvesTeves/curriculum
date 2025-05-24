@@ -4,8 +4,8 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
     <title>WiseCorp - Home</title>
-    <link rel="icon" href="../img/logo.jpg" type="image/jpg">
-    <link rel="stylesheet" href="css/style.css" />
+    <link rel="icon" href="/img/logo.jpg" type="image/jpg">
+<!--    <link rel="stylesheet" href="/styles/estilo.css" />-->
     <style>
         :root {
             --laranja: #FF7514;
@@ -146,9 +146,21 @@
     <div class="logo">WiseCorp</div>
     <nav>
         <ul>
-            <li><span id="user-name">Bem-vindo</span></li>
-            <li><a th:href="@{/candidato/cadastrar}" class="botao-laranja">Cadastrar Currículo</a></li>
-            <li><a th:href="@{/vaga/lista}">Vagas</a></li>
+            <li th:if="${usuario != null}">
+                <span id="user-name">Bem-vindo <span th:text="${usuario.nome}"></span></span>
+            </li>
+            <li th:if="${usuario != null && candidato == null && usuario.id != 1}">
+                <a th:href="@{/candidato/cadastrar}" class="botao-laranja">Cadastrar Currículo</a>
+            </li>
+            <li th:if="${candidato != null && usuario.id != 1}">
+                <a th:href="@{/candidato-vaga/candidato/{id}(id=${candidato.id})}" class="button">Minhas Candidaturas</a>
+            </li>
+            <li th:if="${usuario != null && (usuario.id == 1 || candidato != null)}">
+                <a th:href="@{/vaga/lista}" class="button">Vagas</a>
+            </li>
+            <li th:if="${usuario.id == 1}">
+                <a class="button">Cadastrar Vagas</a>
+            </li>
         </ul>
     </nav>
 </header>
@@ -157,8 +169,10 @@
     <h1>Especialistas em Tecnologia da Informação</h1>
     <p>Na WiseCorp, conectamos talentos a grandes oportunidades no mundo da TI. Descubra vagas, cadastre seu currículo e dê o próximo passo na sua carreira!</p>
     <div class="botoes">
-        <a th:href="@{/vagas}" class="btn-claro">Ver Vagas Disponíveis</a>
-        <a th:href="@{/candidato/cadastrar}" class="btn-escuro">Cadastrar Currículo</a>
+        <a th:if="${usuario != null && candidato == null && usuario.id != 1}" th:href="@{/candidato/cadastrar}" class="btn-escuro">Cadastrar Currículo</a>
+        <a th:if="${candidato != null && usuario.id != 1}" th:href="@{/candidato-vaga/candidato/{id}(id=${candidato.id})}" class="btn-claro">Minhas Candidaturas</a>
+        <a th:if="${usuario != null && (usuario.id == 1 || candidato != null)}" th:href="@{/vaga/lista}" class="btn-claro">Vagas</a>
+        <a th:if="${usuario.id == 1}" class="btn-escuro">Cadastrar Vagas</a>
     </div>
 </section>
 
@@ -217,14 +231,6 @@
         <a href="#">Instagram</a>
     </div>
 </footer>
-
-<script>
-    const nomeUsuario = localStorage.getItem("nomeUsuario");
-    const userNameSpan = document.getElementById("user-name");
-    if (nomeUsuario) {
-        userNameSpan.textContent = `Olá, ${nomeUsuario}`;
-    }
-</script>
 
 </body>
 </html>

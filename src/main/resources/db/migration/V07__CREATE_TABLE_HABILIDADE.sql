@@ -1,5 +1,4 @@
-CREATE TABLE habilidade
-(
+CREATE TABLE habilidade (
     id            INT AUTO_INCREMENT PRIMARY KEY,
     candidato_id  INT,
     descricao     VARCHAR(255) NOT NULL,

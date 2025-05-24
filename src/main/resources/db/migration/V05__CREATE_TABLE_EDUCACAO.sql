@@ -1,5 +1,4 @@
-CREATE TABLE educacao
-(
+CREATE TABLE educacao (
     id           INT AUTO_INCREMENT PRIMARY KEY,
     candidato_id INT,
     grau         VARCHAR(50)  NOT NULL,

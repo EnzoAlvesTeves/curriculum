@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
-	<link rel="stylesheet" href="estilo.css" />
+	<link rel="stylesheet" href="../assets/styles/estilo.css" />
 	<title>Cadastro de Candidato</title>
 		<meta charset="UTF-8"/>
 		<style>
@@ -41,7 +41,7 @@
 <div class="sidebar">
 	<h2>Menu</h2>
 	<ul>
-		<li><a href="home.html">Home</a></li>
+		<li><a href="../home.html">Home</a></li>
 		<li><a href="lista.html">Vagas</a></li>
 	</ul>
 </div>
@@ -80,8 +80,8 @@
 		<label>Rua:</label>
 		<input type="text" id="rua" th:field="*{endereco.rua}" /><br/>
 
-<!--		<label>Bairro:</label>-->
-<!--		<input type="text" id="bairro" th:field="*{endereco.bairro}" /><br/>-->
+		<label>Bairro:</label>
+		<input type="text" id="bairro" th:field="*{endereco.bairro}" /><br/>
 
 		<label>Cidade:</label>
 		<input type="text" id="cidade" th:field="*{endereco.cidade}" /><br/>

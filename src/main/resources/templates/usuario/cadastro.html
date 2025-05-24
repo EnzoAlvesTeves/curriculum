@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Cadastro - WiseCorp</title>
-    <link rel="icon" href="../img/logo.jpg" type="image/jpg">
+    <link rel="icon" href="/img/logo.jpg" type="image/jpg">
     <style>
         * {
             box-sizing: border-box;
@@ -128,23 +128,23 @@
 
 <div class="cadastro-box">
     <div class="image-container">
-        <img src="../img/pessoatrabalhando.avif" alt="Imagem de pessoas trabalhando com tecnologia">
+        <img src="/img/pessoatrabalhando.avif" alt="Imagem de pessoas trabalhando com tecnologia">
     </div>
 
     <div class="cadastro-container">
         <h2>Cadastro</h2>
-        <form action="/candidato/salvar" method="post">
+        <form th:action="@{/usuario/cadastrar}" th:object="${usuario}" method="post">
             <div class="form-group">
                 <label for="nome">Nome completo</label>
-                <input type="text" id="nome" name="nome" required>
+                <input type="text" id="nome" name="nome" required th:field="*{nome}">
             </div>
             <div class="form-group">
                 <label for="email">E-mail</label>
-                <input type="email" id="email" name="email" required>
+                <input type="email" id="email" name="email" required th:field="*{email}">
             </div>
             <div class="form-group">
                 <label for="senha">Senha</label>
-                <input type="password" id="senha" name="senha" required>
+                <input type="password" id="senha" name="senha" required th:field="*{senha}">
             </div>
             <div class="form-group">
                 <label for="confirmarSenha">Confirmar Senha</label>
@@ -154,7 +154,7 @@
         </form>
 
         <div class="extra-info">
-            <p>Já tem uma conta? <a href="login.html">Faça login</a></p>
+            <p>Já tem uma conta? <a href="/">Faça login</a></p>
         </div>
     </div>
 </div>
