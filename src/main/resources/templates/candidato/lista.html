@@ -1,62 +1,98 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
-		<title>Lista de Candidatos</title>
-		<meta charset="UTF-8"/>
-		<style>
-        table {
-            width: 100%;
-            border-collapse: collapse;
-            margin-top: 20px;
-        }
+	<title>Lista de Candidatos</title>
+	<meta charset="UTF-8"/>
+	<style>
+		body {
+			font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+			background-color: #fff8f0;
+			margin: 0;
+			padding: 20px;
+		}
 
-        th, td {
-            border: 1px solid #ccc;
-            padding: 8px;
-            text-align: left;
-        }
+		header {
+			background-color: #FF7514;
+			color: white;
+			padding: 20px;
+			text-align: center;
+			border-radius: 8px;
+			margin-bottom: 30px;
+			box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+		}
 
-        th {
-            background-color: #f2f2f2;
-        }
+		h1 {
+			margin: 0;
+			font-size: 28px;
+		}
 
-        a.button {
-            padding: 5px 10px;
-            background-color: #4CAF50;
-            color: white;
-            text-decoration: none;
-            border-radius: 4px;
-        }
+		table {
+			width: 100%;
+			border-collapse: collapse;
+			margin-top: 10px;
+			background-color: white;
+			border-radius: 10px;
+			overflow: hidden;
+			box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+		}
 
-        a.button:hover {
-            background-color: #45a049;
-        }
-		</style>
+		th, td {
+			border: 1px solid #ffd4b3;
+			padding: 12px;
+			text-align: left;
+		}
+
+		th {
+			background-color: #FF914D;
+			color: white;
+		}
+
+		td {
+			background-color: #fff5ed;
+		}
+
+		a.button {
+			padding: 6px 12px;
+			background-color: #FF7514;
+			color: white;
+			text-decoration: none;
+			border-radius: 6px;
+			transition: background-color 0.3s ease;
+		}
+
+		a.button:hover {
+			background-color: #e06300;
+		}
+	</style>
 </head>
 <body>
-<h1>Lista de Candidatos</h1>
+
+<header>
+	<h1>Lista de Candidatos</h1>
+</header>
 
 <table>
-		<thead>
-		<tr>
-				<th>Nome</th>
-				<th>Email</th>
-				<th>Telefone</th>
-				<th>Data de Nascimento</th>
-				<th>Ações</th>
-		</tr>
-		</thead>
-		<tbody>
-		<tr th:each="candidato : ${candidatos}">
-				<td th:text="${candidato.nome}">Nome</td>
-				<td th:text="${candidato.email}">Email</td>
-				<td th:text="${candidato.telefone}">Telefone</td>
-				<td th:text="${#temporals.format(candidato.dataNascimento, 'dd/MM/yyyy')}">Data</td>
-				<td>
-						<a th:href="@{/candidato/{id}(id=${candidato.id})}" class="button">Curriculo</a>
-				</td>
-		</tr>
-		</tbody>
+	<thead>
+	<tr>
+		<th>Nome</th>
+		<th>Email</th>
+		<th>Telefone</th>
+		<th>Data de Nascimento</th>
+		<th>Ações</th>
+	</tr>
+	</thead>
+	<tbody>
+	<tr th:each="candidato : ${candidatos}">
+		<td th:text="${candidato.nome}">Nome</td>
+		<td th:text="${candidato.email}">Email</td>
+		<td th:text="${candidato.telefone}">Telefone</td>
+		<td th:text="${#temporals.format(candidato.dataNascimento, 'dd/MM/yyyy')}">Data</td>
+		<td>
+			<a th:href="@{/candidato/{id}(id=${candidato.id})}" class="button">Ver Currículo</a>
+		</td>
+	</tr>
+	</tbody>
 </table>
+
 </body>
 </html>
