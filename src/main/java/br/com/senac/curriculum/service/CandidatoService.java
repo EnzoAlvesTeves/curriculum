@@ -11,6 +11,8 @@ import br.com.senac.curriculum.repository.experiencia.ExperienciaEntity;
 import br.com.senac.curriculum.repository.experiencia.ExperienciaRepository;
 import br.com.senac.curriculum.repository.habilidade.HabilidadeEntity;
 import br.com.senac.curriculum.repository.habilidade.HabilidadeRepository;
+import br.com.senac.curriculum.repository.usuario.UsuarioEntity;
+import br.com.senac.curriculum.repository.usuario.UsuarioRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -36,6 +38,9 @@ public class CandidatoService {
     @Autowired
     private HabilidadeRepository habilidadeRepository;
 
+    @Autowired
+    private UsuarioRepository usuarioRepository;
+
     @Transactional
     public CandidatoDTO cadastrar(CandidatoDTO candidatoDTO) {
         EnderecoEntity endereco = new EnderecoEntity();
@@ -45,11 +50,16 @@ public class CandidatoService {
         endereco.setCidade(candidatoDTO.getEndereco().getCidade());
         endereco.setEstado(candidatoDTO.getEndereco().getEstado());
         endereco.setCep(candidatoDTO.getEndereco().getCep());
+        endereco.setBairro(candidatoDTO.getEndereco().getBairro());
 
         endereco = enderecoRepository.save(endereco);
         candidatoDTO.getEndereco().setId(endereco.getId());
 
+        UsuarioEntity usuario = usuarioRepository.findById(candidatoDTO.getUsuario().getId())
+                .orElseThrow(() -> new RuntimeException("Usuário não encontrado"));
+
         CandidatoEntity candidato = new CandidatoEntity();
+        candidato.setUsuario(usuario);
         candidato.setNome(candidatoDTO.getNome());
         candidato.setEmail(candidatoDTO.getEmail());
         candidato.setSexo(candidatoDTO.getSexo());

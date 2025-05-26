@@ -150,7 +150,7 @@
                 <span id="user-name">Bem-vindo <span th:text="${usuario.nome}"></span></span>
             </li>
             <li th:if="${usuario != null && candidato == null && usuario.id != 1}">
-                <a th:href="@{/candidato/cadastrar}" class="botao-laranja">Cadastrar Currículo</a>
+                <a th:href="@{/candidato/cadastrar(usuarioId=${usuario.id})}" class="botao-laranja">Cadastrar Currículo</a>
             </li>
             <li th:if="${candidato != null && usuario.id != 1}">
                 <a th:href="@{/candidato-vaga/candidato/{id}(id=${candidato.id})}" class="button">Minhas Candidaturas</a>

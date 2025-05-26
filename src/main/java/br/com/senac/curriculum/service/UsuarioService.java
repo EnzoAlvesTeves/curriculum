@@ -55,4 +55,14 @@ public class UsuarioService {
             throw new RuntimeException("Usuário não encontrado");
         }
     }
+
+    public UsuarioDTO buscarPorId(Long id) {
+        Optional<UsuarioEntity> usuario = usuarioRepository.findById(id);
+
+        if (usuario.isPresent()) {
+            return new UsuarioDTO(usuario.get());
+        } else {
+            throw new RuntimeException("Usuário não encontrado");
+        }
+    }
 }

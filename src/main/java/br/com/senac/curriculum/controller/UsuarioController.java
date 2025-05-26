@@ -55,6 +55,21 @@ public class UsuarioController {
 		}
 	}
 
+	@GetMapping("/home/{id}")
+	public String login(@PathVariable Long id, Model model) {
+		try {
+			UsuarioDTO usuarioDTO = service.buscarPorId(id);
+
+			model.addAttribute("usuario", usuarioDTO);
+			model.addAttribute("candidato", usuarioDTO.getCandidato());
+			return "home";
+		} catch (RuntimeException e) {
+			model.addAttribute("error", e.getMessage());
+			model.addAttribute("login", new LoginRequest());
+			return "login";
+		}
+	}
+
 	@PostMapping("/login")
 	public String login(@ModelAttribute LoginRequest login, Model model) {
 		try {

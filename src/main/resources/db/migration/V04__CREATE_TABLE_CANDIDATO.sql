@@ -6,8 +6,8 @@ CREATE TABLE candidato (
     telefone            VARCHAR(15),
     data_nascimento     DATE,
     resumo_profissional VARCHAR(1000),
-    endereco_id         INT,
-    usuario_id          INT,
+    endereco_id         INT NOT NULL,
+    usuario_id          INT NOT NULL,
     FOREIGN KEY (endereco_id) REFERENCES endereco (id),
     FOREIGN KEY (usuario_id) REFERENCES usuario (id)
 );
