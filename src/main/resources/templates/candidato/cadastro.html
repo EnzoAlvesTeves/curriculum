@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+	<link rel="stylesheet" href="../assets/styles/estilo.css" />
+	<title>Cadastro de Candidato</title>
+		<meta charset="UTF-8"/>
+		<style>
+        fieldset {
+            margin-bottom: 1em;
+            padding: 1em;
+            border: 1px solid #ccc;
+        }
+		</style>
+	<script>
+		// Função para buscar e preencher o endereço baseado no CEP
+		function buscarCep() {
+			var cep = document.getElementById("cep").value.replace(/\D/g, ''); // Remove caracteres não numéricos
+			if (cep.length == 8) {
+				// Faz a requisição para a API ViaCEP
+				fetch(`https://viacep.com.br/ws/${cep}/json/`)
+						.then(response => response.json())
+						.then(data => {
+							if (!data.erro) {
+								// Preenche os campos do endereço com os dados da API
+								document.getElementById("rua").value = data.logradouro;
+								document.getElementById("bairro").value = data.bairro;
+								document.getElementById("cidade").value = data.localidade;
+								document.getElementById("estado").value = data.uf;
+							} else {
+								alert("CEP não encontrado.");
+							}
+						})
+						.catch(error => alert("Erro ao buscar o CEP."));
+			} else {
+				alert("CEP inválido.");
+			}
+		}
+	</script>
+</head>
+<body>
+<div class="sidebar">
+	<h2>Menu</h2>
+	<ul>
+		<li><a href="../home.html">Home</a></li>
+		<li><a href="lista.html">Vagas</a></li>
+	</ul>
+</div>
+
+<div class="content">
+<h1>Cadastro de Candidato</h1>
+
+<form th:action="@{/candidato/cadastrar}" th:object="${candidato}" method="post">
+
+		<fieldset>
+				<legend>Informações Pessoais</legend>
+				<label>Nome:</label>
+				<input type="text" th:field="*{nome}" /><br/>
+
+				<label>Email:</label>
+				<input type="email" th:field="*{email}" /><br/>
+
+				<label>Sexo:</label>
+				<input type="text" th:field="*{sexo}" /><br/>
+
+				<label>Telefone:</label>
+				<input type="text" th:field="*{telefone}" /><br/>
+
+				<label>Data de Nascimento:</label>
+				<input type="date" th:field="*{dataNascimento}" /><br/>
+
+				<label>Resumo Profissional:</label>
+				<textarea th:field="*{resumoProfissional}"></textarea><br/>
+		</fieldset>
+
+	<fieldset>
+		<legend>Endereço</legend>
+		<label>CEP:</label>
+		<input type="text" id="cep" name="cep" onblur="buscarCep()" placeholder="Digite o CEP" /><br/>
+
+		<label>Rua:</label>
+		<input type="text" id="rua" th:field="*{endereco.rua}" /><br/>
+
+		<label>Bairro:</label>
+		<input type="text" id="bairro" th:field="*{endereco.bairro}" /><br/>
+
+		<label>Cidade:</label>
+		<input type="text" id="cidade" th:field="*{endereco.cidade}" /><br/>
+
+		<label>Estado:</label>
+		<input type="text" id="estado" th:field="*{endereco.estado}" /><br/>
+
+		<label>Número:</label>
+		<input type="number" th:field="*{endereco.numero}" /><br/>
+
+		<label>Complemento:</label>
+		<input type="text" th:field="*{endereco.complemento}" /><br/>
+	</fieldset>
+
+
+	<fieldset>
+				<legend>Experiências</legend>
+				<div th:each="exp, iterStat : *{experiencias}">
+						<label>Cargo:</label>
+						<input type="text" th:field="*{experiencias[__${iterStat.index}__].cargo}" /><br/>
+
+						<label>Empresa:</label>
+						<input type="text" th:field="*{experiencias[__${iterStat.index}__].empresa}" /><br/>
+
+						<label>Data Início:</label>
+						<input type="date" th:field="*{experiencias[__${iterStat.index}__].dataInicio}" /><br/>
+
+						<label>Data Fim:</label>
+						<input type="date" th:field="*{experiencias[__${iterStat.index}__].dataFim}" /><br/><br/>
+				</div>
+		</fieldset>
+
+		<fieldset>
+				<legend>Educação</legend>
+				<div th:each="edu, iterStat : *{educacoes}">
+						<label>Grau:</label>
+						<input type="text" th:field="*{educacoes[__${iterStat.index}__].grau}" /><br/>
+
+						<label>Instituição:</label>
+						<input type="text" th:field="*{educacoes[__${iterStat.index}__].instituicao}" /><br/>
+
+						<label>Curso:</label>
+						<input type="text" th:field="*{educacoes[__${iterStat.index}__].curso}" /><br/>
+
+						<label>Data Início:</label>
+						<input type="date" th:field="*{educacoes[__${iterStat.index}__].dataInicio}" /><br/>
+
+						<label>Data Fim:</label>
+						<input type="date" th:field="*{educacoes[__${iterStat.index}__].dataFim}" /><br/><br/>
+				</div>
+		</fieldset>
+
+		<fieldset>
+				<legend>Habilidades</legend>
+				<div th:each="hab, iterStat : *{habilidades}">
+						<label>Descrição:</label>
+						<input type="text" th:field="*{habilidades[__${iterStat.index}__].descricao}" /><br/>
+
+						<label>Nível:</label>
+						<input type="text" th:field="*{habilidades[__${iterStat.index}__].nivel}" /><br/>
+
+						<label>Especialidade:</label>
+						<input type="text" th:field="*{habilidades[__${iterStat.index}__].especialidade}" /><br/><br/>
+				</div>
+		</fieldset>
+
+		<button type="submit">Salvar</button>
+</form>
+</body>
+</html>
