@@ -1,184 +1,305 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
-	<meta charset="UTF-8">
-	<title>Editar Candidato</title>
-	<style>
-		body {
-			font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-			background-color: #fff8f0;
-			color: #333;
-			margin: 0;
-			padding: 30px;
-		}
-		header {
-			background-color: #ff8000;
-			color: white;
-			padding: 20px;
-			text-align: center;
-			border-radius: 8px;
-			margin-bottom: 30px;
-		}
-		h1 { margin: 0; }
-		h2 {
-			color: #ff8000;
-			border-bottom: 2px solid #ff8000;
-			padding-bottom: 5px;
-			margin-top: 40px;
-		}
-		label, input, textarea {
-			display: block;
-			margin: 8px 0;
-			width: 100%;
-		}
-		input, textarea {
-			padding: 8px;
-			border: 1px solid #ccc;
-			border-radius: 4px;
-		}
-		button {
-			background-color: #ff8000;
-			color: white;
-			border: none;
-			padding: 10px 20px;
-			border-radius: 4px;
-			cursor: pointer;
-			margin-top: 10px;
-		}
-		.section {
-			margin-bottom: 30px;
-			padding-bottom: 20px;
-			border-bottom: 1px solid #ddd;
-		}
-		.entry {
-			border: 1px solid #ccc;
-			padding: 10px;
-			border-radius: 6px;
-			margin-bottom: 10px;
-			background-color: #fffaf3;
-		}
-	</style>
+		<meta charset="UTF-8"/>
+		<title>Editar Candidato</title>
+		<link rel="icon" href="/img/logo.jpg" type="image/jpg">
+		<link rel="stylesheet" href="/styles/estilo.css" />
+		<style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #fff5eb;
+            margin: 0;
+            padding: 0;
+        }
+
+        .navbar {
+            width: 100%;
+            background-color: #ff7f27;
+            padding: 15px 20px;
+            color: white;
+            position: fixed;
+            top: 0;
+            left: 0;
+            z-index: 1000;
+        }
+
+        .navbar h2 {
+            display: inline-block;
+            margin: 0;
+            font-size: 20px;
+        }
+
+        .navbar ul {
+            display: inline-block;
+            list-style-type: none;
+            margin: 0;
+            padding: 0;
+        }
+
+        .navbar ul li {
+            display: inline-block;
+            margin-left: 20px;
+        }
+
+        .navbar ul li a {
+            color: white;
+            text-decoration: none;
+            font-weight: bold;
+        }
+
+        .content {
+            margin-top: 80px;
+            padding: 30px;
+        }
+
+        h1 {
+            color: #ff7f27;
+        }
+
+        form {
+            background-color: white;
+            padding: 20px;
+            border-radius: 8px;
+            border: 1px solid #ddd;
+        }
+
+        fieldset {
+            margin-bottom: 1.5em;
+            padding: 1em;
+            border: 2px solid #ff7f27;
+            border-radius: 8px;
+        }
+
+        legend {
+            font-weight: bold;
+            color: #ff7f27;
+        }
+
+        label {
+            display: inline-block;
+            width: 150px;
+            margin-top: 10px;
+        }
+
+        input[type="text"],
+        input[type="email"],
+        input[type="date"],
+        input[type="number"],
+        select,
+        textarea {
+            padding: 8px;
+            margin-top: 5px;
+            width: 250px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+
+        textarea {
+            height: 80px;
+        }
+
+        button {
+            background-color: #ff7f27;
+            color: white;
+            padding: 8px 20px;
+            border: none;
+            border-radius: 5px;
+            font-size: 14px;
+            cursor: pointer;
+            margin-top: 10px;
+        }
+
+        button:hover {
+            background-color: #e86f1a;
+        }
+
+        .item {
+            margin-bottom: 20px;
+        }
+		</style>
+		<script>
+        function buscarCep() {
+            var cep = document.getElementById("cep").value.replace(/\D/g, '');
+            if (cep.length == 8) {
+                fetch(`https://viacep.com.br/ws/${cep}/json/`)
+                    .then(response => response.json())
+                    .then(data => {
+                        if (!data.erro) {
+                            document.getElementById("rua").value = data.logradouro;
+                            document.getElementById("bairro").value = data.bairro;
+                            document.getElementById("cidade").value = data.localidade;
+                            document.getElementById("estado").value = data.uf;
+                        } else {
+                            alert("CEP não encontrado.");
+                        }
+                    })
+                    .catch(() => alert("Erro ao buscar o CEP."));
+            } else {
+                alert("CEP inválido.");
+            }
+        }
+
+        function addSection(sectionId, prefix) {
+            const container = document.getElementById(sectionId);
+            const items = container.querySelectorAll(".item");
+            const newIndex = items.length;
+
+            const firstItem = items[0];
+            const clone = firstItem.cloneNode(true);
+
+            clone.querySelectorAll("input").forEach(input => {
+                const name = input.getAttribute("name");
+                if (name) {
+                    const fieldName = name.replace(/\[\d+\]/, `[${newIndex}]`);
+                    input.setAttribute("name", fieldName);
+                    input.value = "";
+                }
+            });
+
+            container.insertBefore(clone, container.lastElementChild);
+        }
+
+        function removeSection(button) {
+            const container = button.closest(".item");
+            const parent = container.parentNode;
+            const items = parent.querySelectorAll(".item");
+            if (items.length > 1) {
+                container.remove();
+            }
+        }
+		</script>
 </head>
 <body>
+<div class="navbar">
+		<ul>
+				<li><a th:href="@{/usuario/home/{id}(id=${candidato.usuario.id})}">Home</a></li>
+				<li><a th:href="@{/vaga/lista}">Vagas</a></li>
+		</ul>
+</div>
 
-<header>
-	<h1 th:text="'Editar Candidato: ' + ${candidato.nome}">Editar Candidato</h1>
-</header>
+<div class="content">
+		<h1>Editar Candidato</h1>
 
-<form th:action="@{/candidato/editar}" th:object="${candidato}" method="post">
+		<form th:action="@{/candidato/editar}" method="post">
+				<input type="hidden" name="id" th:value="${candidato.id}"/>
+				<input type="hidden" name="usuario.id" th:value="${candidato.usuario.id}"/>
 
-	<input type="hidden" th:field="*{id}" />
+				<fieldset>
+						<legend>Informações Pessoais</legend>
+						<label>Nome:</label>
+						<input type="text" name="nome" th:value="${candidato.nome}"/><br/>
 
-	<div class="section">
-		<h2>Informações Pessoais</h2>
-		<label>Nome:</label>
-		<input type="text" th:field="*{nome}" />
+						<label>Email:</label>
+						<input type="email" name="email" th:value="${candidato.email}"/><br/>
 
-		<label>Email:</label>
-		<input type="email" th:field="*{email}" />
+						<label>Sexo:</label>
+						<select name="sexo" th:value="${candidato.sexo}">
+								<option value="MASCULINO" th:selected="${candidato.sexo == 'MASCULINO'}">Masculino</option>
+								<option value="FEMININO" th:selected="${candidato.sexo == 'FEMININO'}">Feminino</option>
+								<option value="OUTRO" th:selected="${candidato.sexo == 'OUTRO'}">Outro</option>
+						</select><br/>
 
-		<label>Sexo:</label>
-		<input type="text" th:field="*{sexo}" />
+						<label>Telefone:</label>
+						<input type="text" name="telefone" th:value="${candidato.telefone}"/><br/>
 
-		<label>Telefone:</label>
-		<input type="text" th:field="*{telefone}" />
+						<label>Data de Nascimento:</label>
+						<input type="date" name="dataNascimento" th:value="${candidato.dataNascimento}"/><br/>
 
-		<label>Data de Nascimento:</label>
-		<input type="date" th:field="*{dataNascimento}" />
+						<label>Resumo Profissional:</label>
+						<textarea name="resumoProfissional" th:text="${candidato.resumoProfissional}"></textarea><br/>
+				</fieldset>
 
-		<label>Resumo Profissional:</label>
-		<textarea th:field="*{resumoProfissional}" rows="4"></textarea>
-	</div>
+				<fieldset>
+						<input type="hidden" name="endereco.id" th:value="${candidato.endereco.id}"/>
+						<legend>Endereço</legend>
+						<label>CEP:</label>
+						<input type="text" id="cep" name="endereco.cep" th:value="${candidato.endereco.cep}" onblur="buscarCep()"/><br/>
 
-	<div class="section">
-		<input type="hidden" th:field="*{endereco.id}" />
-		<h2>Endereço</h2>
-		<label>CEP:</label>
-		<input type="text" id="cep" th:field="*{endereco.cep}" onblur="buscarCep()" />
+						<label>Rua:</label>
+						<input type="text" id="rua" name="endereco.rua" th:value="${candidato.endereco.rua}"/><br/>
 
-		<label>Rua:</label>
-		<input type="text" id="rua" th:field="*{endereco.rua}" />
+						<label>Bairro:</label>
+						<input type="text" id="bairro" name="endereco.bairro" th:value="${candidato.endereco.bairro}"/><br/>
 
-		<label>Número:</label>
-		<input type="text" th:field="*{endereco.numero}" />
+						<label>Cidade:</label>
+						<input type="text" id="cidade" name="endereco.cidade" th:value="${candidato.endereco.cidade}"/><br/>
 
-		<label>Complemento:</label>
-		<input type="text" th:field="*{endereco.complemento}" />
+						<label>Estado:</label>
+						<input type="text" id="estado" name="endereco.estado" th:value="${candidato.endereco.estado}"/><br/>
 
-		<label>Bairro:</label>
-		<input type="text" id="bairro" th:field="*{endereco.bairro}" />
+						<label>Número:</label>
+						<input type="number" name="endereco.numero" th:value="${candidato.endereco.numero}"/><br/>
 
-		<label>Cidade:</label>
-		<input type="text" id="cidade" th:field="*{endereco.cidade}" />
+						<label>Complemento:</label>
+						<input type="text" name="endereco.complemento" th:value="${candidato.endereco.complemento}"/><br/>
+				</fieldset>
 
-		<label>Estado:</label>
-		<input type="text" id="estado" th:field="*{endereco.estado}" />
+				<fieldset id="experienciasSection">
+						<legend>Experiências</legend>
+						<div class="item" th:each="exp, iterStat : ${candidato.experiencias}">
+								<input type="hidden" th:name="'experiencias[' + ${iterStat.index} + '].id'" th:value="${exp.id}"/><br/>
+								<label>Cargo:</label>
+								<input type="text" th:name="'experiencias[' + ${iterStat.index} + '].cargo'" th:value="${exp.cargo}"/><br/>
 
-	</div>
+								<label>Empresa:</label>
+								<input type="text" th:name="'experiencias[' + ${iterStat.index} + '].empresa'" th:value="${exp.empresa}"/><br/>
 
-	<!-- EXPERIÊNCIAS -->
-	<div class="section">
-		<h2>Experiências</h2>
-		<div id="experiencias">
-			<div class="entry" th:each="exp, iter : *{experiencias}">
-				<input type="hidden" th:field="*{experiencias[__${iter.index}__].id}" />
-				<label>Cargo:</label>
-				<input type="text" th:field="*{experiencias[__${iter.index}__].cargo}" />
-				<label>Empresa:</label>
-				<input type="text" th:field="*{experiencias[__${iter.index}__].empresa}" />
-				<label>Data Início:</label>
-				<input type="date" th:field="*{experiencias[__${iter.index}__].dataInicio}" />
-				<label>Data Fim:</label>
-				<input type="date" th:field="*{experiencias[__${iter.index}__].dataFim}" />
-				<button type="button" onclick="remover(this)">Remover</button>
-			</div>
-		</div>
-		<button type="button" onclick="adicionar('experiencias', 'cargo,empresa,dataInicio,dataFim')">Adicionar Experiência</button>
-	</div>
+								<label>Data Início:</label>
+								<input type="date" th:name="'experiencias[' + ${iterStat.index} + '].dataInicio'" th:value="${exp.dataInicio}"/><br/>
 
-	<!-- EDUCAÇÃO -->
-	<div class="section">
-		<h2>Educação</h2>
-		<div id="educacoes">
-			<div class="entry" th:each="edu, iter : *{educacoes}">
-				<input type="hidden" th:field="*{educacoes[__${iter.index}__].id}" />
-				<label>Grau:</label>
-				<input type="text" th:field="*{educacoes[__${iter.index}__].grau}" />
-				<label>Curso:</label>
-				<input type="text" th:field="*{educacoes[__${iter.index}__].curso}" />
-				<label>Instituição:</label>
-				<input type="text" th:field="*{educacoes[__${iter.index}__].instituicao}" />
-				<label>Data Início:</label>
-				<input type="date" th:field="*{educacoes[__${iter.index}__].dataInicio}" />
-				<label>Data Fim:</label>
-				<input type="date" th:field="*{educacoes[__${iter.index}__].dataFim}" />
-				<button type="button" onclick="remover(this)">Remover</button>
-			</div>
-		</div>
-		<button type="button" onclick="adicionar('educacoes', 'grau,curso,instituicao,dataInicio,dataFim')">Adicionar Educação</button>
-	</div>
+								<label>Data Fim:</label>
+								<input type="date" th:name="'experiencias[' + ${iterStat.index} + '].dataFim'" th:value="${exp.dataFim}"/><br/>
 
-	<!-- HABILIDADES -->
-	<div class="section">
-		<h2>Habilidades</h2>
-		<div id="habilidades">
-			<div class="entry" th:each="hab, iter : *{habilidades}">
-				<input type="hidden" th:field="*{habilidades[__${iter.index}__].id}" />
-				<label>Descrição:</label>
-				<input type="text" th:field="*{habilidades[__${iter.index}__].descricao}" />
-				<label>Nível:</label>
-				<input type="text" th:field="*{habilidades[__${iter.index}__].nivel}" />
-				<label>Especialidade:</label>
-				<input type="text" th:field="*{habilidades[__${iter.index}__].especialidade}" />
-				<button type="button" onclick="remover(this)">Remover</button>
-			</div>
-		</div>
-		<button type="button" onclick="adicionar('habilidades', 'descricao,nivel,especialidade')">Adicionar Habilidade</button>
-	</div>
+								<button type="button" onclick="removeSection(this)">Remover</button><br/>
+						</div>
+						<button type="button" onclick="addSection('experienciasSection', 'experiencias')">Adicionar Experiência</button>
+				</fieldset>
 
-	<button type="submit">Salvar Informações</button>
-</form>
+				<fieldset id="educacoesSection">
+						<legend>Educação</legend>
+						<div class="item" th:each="edu, iterStat : ${candidato.educacoes}">
+								<input type="hidden" th:name="'educacoes[' + ${iterStat.index} + '].id'" th:value="${edu.id}"/><br/>
+								<label>Grau:</label>
+								<input type="text" th:name="'educacoes[' + ${iterStat.index} + '].grau'" th:value="${edu.grau}"/><br/>
 
-<script src="/scripts/editar-curriculo.js"></script>
+								<label>Instituição:</label>
+								<input type="text" th:name="'educacoes[' + ${iterStat.index} + '].instituicao'" th:value="${edu.instituicao}"/><br/>
+
+								<label>Curso:</label>
+								<input type="text" th:name="'educacoes[' + ${iterStat.index} + '].curso'" th:value="${edu.curso}"/><br/>
+
+								<label>Data Início:</label>
+								<input type="date" th:name="'educacoes[' + ${iterStat.index} + '].dataInicio'" th:value="${edu.dataInicio}"/><br/>
+
+								<label>Data Fim:</label>
+								<input type="date" th:name="'educacoes[' + ${iterStat.index} + '].dataFim'" th:value="${edu.dataFim}"/><br/>
+
+								<button type="button" onclick="removeSection(this)">Remover</button><br/>
+						</div>
+						<button type="button" onclick="addSection('educacoesSection', 'educacoes')">Adicionar Educação</button>
+				</fieldset>
+
+				<fieldset id="habilidadesSection">
+						<legend>Habilidades</legend>
+						<div class="item" th:each="hab, iterStat : ${candidato.habilidades}">
+								<input type="hidden" th:name="'habilidades[' + ${iterStat.index} + '].id'" th:value="${hab.id}"/><br/>
+								<label>Descrição:</label>
+								<input type="text" th:name="'habilidades[' + ${iterStat.index} + '].descricao'" th:value="${hab.descricao}"/><br/>
+
+								<label>Nível:</label>
+								<input type="text" th:name="'habilidades[' + ${iterStat.index} + '].nivel'" th:value="${hab.nivel}"/><br/>
+
+								<label>Especialidade:</label>
+								<input type="text" th:name="'habilidades[' + ${iterStat.index} + '].especialidade'" th:value="${hab.especialidade}"/><br/>
+
+								<button type="button" onclick="removeSection(this)">Remover</button><br/>
+						</div>
+						<button type="button" onclick="addSection('habilidadesSection', 'habilidades')">Adicionar Habilidade</button>
+				</fieldset>
+
+				<button type="submit">Salvar Alterações</button>
+		</form>
+</div>
 </body>
 </html>
