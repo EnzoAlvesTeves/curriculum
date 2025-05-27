@@ -1,5 +1,6 @@
 package br.com.senac.curriculum.service;
 
+import br.com.senac.curriculum.controller.CandidatoController;
 import br.com.senac.curriculum.dto.*;
 import br.com.senac.curriculum.repository.candidato.CandidatoEntity;
 import br.com.senac.curriculum.repository.candidato.CandidatoRepository;
@@ -43,6 +44,14 @@ public class CandidatoService {
 
     @Transactional
     public CandidatoDTO cadastrar(CandidatoDTO candidatoDTO) {
+        UsuarioEntity usuario = usuarioRepository.findById(candidatoDTO.getUsuario().getId())
+                .orElseThrow(() -> new RuntimeException("Usuário não encontrado"));
+
+        Optional<CandidatoEntity> candidatoExistente = candidatoRepository.findByUsuario(usuario);
+        if (candidatoExistente.isPresent()) {
+            throw new RuntimeException("Candidato já cadastrado para o usuário: " + usuario.getId());
+        }
+
         EnderecoEntity endereco = new EnderecoEntity();
         endereco.setRua(candidatoDTO.getEndereco().getRua());
         endereco.setNumero(candidatoDTO.getEndereco().getNumero());
@@ -54,9 +63,6 @@ public class CandidatoService {
 
         endereco = enderecoRepository.save(endereco);
         candidatoDTO.getEndereco().setId(endereco.getId());
-
-        UsuarioEntity usuario = usuarioRepository.findById(candidatoDTO.getUsuario().getId())
-                .orElseThrow(() -> new RuntimeException("Usuário não encontrado"));
 
         CandidatoEntity candidato = new CandidatoEntity();
         candidato.setUsuario(usuario);
@@ -112,61 +118,12 @@ public class CandidatoService {
 
     public CandidatoDTO buscarPorId(Long id) {
         Optional<CandidatoEntity> candidatoEntity = candidatoRepository.findById(id);
-        CandidatoEntity candidato = candidatoEntity.get();
 
-        CandidatoDTO candidatoDTO = new CandidatoDTO();
-        EnderecoDTO enderecoDTO = new EnderecoDTO();
+        if (candidatoEntity.isEmpty()) {
+            throw new RuntimeException("Candidato não encontrado com o ID: " + id);
+        }
 
-        candidato.getExperiencias().forEach(experiencia -> {
-            ExperienciaDTO experienciaDTO = new ExperienciaDTO();
-            experienciaDTO.setId(experiencia.getId());
-            experienciaDTO.setCargo(experiencia.getCargo());
-            experienciaDTO.setEmpresa(experiencia.getEmpresa());
-            experienciaDTO.setDataInicio(experiencia.getDataInicio());
-            experienciaDTO.setDataFim(experiencia.getDataFim());
-
-            candidatoDTO.getExperiencias().add(experienciaDTO);
-        });
-
-        candidato.getEducacoes().forEach(educacao -> {
-            EducacaoDTO educacaoDTO = new EducacaoDTO();
-            educacaoDTO.setId(educacao.getId());
-            educacaoDTO.setGrau(educacao.getGrau());
-            educacaoDTO.setDataInicio(educacao.getDataInicio());
-            educacaoDTO.setDataFim(educacao.getDataFim());
-            educacaoDTO.setInstituicao(educacao.getInstituicao());
-            educacaoDTO.setCurso(educacao.getCurso());
-
-            candidatoDTO.getEducacoes().add(educacaoDTO);
-        });
-
-        candidato.getHabilidades().forEach(habilidade -> {
-            HabilidadeDTO habilidadeDTO = new HabilidadeDTO();
-            habilidadeDTO.setId(habilidade.getId());
-            habilidadeDTO.setDescricao(habilidade.getDescricao());
-            habilidadeDTO.setNivel(habilidade.getNivel());
-            habilidadeDTO.setEspecialidade(habilidade.getEspecialidade());
-
-            candidatoDTO.getHabilidades().add(habilidadeDTO);
-        });
-
-        enderecoDTO.setId(candidato.getEndereco().getId());
-        enderecoDTO.setRua(candidato.getEndereco().getRua());
-        enderecoDTO.setNumero(candidato.getEndereco().getNumero());
-        enderecoDTO.setComplemento(candidato.getEndereco().getComplemento());
-        enderecoDTO.setCidade(candidato.getEndereco().getCidade());
-        enderecoDTO.setEstado(candidato.getEndereco().getEstado());
-        enderecoDTO.setCep(candidato.getEndereco().getCep());
-        enderecoDTO.setBairro(candidatoDTO.getEndereco().getBairro());
-
-        candidatoDTO.setId(candidato.getId());
-        candidatoDTO.setNome(candidato.getNome());
-        candidatoDTO.setEmail(candidato.getEmail());
-        candidatoDTO.setSexo(candidato.getSexo());
-        candidatoDTO.setTelefone(candidato.getTelefone());
-        candidatoDTO.setDataNascimento(candidato.getDataNascimento());
-        candidatoDTO.setEndereco(enderecoDTO);
-
+        CandidatoDTO candidatoDTO = new CandidatoDTO(candidatoEntity.get());
         return candidatoDTO;
     }
 
@@ -175,5 +132,96 @@ public class CandidatoService {
                 .stream()
                 .map(CandidatoDTO::new)
                 .toList();
+    }
+
+    @Transactional
+    public CandidatoDTO editar(CandidatoDTO candidatoDTO) {
+        Optional<CandidatoEntity> candidatoAtual = candidatoRepository.findById(candidatoDTO.getId());
+        if (candidatoAtual.isEmpty()) {
+            throw new RuntimeException("Candidato não encontrado com o ID: " + candidatoDTO.getId());
+        }
+
+        Optional<EnderecoEntity> enderecoAtual = enderecoRepository.findById(candidatoDTO.getEndereco().getId());
+        if (enderecoAtual.isEmpty()) {
+            throw new RuntimeException("Endereço não encontrado com o ID: " + candidatoDTO.getEndereco().getId());
+        }
+
+        EnderecoEntity endereco = enderecoAtual.get();
+        endereco.setRua(candidatoDTO.getEndereco().getRua());
+        endereco.setNumero(candidatoDTO.getEndereco().getNumero());
+        endereco.setComplemento(candidatoDTO.getEndereco().getComplemento());
+        endereco.setCidade(candidatoDTO.getEndereco().getCidade());
+        endereco.setEstado(candidatoDTO.getEndereco().getEstado());
+        endereco.setCep(candidatoDTO.getEndereco().getCep());
+        endereco.setBairro(candidatoDTO.getEndereco().getBairro());
+
+        enderecoRepository.save(endereco);
+
+        CandidatoEntity candidato = candidatoAtual.get();
+        candidato.setNome(candidatoDTO.getNome());
+        candidato.setEmail(candidatoDTO.getEmail());
+        candidato.setSexo(candidatoDTO.getSexo());
+        candidato.setTelefone(candidatoDTO.getTelefone());
+        candidato.setDataNascimento(candidatoDTO.getDataNascimento());
+        candidato.setResumoProfissional(candidatoDTO.getResumoProfissional());
+
+        candidatoDTO.getEducacoes().forEach(educacaoDTO -> {
+            EducacaoEntity educacao = new EducacaoEntity();
+            if (educacaoDTO.getId() != null) {
+                Optional<EducacaoEntity> educacaoExistente = educacaoRepository.findById(educacaoDTO.getId());
+                if (educacaoExistente.isEmpty()) {
+                    throw new RuntimeException("Educação não existe: " + educacaoDTO.getId());
+                }
+                educacao = educacaoExistente.get();
+            }
+
+            educacao.setGrau(educacaoDTO.getGrau());
+            educacao.setDataInicio(educacaoDTO.getDataInicio());
+            educacao.setDataFim(educacaoDTO.getDataFim());
+            educacao.setInstituicao(educacaoDTO.getInstituicao());
+            educacao.setCurso(educacaoDTO.getCurso());
+            educacao.setCandidato(candidato);
+
+            educacaoRepository.save(educacao);
+        });
+
+        candidatoDTO.getExperiencias().forEach(experienciaDTO -> {
+            ExperienciaEntity experiencia = new ExperienciaEntity();
+            if (experienciaDTO.getId() != null) {
+                Optional<ExperienciaEntity> experienciaExistente = experienciaRepository.findById(experienciaDTO.getId());
+                if (experienciaExistente.isEmpty()) {
+                    throw new RuntimeException("Experiência não existe: " + experienciaDTO.getId());
+                }
+                experiencia = experienciaExistente.get();
+            }
+
+            experiencia.setCargo(experienciaDTO.getCargo());
+            experiencia.setEmpresa(experienciaDTO.getEmpresa());
+            experiencia.setDataInicio(experienciaDTO.getDataInicio());
+            experiencia.setDataFim(experienciaDTO.getDataFim());
+            experiencia.setCandidato(candidato);
+
+            experienciaRepository.save(experiencia);
+        });
+
+        candidatoDTO.getHabilidades().forEach(habilidadeDTO -> {
+            HabilidadeEntity habilidade = new HabilidadeEntity();
+            if (habilidadeDTO.getId() != null) {
+                Optional<HabilidadeEntity> habilidadeExistente = habilidadeRepository.findById(habilidadeDTO.getId());
+                if (habilidadeExistente.isEmpty()) {
+                    throw new RuntimeException("Habilidade não existe: " + habilidadeDTO.getId());
+                }
+                habilidade = habilidadeExistente.get();
+            }
+
+            habilidade.setDescricao(habilidadeDTO.getDescricao());
+            habilidade.setNivel(habilidadeDTO.getNivel());
+            habilidade.setEspecialidade(habilidadeDTO.getEspecialidade());
+            habilidade.setCandidato(candidato);
+
+            habilidadeRepository.save(habilidade);
+        });
+
+        return candidatoDTO;
     }
 }

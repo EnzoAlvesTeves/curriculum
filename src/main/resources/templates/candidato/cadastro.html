@@ -173,7 +173,7 @@
 <body>
 <div class="navbar">
 		<ul>
-				<li><a th:href="@{/usuario/home/{id}(id=${usuario.id})}" class="button">Home</a></li>
+				<li><a th:href="@{/usuario/home/{id}(id=${candidato.usuario.id})}" class="button">Home</a></li>
 				<li><a th:href="@{/vaga/lista}" class="button">Vagas</a></li>
 		</ul>
 </div>
@@ -182,14 +182,14 @@
 		<h1>Cadastro de Candidato</h1>
 
 		<form th:action="@{/candidato/cadastrar}" method="post">
-				<input type="hidden" name="usuario.id" th:value="${usuario.id}"/>
+				<input type="hidden" name="usuario.id" th:value="${candidato.usuario.id}"/>
 				<fieldset>
 						<legend>Informações Pessoais</legend>
 						<label>Nome:</label>
-						<input type="text" name="nome" th:value="${usuario.nome}" disabled/><br/>
+						<input type="text" name="nome" th:value="${candidato.nome}"/><br/>
 
 						<label>Email:</label>
-						<input type="email" name="email" th:value="${usuario.email}" disabled/><br/>
+						<input type="email" name="email" th:value="${candidato.email}"/><br/>
 
 						<label>Sexo:</label>
 						<select  name="sexo">

@@ -21,7 +21,7 @@ public class UsuarioDTO {
 		this.email = entity.getEmail();
 		this.senha = entity.getSenha();
 		if (entity.getCandidato() != null) {
-			this.candidato = new CandidatoDTO(entity.getCandidato());
+			this.candidato = new CandidatoDTO(entity.getCandidato(), this);
 		}
 	}
 }

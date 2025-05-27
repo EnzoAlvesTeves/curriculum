@@ -65,12 +65,15 @@
 	<h1 th:text="'Editar Candidato: ' + ${candidato.nome}">Editar Candidato</h1>
 </header>
 
-<form th:action="@{/candidato/salvar}" th:object="${candidato}" method="post">
+<form th:action="@{/candidato/editar}" th:object="${candidato}" method="post">
 
 	<input type="hidden" th:field="*{id}" />
 
 	<div class="section">
 		<h2>Informações Pessoais</h2>
+		<label>Nome:</label>
+		<input type="text" th:field="*{nome}" />
+
 		<label>Email:</label>
 		<input type="email" th:field="*{email}" />
 
@@ -88,6 +91,7 @@
 	</div>
 
 	<div class="section">
+		<input type="hidden" th:field="*{endereco.id}" />
 		<h2>Endereço</h2>
 		<label>CEP:</label>
 		<input type="text" id="cep" th:field="*{endereco.cep}" onblur="buscarCep()" />
@@ -117,6 +121,7 @@
 		<h2>Experiências</h2>
 		<div id="experiencias">
 			<div class="entry" th:each="exp, iter : *{experiencias}">
+				<input type="hidden" th:field="*{experiencias[__${iter.index}__].id}" />
 				<label>Cargo:</label>
 				<input type="text" th:field="*{experiencias[__${iter.index}__].cargo}" />
 				<label>Empresa:</label>
@@ -136,6 +141,7 @@
 		<h2>Educação</h2>
 		<div id="educacoes">
 			<div class="entry" th:each="edu, iter : *{educacoes}">
+				<input type="hidden" th:field="*{educacoes[__${iter.index}__].id}" />
 				<label>Grau:</label>
 				<input type="text" th:field="*{educacoes[__${iter.index}__].grau}" />
 				<label>Curso:</label>
@@ -157,6 +163,7 @@
 		<h2>Habilidades</h2>
 		<div id="habilidades">
 			<div class="entry" th:each="hab, iter : *{habilidades}">
+				<input type="hidden" th:field="*{habilidades[__${iter.index}__].id}" />
 				<label>Descrição:</label>
 				<input type="text" th:field="*{habilidades[__${iter.index}__].descricao}" />
 				<label>Nível:</label>
@@ -172,69 +179,6 @@
 	<button type="submit">Salvar Informações</button>
 </form>
 
-<script>
-	function remover(btn) {
-		btn.parentElement.remove();
-	}
-
-	function adicionar(containerId, campos) {
-		const container = document.getElementById(containerId);
-		const camposArray = campos.split(',');
-
-		const div = document.createElement('div');
-		div.className = 'entry';
-
-		camposArray.forEach(campo => {
-			const label = document.createElement('label');
-			label.textContent = campo.charAt(0).toUpperCase() + campo.slice(1) + ':';
-
-			const input = document.createElement('input');
-			input.name = containerId + '[]';
-			input.placeholder = campo;
-			input.required = true;
-
-			if (campo.toLowerCase().includes('data')) {
-				input.type = 'date';
-			} else {
-				input.type = 'text';
-			}
-
-			div.appendChild(label);
-			div.appendChild(input);
-		});
-
-		const btn = document.createElement('button');
-		btn.type = 'button';
-		btn.textContent = 'Remover';
-		btn.onclick = function() { remover(btn); };
-
-		div.appendChild(btn);
-		container.appendChild(div);
-	}
-</script>
-<script>
-	// Função para buscar e preencher o endereço baseado no CEP
-	function buscarCep() {
-		var cep = document.getElementById("cep").value.replace(/\D/g, '');
-		if (cep.length == 8) {
-			fetch(`https://viacep.com.br/ws/${cep}/json/`)
-					.then(response => response.json())
-					.then(data => {
-						if (!data.erro) {
-							document.getElementById("rua").value = data.logradouro;
-							document.getElementById("bairro").value = data.bairro;
-							document.getElementById("cidade").value = data.localidade;
-							document.getElementById("estado").value = data.uf;
-						} else {
-							alert("CEP não encontrado.");
-						}
-					})
-					.catch(error => alert("Erro ao buscar o CEP."));
-		} else {
-			alert("CEP inválido.");
-		}
-	}
-</script>
-
+<script src="/scripts/editar-curriculo.js"></script>
 </body>
 </html>

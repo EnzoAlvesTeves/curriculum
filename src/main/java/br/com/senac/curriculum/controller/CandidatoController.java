@@ -33,15 +33,13 @@ public class CandidatoController {
 	public String novoCandidato(Long usuarioId, Model model) {
 		UsuarioDTO usuarioDTO = usuarioService.buscarPorId(usuarioId);
 
-		CandidatoDTO candidatoDTO = new CandidatoDTO();
-		candidatoDTO.setUsuario(usuarioDTO);
+		CandidatoDTO candidatoDTO = new CandidatoDTO(usuarioDTO);
 		candidatoDTO.setEndereco(new EnderecoDTO());
 		candidatoDTO.getEducacoes().add(new EducacaoDTO());
 		candidatoDTO.getExperiencias().add(new ExperienciaDTO());
 		candidatoDTO.getHabilidades().add(new HabilidadeDTO());
 
 		model.addAttribute("candidato", candidatoDTO);
-		model.addAttribute("usuario", usuarioDTO);
 		return "candidato/cadastro";
 	}
 
@@ -56,11 +54,15 @@ public class CandidatoController {
 	@PostMapping("/cadastrar")
 	public String cadastrar(@ModelAttribute CandidatoDTO candidatoDTO, Model model){
 		CandidatoDTO candidato = service.cadastrar(candidatoDTO);
-//		return "redirect:/candidato/" + candidato.getId();
 
-		model.addAttribute("candidato", candidato);
-		model.addAttribute("usuario", candidato.getUsuario());
-		return "candidato/curriculo";
+		return "redirect:/candidato/" + candidato.getId();
+	}
+
+	@PostMapping("/editar")
+	public String editar(@ModelAttribute CandidatoDTO candidatoDTO, Model model){
+		CandidatoDTO candidato = service.editar(candidatoDTO);
+
+		return "redirect:/candidato/" + candidato.getId();
 	}
 }
 

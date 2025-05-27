@@ -152,6 +152,9 @@
             <li th:if="${usuario != null && candidato == null && usuario.id != 1}">
                 <a th:href="@{/candidato/cadastrar(usuarioId=${usuario.id})}" class="botao-laranja">Cadastrar Currículo</a>
             </li>
+            <li th:if="${usuario != null && candidato != null && usuario.id != 1}">
+                <a th:href="@{/candidato/{id}(id=${candidato.id})}" class="botao-laranja">Meu Currículo</a>
+            </li>
             <li th:if="${candidato != null && usuario.id != 1}">
                 <a th:href="@{/candidato-vaga/candidato/{id}(id=${candidato.id})}" class="button">Minhas Candidaturas</a>
             </li>
@@ -170,9 +173,11 @@
     <p>Na WiseCorp, conectamos talentos a grandes oportunidades no mundo da TI. Descubra vagas, cadastre seu currículo e dê o próximo passo na sua carreira!</p>
     <div class="botoes">
         <a th:if="${usuario != null && candidato == null && usuario.id != 1}"
-           th:href="@{/candidato/cadastrar}" class="btn-escuro">Cadastrar Currículo
+           th:href="@{/candidato/cadastrar(usuarioId=${usuario.id})}" class="btn-escuro">Cadastrar Currículo
         </a>
-
+        <a th:if="${candidato != null && usuario.id != 1}"
+           th:href="@{/candidato/{id}(id=${candidato.id})}" class="btn-escuro">Meu Currículo
+        </a>
         <a th:if="${candidato != null && usuario.id != 1}"
            th:href="@{/candidato-vaga/candidato/{id}(id=${candidato.id})}" class="btn-claro">Minhas Candidaturas
         </a>
