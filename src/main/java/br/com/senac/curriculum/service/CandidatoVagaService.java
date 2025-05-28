@@ -1,6 +1,7 @@
 package br.com.senac.curriculum.service;
 
 import br.com.senac.curriculum.dto.CandidatoDTO;
+import br.com.senac.curriculum.dto.CandidatoVagasDTO;
 import br.com.senac.curriculum.dto.VagaDTO;
 import br.com.senac.curriculum.repository.candidato.CandidatoEntity;
 import br.com.senac.curriculum.repository.candidato.CandidatoRepository;
@@ -62,15 +63,17 @@ public class CandidatoVagaService {
                 .toList();
     }
 
-    public List<VagaDTO> listarVagasPorCandidato(Long candidatoId) {
+    public CandidatoVagasDTO listarVagasPorCandidato(Long candidatoId) {
         CandidatoEntity candidato = candidatoRepository.findById(candidatoId)
                 .orElseThrow(() -> new RuntimeException("Candidato não encontrado"));
 
         List<CandidatoVagaEntity> vagasCandidato = candidatoVagaRepository.findByCandidato(candidato);
 
-        return vagasCandidato.stream()
+        List<VagaDTO> vagas = vagasCandidato.stream()
                 .map(candidatoVaga -> new VagaDTO(candidatoVaga.getVaga()))
                 .toList();
+
+        return new CandidatoVagasDTO(new CandidatoDTO(candidato), vagas);
     }
 
 }

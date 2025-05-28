@@ -3,6 +3,7 @@ package br.com.senac.curriculum.controller;
 
 import br.com.senac.curriculum.controller.request.CandidaturaRequest;
 import br.com.senac.curriculum.dto.CandidatoDTO;
+import br.com.senac.curriculum.dto.CandidatoVagasDTO;
 import br.com.senac.curriculum.dto.VagaDTO;
 import br.com.senac.curriculum.service.CandidatoVagaService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,7 +27,7 @@ public class CandidatoVagaController {
 				candidaturaRequest.getVagaId()
 		);
 
-		return "redirect:/candidato/vagas/" + candidaturaRequest.getCandidatoId();
+		return "redirect:/candidato-vaga/candidato/" + candidaturaRequest.getCandidatoId();
 	}
 
 	//listagem de candidatos por vaga
@@ -41,9 +42,10 @@ public class CandidatoVagaController {
 	//listagem de vagas que candidato se inscreveu
 	@GetMapping("/candidato/{id}")
 	public String vagasPorCandidato(@PathVariable Long id, Model model) {
-		List<VagaDTO> vagas = service.listarVagasPorCandidato(id);
+		CandidatoVagasDTO candidatoVagasDTO = service.listarVagasPorCandidato(id);
 
-		model.addAttribute("candidato", vagas);
+		model.addAttribute("candidato", candidatoVagasDTO.getCandidato());
+		model.addAttribute("vagas", candidatoVagasDTO.getVagas());
 		return "candidato/vagas";
 	}
 

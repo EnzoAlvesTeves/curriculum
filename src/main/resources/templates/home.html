@@ -158,8 +158,8 @@
             <li th:if="${candidato != null && usuario.id != 1}">
                 <a th:href="@{/candidato-vaga/candidato/{id}(id=${candidato.id})}" class="button">Minhas Candidaturas</a>
             </li>
-            <li th:if="${usuario != null && (usuario.id == 1 || candidato != null)}">
-                <a th:href="@{/vaga/lista}" class="button">Vagas</a>
+            <li th:if="${usuario != null}">
+                <a th:href="@{/vaga/lista/usuario/{id}(id=${usuario.id})}" class="button">Vagas</a>
             </li>
             <li th:if="${usuario.id == 1}">
                 <a class="button">Cadastrar Vagas</a>
@@ -175,15 +175,15 @@
         <a th:if="${usuario != null && candidato == null && usuario.id != 1}"
            th:href="@{/candidato/cadastrar(usuarioId=${usuario.id})}" class="btn-escuro">Cadastrar Currículo
         </a>
-        <a th:if="${candidato != null && usuario.id != 1}"
+        <a th:if="${usuario != null && candidato != null && usuario.id != 1}"
            th:href="@{/candidato/{id}(id=${candidato.id})}" class="btn-escuro">Meu Currículo
         </a>
         <a th:if="${candidato != null && usuario.id != 1}"
            th:href="@{/candidato-vaga/candidato/{id}(id=${candidato.id})}" class="btn-claro">Minhas Candidaturas
         </a>
 
-        <a th:if="${usuario != null && (usuario.id == 1 || candidato != null)}"
-           th:href="@{/vaga/lista}" class="btn-claro">Vagas
+        <a th:if="${usuario != null}"
+           th:href="@{/vaga/lista/usuario/{id}(id=${usuario.id})}" class="btn-claro">Vagas
         </a>
 
         <a th:if="${usuario.id == 1}" class="btn-escuro">Cadastrar Vagas</a>

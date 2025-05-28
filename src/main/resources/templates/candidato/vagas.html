@@ -2,21 +2,35 @@
 <html lang="pt-BR" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8" />
-    <title>Vagas Disponíveis - WiseCorp</title>
+    <title>Minhas Candidaturas</title>
     <style>
-        body {
-            font-family: Arial, sans-serif;
-            background-color: #fff8f0;
-            margin: 0;
+        :root {
+            --laranja: #FF7514;
+            --laranja-claro: #ffe2ca;
+            --cinza-fundo: #f9fafc;
+            --sombra: rgba(0, 0, 0, 0.1);
         }
-        header {
-            background-color: #ff7a00;
-            color: white;
-            padding: 1rem;
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: var(--cinza-fundo);
+            animation: fadeIn 1.2s ease-in;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        .topo {
+            background-color: var(--laranja);
+            padding: 20px;
             display: flex;
             justify-content: space-between;
             align-items: center;
+            box-shadow: 0 4px 12px var(--sombra);
         }
+
         .vaga {
             background-color: #fff;
             border-left: 5px solid #ff7a00;
@@ -25,10 +39,6 @@
             border-radius: 8px;
             transition: 0.3s;
             cursor: pointer;
-        }
-        .vaga:hover {
-            transform: scale(1.02);
-            box-shadow: 0 0 10px rgba(0,0,0,0.1);
         }
         .vaga .detalhes {
             display: none;
@@ -45,44 +55,108 @@
             border-radius: 6px;
             cursor: pointer;
         }
+
+        .topo {
+            background-color: var(--laranja);
+            padding: 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 4px 12px var(--sombra);
+        }
+
+        .logo {
+            font-size: 28px;
+            font-weight: bold;
+            color: white;
+        }
+
+        nav ul {
+            list-style: none;
+            display: flex;
+            gap: 16px;
+        }
+
+        nav a {
+            text-decoration: none;
+            color: white;
+            font-weight: 600;
+            padding: 10px 14px;
+            border-radius: 8px;
+            transition: background 0.3s;
+        }
+
+        nav a:hover {
+            background-color: var(--laranja-claro);
+        }
+
+        .botao-laranja {
+            background-color: white;
+            color: var(--laranja);
+        }
+
+        .botoes {
+            margin-top: 20px;
+        }
+
+        .btn-claro, .btn-escuro {
+            padding: 12px 20px;
+            border-radius: 8px;
+            margin: 0 10px;
+            text-decoration: none;
+            font-weight: bold;
+        }
+
+        .btn-claro {
+            background-color: white;
+            color: var(--laranja);
+            border: 2px solid var(--laranja);
+        }
+
+        .btn-escuro {
+            background-color: var(--laranja);
+            color: white;
+            border: none;
+        }
+
+        #user-name {
+            margin-right: 10px;
+        }
     </style>
 </head>
 <body>
 
-<header>
-    <h1>Vagas Disponíveis</h1>
-    <a th:href="@{/home}">
-        <button>Home</button>
-    </a>
+<header class="topo">
+    <div class="logo">WiseCorp</div>
+    <nav>
+        <ul>
+            <li th:if="${candidato != null}">
+                <span id="user-name"><span th:text="${candidato.nome}"></span></span>
+            </li>
+            <li th:if="${candidato != null}">
+                <a th:href="@{/usuario/home/{id}(id=${candidato.usuario.id})}" class="button">Home</a>
+            </li>
+            <li th:if="${candidato != null}">
+                <a th:href="@{/candidato/{id}(id=${candidato.id})}" class="botao-laranja">Meu Currículo</a>
+            </li>
+            <li th:if="${candidato != null}">
+                <a th:href="@{/vaga/lista/usuario/{id}(id=${candidato.usuario.id})}" class="button">Vagas</a>
+            </li>
+        </ul>
+    </nav>
 </header>
 
 <div id="lista-vagas">
-    <div class="vaga" th:each="vaga : ${vagas}" onclick="this.classList.toggle('ativa')">
+    <div class="vaga ativa" th:each="vaga : ${vagas}">
         <h2 th:text="${vaga.titulo}"></h2>
         <p th:text="${vaga.empresa}"></p>
         <div class="detalhes">
             <p><strong>Descrição:</strong> <span th:text=" ${vaga.descricao}"></span></p>
             <p><strong>Benefícios:</strong> <span th:text="${vaga.beneficios}"></span></p>
             <p><strong>Salário:</strong> R$ <span th:text="${vaga.salario}"></span></p>
-
-            <form th:action="@{/vaga/increver}" method="post" onsubmit="event.stopPropagation();">
-                <input type="hidden" name="idVaga" th:value="${vaga.id}" />
-                <button type="submit">Inscrever-se</button>
-            </form>
         </div>
     </div>
 </div>
-
-<script>
-    // Saudação com nome
-    const nome = localStorage.getItem("nomeUsuario");
-    if (nome) {
-        const header = document.querySelector("header");
-        const span = document.createElement("span");
-        span.textContent = `Olá, ${nome}!`;
-        header.appendChild(span);
-    }
-</script>
 
 </body>
 </html>

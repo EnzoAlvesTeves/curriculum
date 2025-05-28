@@ -65,24 +65,14 @@
             <p><strong>Benefícios:</strong> <span th:text="${vaga.beneficios}"></span></p>
             <p><strong>Salário:</strong> R$ <span th:text="${vaga.salario}"></span></p>
 
-            <form th:action="@{/vaga/increver}" method="post" onsubmit="event.stopPropagation();">
-                <input type="hidden" name="idVaga" th:value="${vaga.id}" />
+            <form th:action="@{/candidato-vaga/candidatura}" method="post">
+                <input type="hidden" name="vagaId" th:value="${vaga.id}" />
+                <input type="hidden" name="candidatoId" th:value="${candidato.id}" />
                 <button type="submit">Inscrever-se</button>
             </form>
         </div>
     </div>
 </div>
-
-<script>
-    // Saudação com nome
-    const nome = localStorage.getItem("nomeUsuario");
-    if (nome) {
-        const header = document.querySelector("header");
-        const span = document.createElement("span");
-        span.textContent = `Olá, ${nome}!`;
-        header.appendChild(span);
-    }
-</script>
 
 </body>
 </html>
