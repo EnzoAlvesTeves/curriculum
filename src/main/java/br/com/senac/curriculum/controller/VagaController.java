@@ -22,9 +22,19 @@ public class VagaController {
 	private UsuarioService usuarioService;
 
 	//salvar vaga
-	@PostMapping
-	public VagaDTO cadastrar(@RequestBody VagaDTO vagaDTO) {
-		return service.cadastrar(vagaDTO);
+	@PostMapping("cadastrar")
+	public String cadastrar(@ModelAttribute VagaDTO vagaDTO) {
+		service.cadastrar(vagaDTO);
+
+		return "redirect:/vaga/lista/usuario/1";
+	}
+
+	@GetMapping("/cadastrar/usuario/{id}")
+	public String cadastrarVaga(@PathVariable Long id, Model model) {
+		UsuarioDTO usuarioDTO = usuarioService.buscarPorId(id);
+
+		model.addAttribute("usuario", usuarioDTO);
+		return "vaga/cadastro";
 	}
 
 	@GetMapping("/lista/usuario/{id}")

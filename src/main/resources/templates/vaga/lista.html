@@ -142,6 +142,9 @@
 						<li th:if="${candidato != null && usuario.id != 1}">
 								<a th:href="@{/candidato-vaga/candidato/{id}(id=${candidato.id})}" class="button">Minhas Candidaturas</a>
 						</li>
+					<li th:if="${usuario.id == 1}">
+						<a th:href="@{/vaga/cadastrar/usuario/{id}(id=${usuario.id})}" class="button">Cadastrar Vagas</a>
+					</li>
 				</ul>
 		</nav>
 </header>

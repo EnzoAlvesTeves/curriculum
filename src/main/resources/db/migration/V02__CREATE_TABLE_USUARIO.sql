@@ -4,5 +4,3 @@ CREATE TABLE usuario (
     email   VARCHAR(255) NOT NULL,
     senha   VARCHAR(255) NOT NULL
 );
-
-INSERT INTO usuario (nome, email, senha) VALUES ('admin', 'admin@wisecorp.com', 'admin123');

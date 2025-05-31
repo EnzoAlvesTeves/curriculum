@@ -165,6 +165,17 @@ public class CandidatoService {
         candidato.setDataNascimento(candidatoDTO.getDataNascimento());
         candidato.setResumoProfissional(candidatoDTO.getResumoProfissional());
 
+        List<EducacaoEntity> educacaoParaDeletar = candidato.getEducacoes()
+                .stream()
+                .filter(educacao ->
+                    !candidatoDTO.getEducacoes()
+                            .stream()
+                            .anyMatch(educacaoDTO -> educacaoDTO.getId().equals(educacao.getId()))
+                ).toList();
+
+        educacaoRepository.deleteAll(educacaoParaDeletar);
+
+
         candidatoDTO.getEducacoes().forEach(educacaoDTO -> {
             EducacaoEntity educacao = new EducacaoEntity();
             if (educacaoDTO.getId() != null) {
@@ -185,6 +196,16 @@ public class CandidatoService {
             educacaoRepository.save(educacao);
         });
 
+        List<ExperienciaEntity> experienciaParaDeletar = candidato.getExperiencias()
+                .stream()
+                .filter(experiencia ->
+                        !candidatoDTO.getExperiencias()
+                                .stream()
+                                .anyMatch(experienciaDTO -> experienciaDTO.getId().equals(experiencia.getId()))
+                ).toList();
+
+        experienciaRepository.deleteAll(experienciaParaDeletar);
+
         candidatoDTO.getExperiencias().forEach(experienciaDTO -> {
             ExperienciaEntity experiencia = new ExperienciaEntity();
             if (experienciaDTO.getId() != null) {
@@ -203,6 +224,16 @@ public class CandidatoService {
 
             experienciaRepository.save(experiencia);
         });
+
+        List<HabilidadeEntity> habilidadeParaDeletar = candidato.getHabilidades()
+                .stream()
+                .filter(habilidade ->
+                        !candidatoDTO.getHabilidades()
+                                .stream()
+                                .anyMatch(habilidadeDTO -> habilidadeDTO.getId().equals(habilidade.getId()))
+                ).toList();
+
+        habilidadeRepository.deleteAll(habilidadeParaDeletar);
 
         candidatoDTO.getHabilidades().forEach(habilidadeDTO -> {
             HabilidadeEntity habilidade = new HabilidadeEntity();

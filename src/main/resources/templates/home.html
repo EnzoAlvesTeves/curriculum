@@ -162,7 +162,7 @@
                 <a th:href="@{/vaga/lista/usuario/{id}(id=${usuario.id})}" class="button">Vagas</a>
             </li>
             <li th:if="${usuario.id == 1}">
-                <a class="button">Cadastrar Vagas</a>
+                <a th:href="@{/vaga/cadastrar/usuario/{id}(id=${usuario.id})}" class="button">Cadastrar Vagas</a>
             </li>
         </ul>
     </nav>
@@ -186,7 +186,9 @@
            th:href="@{/vaga/lista/usuario/{id}(id=${usuario.id})}" class="btn-claro">Vagas
         </a>
 
-        <a th:if="${usuario.id == 1}" class="btn-escuro">Cadastrar Vagas</a>
+        <a th:if="${usuario.id == 1}"
+           th:href="@{/vaga/cadastrar/usuario/{id}(id=${usuario.id})}" class="btn-escuro">Cadastrar Vagas
+        </a>
     </div>
 </section>
 
