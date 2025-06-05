@@ -1,35 +1,73 @@
-🚀 Projeto de Faculdade: Sistema de Gerenciamento de Currículos
+# 🚀 Sistema de Gerenciamento de Currículos - Projeto Acadêmico
 
-Durante a faculdade, desenvolvi um sistema completo para auxiliar empresas na organização e gestão de currículos de candidatos.
+> Um sistema completo para centralizar, organizar e otimizar o processo de recrutamento de talentos. Criado com foco total em **usabilidade**, **eficiência** e **responsividade**.
 
-🎯 A ideia surgiu a partir de uma dor real observada no mercado: muitas empresas, principalmente da área de tecnologia, ainda enfrentam dificuldades para armazenar, filtrar e acessar currículos de forma eficiente.
+---
 
-Com isso, construí uma aplicação que permite:
+## 🧠 Sobre o Projeto
 
-📂 Cadastro e organização de currículos com informações detalhadas
+Durante este semestre, desenvolvemos — em equipe com **Thiago Marinho De Sousa** e **Guilherme Lopes** — um sistema completo para uma empresa de tecnologia que enfrentava dificuldades na organização e localização de currículos.
 
-🔍 Busca por área, habilidades, formação e outras categorias personalizadas
+A proposta surgiu de uma **necessidade real do mercado**: tornar o processo seletivo mais ágil e eficaz por meio da centralização e automação da triagem de currículos.
 
-🗂️ Classificação por status (ex: “Em análise”, “Reprovado”, “Aprovado”)
+---
 
-👤 Cadastro de empresas e controle de acesso por usuário
+## 💡 Funcionalidades
 
-🛠️ Tecnologias utilizadas:
+- Formulários dinâmicos com adição e remoção de campos sem recarregar a página
+- Preenchimento automático de endereço via **API ViaCEP**
+- Máscaras de entrada para CPF, telefone, data, etc.
+- Design responsivo e amigável para diferentes dispositivos
+- Validação eficiente de dados no front e back-end
 
-☕ Java com Spring Boot
+---
 
-🐘 PostgreSQL
+## 🧰 Tecnologias Utilizadas
 
-🧩 DAO e arquitetura em camadas (Controller, Service, Repository, Model)
+### 🚀 Backend:
+- Java
+- Spring Boot
+- DAO Pattern
+- API REST
 
-💻 HTML, CSS e JavaScript no frontend
+### 🎨 Frontend:
+- HTML5, CSS3, JavaScript
+- Thymeleaf (Template Engine)
 
-📚 Principais aprendizados:
+### 🗄️ Banco de Dados:
+- PostgreSQL
 
-Aplicação de boas práticas em Java e arquitetura MVC
+### 🛠️ Outras Ferramentas:
+- Git e GitHub para versionamento
+- Integração com API externa: **ViaCEP**
 
-Uso de banco de dados relacional com SQL avançado
+---
 
-Integração frontend-backend
+## 📚 Aprendizados e Entregas
 
-Preparação de CRUDs completos e interfaces simples para usuários finais
+- Integração real entre frontend e backend utilizando arquitetura **MVC**
+- Implementação de formulários dinâmicos e responsivos
+- Consumo de APIs públicas e tratamento de dados externos
+- Organização de código seguindo boas práticas de arquitetura
+- Experiência prática com versionamento em equipe
+
+---
+
+## 📈 Melhorias Futuras
+
+- Perfis diferenciados: **Candidato**, **Admin**, **Recrutador**
+- Upload de **portfólio** e **certificados**
+- Filtros e **busca inteligente por vagas**
+- Dashboard com **métricas** para recrutadores
+- Chatbot com recomendação de vagas personalizadas via IA
+
+---
+
+## 👨‍💻 Desenvolvedores
+
+| Nome                     | GitHub                      |
+|--------------------------|-----------------------------|
+| Enzo Alves Teves         | [https://github.com/EnzoAlvesTeves](https://github.com/EnzoAlvesTeves)         |
+| Thiago Marinho De Sousa  | [https://github.com/Thzzxs](https://github.com/Thzzxs)   |
+
+**Feito com muita dedicação.**
