@@ -8,6 +8,5 @@ CREATE TABLE candidato (
     resumo_profissional VARCHAR(1000),
     endereco_id INT NOT NULL,
     usuario_id INT NOT NULL,
-    FOREIGN KEY (endereco_id) REFERENCES endereco (id),
-    FOREIGN KEY (usuario_id) REFERENCES usuario (id)
+    FOREIGN KEY (endereco_id) REFERENCES endereco (id)
 );
