@@ -4,7 +4,7 @@ spring:
   application:
     name: ms-curriculum
   datasource:
-    url: jdbc:mysql://localhost:3306/ms-curriculum
+    url: jdbc:mysql://localhost:3306/ms_curriculum
     username: user_curriculum
     password: admin
     driver-class-name: com.mysql.cj.jdbc.Driver
