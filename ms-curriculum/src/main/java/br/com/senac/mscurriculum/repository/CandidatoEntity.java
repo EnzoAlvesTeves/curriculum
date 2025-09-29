@@ -38,5 +38,8 @@ public class CandidatoEntity {
 	@ManyToOne
 	@JoinColumn(name = "endereco_id")
 	private EnderecoEntity endereco;
+
+	@Column(name = "usuario_id", nullable = false)
+	private Long usuarioId;
 }
 
