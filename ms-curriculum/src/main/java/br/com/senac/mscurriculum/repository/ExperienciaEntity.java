@@ -30,4 +30,8 @@ public class ExperienciaEntity {
 
 	@Column(name = "data_fim")
 	private LocalDate dataFim;
+
+	@ManyToOne
+	@JoinColumn(name = "candidato_id")
+	private CandidatoEntity candidato;
 }

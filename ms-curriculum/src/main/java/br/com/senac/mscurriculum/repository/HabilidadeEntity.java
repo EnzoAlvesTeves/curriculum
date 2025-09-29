@@ -25,4 +25,8 @@ public class HabilidadeEntity {
 
 	@Column(name = "especialidade", length = 100)
 	private String especialidade;
+
+	@ManyToOne
+	@JoinColumn(name = "candidato_id")
+	private CandidatoEntity candidato;
 }

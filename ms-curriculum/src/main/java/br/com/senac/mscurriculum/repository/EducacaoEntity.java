@@ -34,4 +34,8 @@ public class EducacaoEntity {
 
 	@Column(name = "curso", nullable = false, length = 100)
 	private String curso;
+
+	@ManyToOne
+	@JoinColumn(name = "candidato_id")
+	private CandidatoEntity candidato;
 }
