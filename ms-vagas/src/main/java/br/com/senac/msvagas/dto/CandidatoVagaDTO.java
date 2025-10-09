@@ -1,6 +1,5 @@
 package br.com.senac.msvagas.dto;
 
-
 import br.com.senac.msvagas.repository.VagaEntity;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -15,10 +14,12 @@ public class CandidatoVagaDTO {
 	private Long id;
 	private VagaDTO vaga;
 	private LocalDateTime dataInscricao;
+	private Long candidatoId;
 
-	CandidatoVagaDTO(Long id, VagaEntity vaga, LocalDateTime dataInscricao) {
+	public CandidatoVagaDTO(Long id, VagaEntity vaga, LocalDateTime dataInscricao, Long candidatoId) {
 		this.id = id;
 		this.vaga = new VagaDTO(vaga);
 		this.dataInscricao = dataInscricao;
+		this.candidatoId = candidatoId;
 	}
 }

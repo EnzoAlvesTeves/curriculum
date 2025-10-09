@@ -18,6 +18,8 @@ public class CandidatoDTO {
 	private LocalDate dataNascimento;
 	private String resumoProfissional;
 	private Long usuarioId;
+	private EnderecoDTO endereco;
+
 
 	public CandidatoDTO(CandidatoEntity entity) {
 		this.id = entity.getId();
@@ -27,5 +29,8 @@ public class CandidatoDTO {
 		this.dataNascimento = entity.getDataNascimento();
 		this.resumoProfissional = entity.getResumoProfissional();
 		this.usuarioId = entity.getUsuarioId();
+		if (entity.getEndereco() != null) {
+			this.endereco = new EnderecoDTO(entity.getEndereco());
+		}
 	}
-}
+	}
