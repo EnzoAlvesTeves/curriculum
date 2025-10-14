@@ -1,4 +1,4 @@
-package br.com.senac.mscurriculum.repository;
+package br.com.senac.mscurriculum.repository.entity;
 
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;

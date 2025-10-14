@@ -1,6 +1,6 @@
 package br.com.senac.mscurriculum.dto;
 
-import br.com.senac.mscurriculum.repository.EducacaoEntity;
+import br.com.senac.mscurriculum.repository.entity.EducacaoEntity;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -12,19 +12,19 @@ import java.time.LocalDate;
 @NoArgsConstructor
 public class EducacaoDTO {
 
-	private Long id;
-	private String grau;
-	private LocalDate dataInicio;
-	private LocalDate dataFim;
-	private String instituicao;
-	private String curso;
+    private Long id;
+    private String grau;
+    private LocalDate dataInicio;
+    private LocalDate dataFim;
+    private String instituicao;
+    private String curso;
 
-	public EducacaoDTO(EducacaoEntity educacaoEntity) {
-		this.id = educacaoEntity.getId();
-		this.grau = educacaoEntity.getGrau();
-		this.dataInicio = educacaoEntity.getDataInicio();
-		this.dataFim = educacaoEntity.getDataFim();
-		this.instituicao = educacaoEntity.getInstituicao();
-		this.curso = educacaoEntity.getCurso();
-	}
+    public EducacaoDTO(EducacaoEntity educacaoEntity) {
+        this.id = educacaoEntity.getId();
+        this.grau = educacaoEntity.getGrau();
+        this.dataInicio = educacaoEntity.getDataInicio();
+        this.dataFim = educacaoEntity.getDataFim();
+        this.instituicao = educacaoEntity.getInstituicao();
+        this.curso = educacaoEntity.getCurso();
+    }
 }

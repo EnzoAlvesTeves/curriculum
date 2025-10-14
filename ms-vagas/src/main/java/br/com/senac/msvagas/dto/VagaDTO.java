@@ -1,6 +1,6 @@
 package br.com.senac.msvagas.dto;
 
-import br.com.senac.msvagas.repository.VagaEntity;
+import br.com.senac.msvagas.repository.entity.VagaEntity;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;

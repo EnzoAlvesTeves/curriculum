@@ -1,7 +1,7 @@
 package br.com.senac.msusuario.dto;
 
 import br.com.senac.msusuario.enums.Sexo;
-import br.com.senac.msusuario.repository.UsuarioEntity;
+import br.com.senac.msusuario.repository.entity.UsuarioEntity;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;

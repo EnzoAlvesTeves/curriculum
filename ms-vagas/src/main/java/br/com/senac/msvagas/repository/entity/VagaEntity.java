@@ -1,11 +1,9 @@
-package br.com.senac.msvagas.repository;
+package br.com.senac.msvagas.repository.entity;
 
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-
-import java.util.List;
 
 @Entity
 @Data

@@ -1,4 +1,4 @@
-package br.com.senac.msusuario.repository;
+package br.com.senac.msusuario.repository.entity;
 
 
 import jakarta.persistence.*;
