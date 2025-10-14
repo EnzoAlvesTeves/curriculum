@@ -1,5 +1,6 @@
 package br.com.senac.mscurriculum.repository;
 
+import br.com.senac.mscurriculum.enums.Sexo;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -41,5 +42,9 @@ public class CandidatoEntity {
 
 	@Column(name = "usuario_id", nullable = false)
 	private Long usuarioId;
+
+	@Column(name = "sexo", nullable = false)
+	@Enumerated(EnumType.STRING)
+	private Sexo sexo;
 }
 

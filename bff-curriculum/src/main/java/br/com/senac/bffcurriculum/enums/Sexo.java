@@ -1,4 +1,4 @@
-package br.com.senac.msusuario.enums;
+package br.com.senac.bffcurriculum.enums;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;

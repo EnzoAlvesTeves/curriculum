@@ -9,10 +9,10 @@
         <relativePath/> <!-- lookup parent from repository -->
     </parent>
     <groupId>br.com.senac</groupId>
-    <artifactId>bff-curricukum</artifactId>
+    <artifactId>bff-curriculum</artifactId>
     <version>0.0.1-SNAPSHOT</version>
-    <name>bff-curricukum</name>
-    <description>bff-curricukum</description>
+    <name>bff-curriculum</name>
+    <description>bff-curriculum</description>
     <url/>
     <licenses>
         <license/>
@@ -38,7 +38,15 @@
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-web</artifactId>
         </dependency>
-
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-actuator</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.projectlombok</groupId>
+            <artifactId>lombok</artifactId>
+            <optional>true</optional>
+        </dependency>
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-test</artifactId>
