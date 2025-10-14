@@ -1,14 +1,12 @@
-package br.com.senac.mscurriculum.repository;
+package br.com.senac.mscurriculum.repository.entity;
 
 import br.com.senac.mscurriculum.enums.Sexo;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.springframework.context.annotation.Lazy;
 
 import java.time.LocalDate;
-import java.util.List;
 
 @Entity
 @Data
