@@ -17,6 +17,7 @@ public class ExperienciaDTO {
     private String empresa;
     private LocalDate dataInicio;
     private LocalDate dataFim;
+    private Long candidatoId;
 
     public ExperienciaDTO(ExperienciaEntity experienciaEntity) {
         this.id = experienciaEntity.getId();
@@ -24,6 +25,15 @@ public class ExperienciaDTO {
         this.empresa = experienciaEntity.getEmpresa();
         this.dataInicio = experienciaEntity.getDataInicio();
         this.dataFim = experienciaEntity.getDataFim();
+        this.candidatoId = experienciaEntity.getCandidato().getId();
     }
 
+    public ExperienciaDTO(ExperienciaEntity experiencia, Long id) {
+        this.id = experiencia.getId();
+        this.cargo = experiencia.getCargo();
+        this.empresa = experiencia.getEmpresa();
+        this.dataInicio = experiencia.getDataInicio();
+        this.dataFim = experiencia.getDataFim();
+        this.candidatoId = id;
+    }
 }

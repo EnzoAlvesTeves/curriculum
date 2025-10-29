@@ -1,12 +1,12 @@
 server:
-  port: 8080
+  port: 8090
 spring:
   application:
     name: ms-curriculum
   datasource:
-    url: jdbc:mysql://localhost:3306/ms_curriculum
-    username: user_curriculum
-    password: admin
+    url: jdbc:mysql://${DB_HOST:localhost}:${DB_PORT:3306}/${DB_NAME:ms_curriculum}
+    username: ${DB_USER:user_curriculum}
+    password: ${DB_PASSWORD:admin}
     driver-class-name: com.mysql.cj.jdbc.Driver
   jpa:
     hibernate:

@@ -18,6 +18,7 @@ public class EducacaoDTO {
     private LocalDate dataFim;
     private String instituicao;
     private String curso;
+    private Long candidatoId;
 
     public EducacaoDTO(EducacaoEntity educacaoEntity) {
         this.id = educacaoEntity.getId();
@@ -26,5 +27,15 @@ public class EducacaoDTO {
         this.dataFim = educacaoEntity.getDataFim();
         this.instituicao = educacaoEntity.getInstituicao();
         this.curso = educacaoEntity.getCurso();
+    }
+
+    public EducacaoDTO(EducacaoEntity educacao, Long candidatoId) {
+        this.id = educacao.getId();
+        this.grau = educacao.getGrau();
+        this.dataInicio = educacao.getDataInicio();
+        this.dataFim = educacao.getDataFim();
+        this.instituicao = educacao.getInstituicao();
+        this.curso = educacao.getCurso();
+        this.candidatoId = candidatoId;
     }
 }

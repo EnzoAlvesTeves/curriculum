@@ -8,31 +8,34 @@ import java.util.List;
 
 @Service
 public class VagaService {
-
     private final VagaRepository vagaRepository;
 
     public VagaService(VagaRepository vagaRepository) {
         this.vagaRepository = vagaRepository;
     }
 
-    public VagaDTO salvar(VagaDTO vagaDTO) {
-
+    public VagaDTO create(VagaDTO vagaDTO) {
+        // implementar a lógica para criar uma nova vaga
+        return null;
     }
 
-    public VagaDTO atualizar(VagaDTO vagaDTO) {
-
+    public VagaDTO update(VagaDTO vagaDTO) {
+        // implementar a lógica para atualizar uma vaga existente
+        return null;
     }
 
-    public void deletar(Long id) {
-
+    public void delete(Long id) {
+        // implementar a lógica para deletar uma vaga pelo id
     }
 
-    public  VagaDTO consultarPorId(Long id) {
-
+    public  VagaDTO getById(Long id) {
+        // implementar a lógica para buscar uma vaga pelo id
+        return null;
     }
 
-    public List<VagaDTO> listarTodas() {
-
+    public List<VagaDTO> getall() {
+        // implementar a lógica para listar todas as vagas
+        return null;
     }
 
 }

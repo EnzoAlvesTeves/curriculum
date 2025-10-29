@@ -1,11 +1,65 @@
 services:
-  mysql:
+  curriculum-db:
     image: mysql:8.0
-    container_name: mysql-microservices
+    container_name: curriculum-db
     restart: always
+    networks:
+      - curriculum-net
     environment:
       MYSQL_ROOT_PASSWORD: admin
     ports:
       - "3306:3306"
     volumes:
       - ./mysql-init:/docker-entrypoint-initdb.d
+
+  ms-curriculum:
+    build: './ms-curriculum'
+    container_name: ms-curriculum
+    depends_on:
+      - curriculum-db
+    networks:
+      - curriculum-net
+    environment:
+      - DB_HOST=curriculum-db
+      - DB_PORT=3306
+      - DB_NAME=ms_curriculum
+      - DB_USER=user_curriculum
+      - DB_PASSWORD=admin
+    ports:
+      - "8090:8090"
+
+  ms-usuario:
+    build: './ms-usuario'
+    container_name: ms-usuario
+    depends_on:
+      - curriculum-db
+    networks:
+      - curriculum-net
+    environment:
+      - DB_HOST=curriculum-db
+      - DB_PORT=3306
+      - DB_NAME=ms_usuario
+      - DB_USER=user_usuario
+      - DB_PASSWORD=admin
+    ports:
+      - "8091:8091"
+
+  ms-vagas:
+    build: './ms-vagas'
+    container_name: ms-vagas
+    depends_on:
+      - curriculum-db
+    networks:
+      - curriculum-net
+    environment:
+      - DB_HOST=curriculum-db
+      - DB_PORT=3306
+      - DB_NAME=ms_vagas
+      - DB_USER=user_vagas
+      - DB_PASSWORD=admin
+    ports:
+      - "8092:8092"
+
+networks:
+  curriculum-net:
+    driver: bridge
