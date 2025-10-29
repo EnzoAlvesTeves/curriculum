@@ -11,25 +11,9 @@ import java.util.List;
 @Service
 public class CandidatoVagaService {
 
-    private final CandidatoVagaRepository candidatoVagaRepository;
+	private final CandidatoVagaRepository candidatoVagaRepository;
 
-    public CandidatoVagaService(CandidatoVagaRepository candidatoVagaRepository) {
-        this.candidatoVagaRepository = candidatoVagaRepository;
-    }
-
-    public CandidatoVagaDTO candidatarVaga(Long candidatoId, Long vagaId) {
-
-    }
-
-    public void removerCandidatura(Long id) {
-
-    }
-
-    public List<CandidatoVagaDTO> listarCandidaturasPorCandidato(Long candidatoId) {
-
-    }
-
-    public List<Long> candidatosPorVaga(Long vagaId) {
-
-    }
+	public CandidatoVagaService(CandidatoVagaRepository candidatoVagaRepository) {
+		this.candidatoVagaRepository = candidatoVagaRepository;
+	}
 }
