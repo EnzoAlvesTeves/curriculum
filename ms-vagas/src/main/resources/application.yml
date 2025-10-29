@@ -1,12 +1,12 @@
 server:
-  port: 8082
+  port: 8092
 spring:
   application:
     name: ms-vagas
   datasource:
-    url: jdbc:mysql://localhost:3306/ms_vagas
-    username: user_vagas
-    password: admin
+    url: jdbc:mysql://${DB_HOST:localhost}:${DB_PORT:3306}/${DB_NAME:ms_vagas}
+    username: ${DB_USER:user_vagas}
+    password: ${DB_PASSWORD:admin}
     driver-class-name: com.mysql.cj.jdbc.Driver
   jpa:
     hibernate:

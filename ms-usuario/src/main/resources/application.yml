@@ -1,12 +1,12 @@
 server:
-  port: 8081
+  port: 8091
 spring:
   application:
     name: ms-usuario
   datasource:
-    url: jdbc:mysql://localhost:3306/ms_usuario
-    username: user_usuario
-    password: admin
+    url: jdbc:mysql://${DB_HOST:localhost}:${DB_PORT:3306}/${DB_NAME:ms_usuario}
+    username: ${DB_USER:user_usuario}
+    password: ${DB_PASSWORD:admin}
     driver-class-name: com.mysql.cj.jdbc.Driver
   jpa:
     hibernate:

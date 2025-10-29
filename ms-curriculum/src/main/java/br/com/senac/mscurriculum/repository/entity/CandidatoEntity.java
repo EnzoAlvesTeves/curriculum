@@ -7,6 +7,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.time.LocalDate;
+import java.util.List;
 
 @Entity
 @Data
@@ -44,5 +45,14 @@ public class CandidatoEntity {
 	@Column(name = "sexo", nullable = false)
 	@Enumerated(EnumType.STRING)
 	private Sexo sexo;
+
+    @OneToMany(mappedBy = "candidato")
+    private List<ExperienciaEntity> experiencias;
+
+    @OneToMany(mappedBy = "candidato")
+    private List<EducacaoEntity> educacoes;
+
+    @OneToMany(mappedBy = "candidato")
+    private List<HabilidadeEntity> habilidades;
 }
 
