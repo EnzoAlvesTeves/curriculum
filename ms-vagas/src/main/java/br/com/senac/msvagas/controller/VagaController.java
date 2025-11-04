@@ -37,7 +37,7 @@ public class VagaController {
 
     @GetMapping
     public List<VagaDTO> getall() {
-        return vagaService.getall();
+        return vagaService.getAll();
     }
 
 }
