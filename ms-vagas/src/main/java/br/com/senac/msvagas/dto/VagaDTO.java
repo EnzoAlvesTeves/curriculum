@@ -26,4 +26,15 @@ public class VagaDTO {
 		this.salario = vagaEntity.getSalario();
 	}
 
+    public VagaEntity toEntity() {
+        VagaEntity vagaEntity = new VagaEntity();
+        vagaEntity.setId(this.id);
+        vagaEntity.setTitulo(this.titulo);
+        vagaEntity.setDescricao(this.descricao);
+        vagaEntity.setEmpresa(this.empresa);
+        vagaEntity.setBeneficios(this.beneficios);
+        vagaEntity.setSalario(this.salario);
+        return vagaEntity;
+    }
+
 }
