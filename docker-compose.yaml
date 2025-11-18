@@ -63,3 +63,4 @@ services:
 networks:
   curriculum-net:
     driver: bridge
+
