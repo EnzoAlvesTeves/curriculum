@@ -4,7 +4,7 @@ COPY pom.xml .
 COPY src ./src
 RUN mvn -B -DskipTests package
 
-FROM openjdk:21-jdk-slim
+FROM eclipse-temurin:21-jdk-jammy
 WORKDIR /app
 COPY --from=builder /workspace/target/*.jar ms-vagas.jar
 EXPOSE 8092
