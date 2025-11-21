@@ -5,247 +5,341 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
     <title>WiseCorp - Home</title>
     <link rel="icon" href="/img/logo.jpg" type="image/jpg">
-<!--    <link rel="stylesheet" href="/styles/estilo.css" />-->
+
     <style>
         :root {
             --laranja: #FF7514;
-            --laranja-claro: #ffe2ca;
-            --cinza-fundo: #f9fafc;
-            --sombra: rgba(0, 0, 0, 0.1);
+            --laranja-escuro: #e4650f;
+            --cinza-texto: #2b2b2b;
+            --texto-secundario: #555;
+            --cinza-claro: #fafafa;
+            --radius: 14px;
+            --sombra: 0 4px 10px rgba(0,0,0,0.06);
         }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
 
         body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background-color: var(--cinza-fundo);
-            animation: fadeIn 1.2s ease-in;
+            font-family: 'Segoe UI', sans-serif;
+            background: white;
+            color: var(--cinza-texto);
         }
 
-        @keyframes fadeIn {
-            from { opacity: 0; }
-            to { opacity: 1; }
-        }
-
-        .topo {
-            background-color: var(--laranja);
-            padding: 20px;
+        /* ---------------- HEADER ---------------- */
+        header {
+            padding: 20px 60px;
             display: flex;
             justify-content: space-between;
             align-items: center;
-            box-shadow: 0 4px 12px var(--sombra);
+            background: white;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            border-bottom: 1px solid #eee;
         }
 
         .logo {
             font-size: 28px;
-            font-weight: bold;
-            color: white;
+            font-weight: 900;
+            color: var(--laranja);
         }
 
         nav ul {
-            list-style: none;
             display: flex;
-            gap: 16px;
+            gap: 20px;
+            list-style: none;
         }
-
-        nav a {
+        nav ul li a {
             text-decoration: none;
-            color: white;
             font-weight: 600;
-            padding: 10px 14px;
-            border-radius: 8px;
-            transition: background 0.3s;
+            color: var(--cinza-texto);
+            padding: 10px 16px;
+            border-radius: var(--radius);
+        }
+        nav ul li a:hover {
+            background: var(--laranja);
+            color: white;
         }
 
-        nav a:hover {
-            background-color: var(--laranja-claro);
+        /* -------------------- HERO -------------------- */
+        .hero {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 80px 60px;
+            background: linear-gradient(135deg, #fff5ec, #fde7d6);
         }
 
-        .botao-laranja {
-            background-color: white;
+        .hero-left {
+            max-width: 520px;
+        }
+
+        .badge {
+            background: #ffe7d2;
+            padding: 6px 14px;
+            border-radius: 20px;
+            font-size: 13px;
+            color: var(--laranja);
+            font-weight: bold;
+            display: inline-block;
+            margin-bottom: 20px;
+        }
+
+        .hero h1 {
+            font-size: 42px;
+            line-height: 1.3;
+            font-weight: 900;
+        }
+
+        .hero h1 span {
             color: var(--laranja);
         }
 
-        .principal, .sobre, .porque, .beneficios {
-            padding: 60px 20px;
-            max-width: 1000px;
-            margin: auto;
+        .hero p {
+            margin: 20px 0 30px;
+            color: var(--texto-secundario);
+            font-size: 17px;
+        }
+
+        .hero-btn {
+            background: var(--laranja);
+            color: white;
+            padding: 14px 26px;
+            border-radius: var(--radius);
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            text-decoration: none;
+            font-weight: 700;
+            transition: .3s;
+        }
+        .hero-btn:hover { background: var(--laranja-escuro); }
+
+        /* ÍCONE DA DIREITA */
+        .hero-right {
+            background: #ffe5d3;
+            border-radius: 18px;
+            width: 450px;
+            height: 350px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .hero-right img {
+            width: 120px;
+            opacity: 0.6;
+        }
+
+        /* -------------- POR QUE ESCOLHER -------------- */
+        section {
+            padding: 60px 60px;
             text-align: center;
         }
 
-        .botoes {
-            margin-top: 20px;
-        }
-
-        .btn-claro, .btn-escuro {
-            padding: 12px 20px;
-            border-radius: 8px;
-            margin: 0 10px;
-            text-decoration: none;
-            font-weight: bold;
-        }
-
-        .btn-claro {
-            background-color: white;
-            color: var(--laranja);
-            border: 2px solid var(--laranja);
-        }
-
-        .btn-escuro {
-            background-color: var(--laranja);
-            color: white;
-            border: none;
-        }
-
-        .cards {
-            display: flex;
-            justify-content: space-around;
-            flex-wrap: wrap;
-            gap: 20px;
+        .grid-6 {
+            margin-top: 30px;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+            gap: 25px;
         }
 
         .card {
-            background-color: white;
-            padding: 20px;
-            border-radius: 10px;
-            box-shadow: 0 2px 8px var(--sombra);
-            flex: 1 1 280px;
+            background: white;
+            padding: 28px;
+            border-radius: var(--radius);
+            box-shadow: var(--sombra);
+            text-align: left;
         }
 
-        .emoji {
-            font-size: 36px;
-            margin-bottom: 10px;
+        .card h3 {
+            font-size: 19px;
+            margin-bottom: 6px;
+            color: var(--cinza-texto);
         }
 
-        .grid-porques {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
-            gap: 20px;
+        .card p {
+            color: var(--texto-secundario);
+            font-size: 14px;
         }
 
-        .rodape {
-            background-color: var(--laranja);
-            color: white;
-            padding: 20px;
+        /* -------------- COMO FUNCIONA -------------- */
+        .steps {
+            display: flex;
+            justify-content: center;
+            gap: 60px;
+            margin-top: 40px;
+        }
+
+        .step {
             text-align: center;
+            width: 220px;
         }
 
-        .redes a {
+        .circle {
+            background: var(--laranja);
             color: white;
-            margin: 0 10px;
-            text-decoration: none;
+            width: 45px;
+            height: 45px;
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin: 0 auto 10px;
             font-weight: bold;
         }
 
-        #user-name {
-            margin-right: 10px;
+        /* -------------- CTA LARANJA -------------- */
+        .cta {
+            background: var(--laranja);
+            color: white;
+            padding: 70px 40px;
+            text-align: center;
+            margin-top: 60px;
+        }
+
+        .cta a {
+            text-decoration: none;
+            background: white;
+            color: var(--laranja);
+            padding: 14px 26px;
+            border-radius: var(--radius);
+            display: inline-block;
+            font-weight: 700;
+        }
+
+        /* -------------- RODAPÉ -------------- */
+        footer {
+            background: #222;
+            color: #ddd;
+            padding: 40px;
+            text-align: center;
+            margin-top: 40px;
         }
     </style>
 </head>
+
 <body>
 
-<header class="topo">
+<header>
     <div class="logo">WiseCorp</div>
+
     <nav>
         <ul>
             <li th:if="${usuario != null}">
-                <span id="user-name">Bem-vindo <span th:text="${usuario.nome}"></span></span>
+                <span style="font-weight:bold;">Olá, <span th:text="${usuario.nome}"></span></span>
             </li>
+
             <li th:if="${usuario != null && candidato == null && usuario.id != 1}">
-                <a th:href="@{/candidato/cadastrar(usuarioId=${usuario.id})}" class="botao-laranja">Cadastrar Currículo</a>
+                <a th:href="@{/candidato/cadastrar(usuarioId=${usuario.id})}">Cadastrar Currículo</a>
             </li>
+
             <li th:if="${usuario != null && candidato != null && usuario.id != 1}">
-                <a th:href="@{/candidato/{id}(id=${candidato.id})}" class="botao-laranja">Meu Currículo</a>
+                <a th:href="@{/candidato/{id}(id=${candidato.id})}">Meu Currículo</a>
             </li>
+
             <li th:if="${candidato != null && usuario.id != 1}">
-                <a th:href="@{/candidato-vaga/candidato/{id}(id=${candidato.id})}" class="button">Minhas Candidaturas</a>
+                <a th:href="@{/candidato-vaga/candidato/{id}(id=${candidato.id})}">Minhas Candidaturas</a>
             </li>
+
             <li th:if="${usuario != null}">
-                <a th:href="@{/vaga/lista/usuario/{id}(id=${usuario.id})}" class="button">Vagas</a>
+                <a th:href="@{/vaga/lista/usuario/{id}(id=${usuario.id})}">Vagas</a>
             </li>
+
             <li th:if="${usuario.id == 1}">
-                <a th:href="@{/vaga/cadastrar/usuario/{id}(id=${usuario.id})}" class="button">Cadastrar Vagas</a>
+                <a th:href="@{/vaga/cadastrar/usuario/{id}(id=${usuario.id})}">Cadastrar Vagas</a>
             </li>
         </ul>
     </nav>
 </header>
 
-<section class="principal">
-    <h1>Especialistas em Tecnologia da Informação</h1>
-    <p>Na WiseCorp, conectamos talentos a grandes oportunidades no mundo da TI. Descubra vagas, cadastre seu currículo e dê o próximo passo na sua carreira!</p>
-    <div class="botoes">
-        <a th:if="${usuario != null && candidato == null && usuario.id != 1}"
-           th:href="@{/candidato/cadastrar(usuarioId=${usuario.id})}" class="btn-escuro">Cadastrar Currículo
-        </a>
-        <a th:if="${usuario != null && candidato != null && usuario.id != 1}"
-           th:href="@{/candidato/{id}(id=${candidato.id})}" class="btn-escuro">Meu Currículo
-        </a>
-        <a th:if="${candidato != null && usuario.id != 1}"
-           th:href="@{/candidato-vaga/candidato/{id}(id=${candidato.id})}" class="btn-claro">Minhas Candidaturas
-        </a>
+<!-- HERO -->
+<section class="hero">
+    <div class="hero-left">
+        <div class="badge">🚀 Plataforma líder em recrutamento</div>
 
-        <a th:if="${usuario != null}"
-           th:href="@{/vaga/lista/usuario/{id}(id=${usuario.id})}" class="btn-claro">Vagas
-        </a>
+        <h1>Conectamos <span>talentos</span> às melhores oportunidades</h1>
 
-        <a th:if="${usuario.id == 1}"
-           th:href="@{/vaga/cadastrar/usuario/{id}(id=${usuario.id})}" class="btn-escuro">Cadastrar Vagas
+        <p>A WiseCorp é a plataforma completa para gestão de currículos e vagas. Encontre seu próximo desafio profissional ou o candidato ideal para sua empresa.</p>
+
+        <a class="hero-btn" th:href="@{/vaga/lista}">
+            Ver Vagas Disponíveis →
         </a>
+    </div>
+
+    <div class="hero-right">
+        <img src="/img/maleta.png" alt="Ícone">
     </div>
 </section>
 
-<section class="beneficios">
-    <div class="cards">
-        <div class="card">
-            <div class="emoji">💼</div>
-            <h3>Vagas Premium</h3>
-            <p>Acesso às melhores oportunidades em empresas líderes do setor de tecnologia.</p>
-        </div>
-        <div class="card">
-            <div class="emoji">🚀</div>
-            <h3>Crescimento Profissional</h3>
-            <p>Desenvolvimento de carreira com as principais tecnologias do mercado.</p>
-        </div>
-        <div class="card">
-            <div class="emoji">🤝</div>
-            <h3>Acompanhamento</h3>
-            <p>Suporte personalizado durante todo o processo seletivo.</p>
-        </div>
-    </div>
-</section>
+<!-- POR QUE ESCOLHER -->
+<section>
+    <h2>Por que escolher a Wise Corp?</h2>
 
-<section class="sobre">
-    <h2>Sobre a WiseCorp</h2>
-    <p>Somos uma empresa dedicada 100% à área de Tecnologia da Informação, com foco em aproximar profissionais qualificados das melhores vagas do mercado. Acreditamos que o talento certo no lugar certo transforma empresas e carreiras. Junte-se a nós e faça parte dessa revolução digital.</p>
-</section>
+    <div class="grid-6">
+        <div class="card">
+            <h3>Gestão Completa de Currículos</h3>
+            <p>Organize e gerencie perfis de forma eficiente.</p>
+        </div>
 
-<section class="porque">
-    <h2>Por que escolher a WiseCorp?</h2>
-    <div class="grid-porques">
         <div class="card">
-            <h3>Oportunidades Exclusivas</h3>
-            <p>Acesso a vagas em empresas líderes do setor de tecnologia.</p>
+            <h3>Vagas Diversificadas</h3>
+            <p>Encontre oportunidades em diversas áreas de TI.</p>
         </div>
+
         <div class="card">
-            <h3>Desenvolvimento Profissional</h3>
-            <p>Projetos desafiadores que impulsionam sua carreira.</p>
+            <h3>Processo Simplificado</h3>
+            <p>Candidaturas rápidas e acompanhamento contínuo.</p>
         </div>
+
         <div class="card">
-            <h3>Cultura Inovadora</h3>
-            <p>Ambiente que valoriza criatividade e crescimento.</p>
+            <h3>Empresas Confiáveis</h3>
+            <p>Conectamos você às melhores empresas.</p>
         </div>
+
         <div class="card">
-            <h3>Suporte Contínuo</h3>
-            <p>Acompanhamento em todas as etapas do processo.</p>
+            <h3>Segurança e Privacidade</h3>
+            <p>Suas informações sempre protegidas.</p>
+        </div>
+
+        <div class="card">
+            <h3>Suporte Dedicado</h3>
+            <p>Acompanhamento em todas as etapas.</p>
         </div>
     </div>
 </section>
 
-<footer class="rodape">
+<!-- COMO FUNCIONA -->
+<section>
+    <h2>Como funciona</h2>
+
+    <div class="steps">
+        <div class="step">
+            <div class="circle">1</div>
+            <p><strong>Crie seu Perfil</strong><br>Complete suas informações profissionais.</p>
+        </div>
+
+        <div class="step">
+            <div class="circle">2</div>
+            <p><strong>Encontre Vagas</strong><br>Explore oportunidades personalizadas.</p>
+        </div>
+
+        <div class="step">
+            <div class="circle">3</div>
+            <p><strong>Candidate-se</strong><br>Envie seu currículo com um clique.</p>
+        </div>
+    </div>
+</section>
+
+<!-- CTA LARANJA -->
+<div class="cta">
+    <h2>Pronto para dar o próximo passo na sua carreira?</h2>
+    <p>Junte-se a milhares de profissionais que já encontraram novas oportunidades.</p>
+    <a th:href="@{/vaga/lista}">Explorar Vagas →</a>
+</div>
+
+<footer>
     <p>© 2025 WiseCorp. Todos os direitos reservados.</p>
-    <div class="redes">
-        <a href="#">LinkedIn</a>
-        <a href="#">Twitter</a>
-        <a href="#">Instagram</a>
-    </div>
 </footer>
 
 </body>
