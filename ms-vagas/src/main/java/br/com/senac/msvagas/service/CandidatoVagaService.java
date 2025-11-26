@@ -4,8 +4,11 @@ import br.com.senac.msvagas.dto.CandidatoVagaDTO;
 import br.com.senac.msvagas.repository.CandidatoVagaRepository;
 import br.com.senac.msvagas.repository.VagaRepository;
 import br.com.senac.msvagas.repository.entity.CandidatoVagaEntity;
+import br.com.senac.msvagas.repository.entity.VagaEntity;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -17,41 +20,55 @@ public class CandidatoVagaService {
     public CandidatoVagaService(
             CandidatoVagaRepository candidatoVagaRepository,
             VagaRepository vagaRepository
-    ){
+    ) {
         this.candidatoVagaRepository = candidatoVagaRepository;
         this.vagaRepository = vagaRepository;
     }
 
+    @Transactional
     public CandidatoVagaDTO create(CandidatoVagaDTO candidatoVagaDTO) {
-			CandidatoVagaEntity candidatoVagaEntity = new CandidatoVagaEntity();
-			candidatoVagaEntity.setCandidatoId(candidatoVagaDTO.getCandidatoId());
-			candidatoVagaEntity.setVaga(candidatoVagaDTO.getVaga().toEntity());
+        VagaEntity vagaEntity = vagaRepository.findById(candidatoVagaDTO.getVaga().getId())
+                .orElseThrow(() -> new RuntimeException("Vaga inexistente!"));
 
-			CandidatoVagaEntity savedEntity = candidatoVagaRepository.save(candidatoVagaEntity);
+        try {
+            CandidatoVagaEntity candidatoVagaEntity = new CandidatoVagaEntity();
+            candidatoVagaEntity.setDataInscricao(LocalDateTime.now());
+            candidatoVagaEntity.setCandidatoId(candidatoVagaDTO.getCandidatoId());
+            candidatoVagaEntity.setVaga(vagaEntity);
 
-			return new CandidatoVagaDTO(savedEntity);
+            CandidatoVagaEntity savedEntity = candidatoVagaRepository.save(candidatoVagaEntity);
+
+            return new CandidatoVagaDTO(savedEntity);
+        }  catch (Exception e) {
+            throw new RuntimeException("Erro ao salvar candidatoVaga", e);
+        }
     }
 
+    @Transactional
     public void delete(Long id) {
-			CandidatoVagaEntity candidatoVagaEntity = candidatoVagaRepository.findById(id)
-							.orElseThrow(() -> new RuntimeException("Candidatura não encontrada!"));
+        CandidatoVagaEntity candidatoVagaEntity = candidatoVagaRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Candidatura não encontrada!"));
 
-			candidatoVagaRepository.delete(candidatoVagaEntity);
+        try {
+            candidatoVagaRepository.delete(candidatoVagaEntity);
+        }   catch (Exception e) {
+            throw new RuntimeException("Erro ao deletar candidatoVaga", e);
+        }
     }
 
     public List<CandidatoVagaDTO> getByCandidatoId(Long candidatoId) {
-			List<CandidatoVagaEntity> candidaturas = candidatoVagaRepository.findByCandidatoId(candidatoId);
+        List<CandidatoVagaEntity> candidaturas = candidatoVagaRepository.findByCandidatoId(candidatoId);
 
-			return candidaturas.stream()
-							.map(CandidatoVagaDTO::new)
-							.collect(Collectors.toList());
+        return candidaturas.stream()
+                .map(CandidatoVagaDTO::new)
+                .collect(Collectors.toList());
     }
 
     public List<Long> getByVagaId(Long vagaId) {
-			List<CandidatoVagaEntity> candidaturas = candidatoVagaRepository.findByVagaId(vagaId);
+        List<CandidatoVagaEntity> candidaturas = candidatoVagaRepository.findByVagaId(vagaId);
 
-			return candidaturas.stream()
-							.map(CandidatoVagaEntity::getCandidatoId)
-							.collect(Collectors.toList());
+        return candidaturas.stream()
+                .map(CandidatoVagaEntity::getCandidatoId)
+                .collect(Collectors.toList());
     }
 }

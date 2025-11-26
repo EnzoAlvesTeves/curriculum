@@ -2,8 +2,9 @@ package br.com.senac.mscurriculum.service;
 
 import br.com.senac.mscurriculum.dto.CandidatoDTO;
 import br.com.senac.mscurriculum.repository.*;
-import br.com.senac.mscurriculum.repository.entity.CandidatoEntity;
+import br.com.senac.mscurriculum.repository.entity.*;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -17,12 +18,12 @@ public class CandidatoService {
 	private final EducacaoRepository educacaoRepository;
 
 	public CandidatoService(
-					CandidatoRepository candidatoRepository,
-					EnderecoRepository enderecoRepository,
-					ExperienciaRepository experienciaRepository,
-					HabilidadeRepository habilidadeRepository,
-					EducacaoRepository educacaoRepository
-	) {
+            CandidatoRepository candidatoRepository,
+            EnderecoRepository enderecoRepository,
+            ExperienciaRepository experienciaRepository,
+            HabilidadeRepository habilidadeRepository,
+            EducacaoRepository educacaoRepository
+    ) {
 		this.candidatoRepository = candidatoRepository;
 		this.enderecoRepository = enderecoRepository;
 		this.experienciaRepository = experienciaRepository;
@@ -30,12 +31,42 @@ public class CandidatoService {
 		this.educacaoRepository = educacaoRepository;
 	}
 
+    @Transactional
 	public CandidatoDTO create(CandidatoDTO candidatoDTO) {
-		CandidatoEntity candidateEntity = candidatoDTO.toEntity();
+        try {
+            EnderecoEntity enderecoEntity = candidatoDTO.getEndereco().toEntity();
+            EnderecoEntity novoEndereco = enderecoRepository.save(enderecoEntity);
 
-		CandidatoEntity novoCandidate = candidatoRepository.save(candidateEntity);
+            CandidatoEntity candidatoEntity = candidatoDTO.toEntity();
+            candidatoEntity.setEndereco(novoEndereco);
 
-		return new CandidatoDTO(novoCandidate);
+            CandidatoEntity novoCandidato = candidatoRepository.save(candidatoEntity);
+
+            candidatoDTO.getEducacoes().forEach(educacao -> {
+                EducacaoEntity educacaoEntity = educacao.toEntity();
+                educacaoEntity.setCandidato(novoCandidato);
+
+                educacaoRepository.save(educacaoEntity);
+            });
+
+            candidatoDTO.getExperiencias().forEach(experiencia -> {
+                ExperienciaEntity experienciaEntity = experiencia.toEntity();
+                experienciaEntity.setCandidato(novoCandidato);
+
+                experienciaRepository.save(experienciaEntity);
+            });
+
+            candidatoDTO.getHabilidades().forEach(habilidade -> {
+                HabilidadeEntity habilidadeEntity = habilidade.toEntity();
+                habilidadeEntity.setCandidato(novoCandidato);
+
+                habilidadeRepository.save(habilidadeEntity);
+            });
+
+            return new CandidatoDTO(novoCandidato);
+        } catch (Exception e) {
+            throw new RuntimeException("Erro ao criar candidato", e);
+        }
 	}
 
 	public CandidatoDTO getById(Long id) {
@@ -53,28 +84,38 @@ public class CandidatoService {
 						.collect(Collectors.toList());
 	}
 
+    @Transactional
 	public CandidatoDTO update(CandidatoDTO candidatoDTO) {
-		CandidatoEntity candidateEntity = candidatoRepository.findById(candidatoDTO.getId())
-						.orElseThrow(() -> new RuntimeException("Candidato não encontrado!"));
+        CandidatoEntity candidatoEntity = candidatoRepository.findById(candidatoDTO.getId())
+                .orElseThrow(() -> new RuntimeException("Candidato não encontrado!"));
+        try {
+            candidatoEntity.setId(candidatoDTO.getId());
+            candidatoEntity.setNome(candidatoDTO.getNome());
+            candidatoEntity.setEmail(candidatoDTO.getEmail());
+            candidatoEntity.setTelefone(candidatoDTO.getTelefone());
+            candidatoEntity.setSexo(candidatoDTO.getSexo());
+            candidatoEntity.setDataNascimento(candidatoDTO.getDataNascimento());
+            candidatoEntity.setResumoProfissional(candidatoDTO.getResumoProfissional());
+            candidatoEntity.setUsuarioId(candidatoDTO.getUsuarioId());
 
-		candidateEntity.setId(candidatoDTO.getId());
-		candidateEntity.setNome(candidatoDTO.getNome());
-		candidateEntity.setEmail(candidatoDTO.getEmail());
-		candidateEntity.setTelefone(candidatoDTO.getTelefone());
-		candidateEntity.setSexo(candidatoDTO.getSexo());
-		candidateEntity.setDataNascimento(candidatoDTO.getDataNascimento());
-		candidateEntity.setResumoProfissional(candidatoDTO.getResumoProfissional());
-		candidateEntity.setUsuarioId(candidatoDTO.getUsuarioId());
+            CandidatoEntity candidateAlterado = candidatoRepository.saveAndFlush(candidatoEntity);
 
-		CandidatoEntity candidateAlterado = candidatoRepository.save(candidateEntity);
-
-		return new CandidatoDTO(candidateAlterado);
+            return new CandidatoDTO(candidateAlterado);
+        } catch (Exception e) {
+            throw new RuntimeException("Erro ao editar candidato", e);
+        }
 	}
 
+    @Transactional
 	public void delete(Long id) {
 		CandidatoEntity candidateEntity = candidatoRepository.findById(id)
 						.orElseThrow(() -> new RuntimeException("Candidato não encontrado!"));
 
-		candidatoRepository.delete(candidateEntity);
+        try {
+            candidatoRepository.delete(candidateEntity);
+        } catch (Exception e) {
+            throw new RuntimeException("Erro ao deletar candidato", e);
+        }
+
 	}
 }

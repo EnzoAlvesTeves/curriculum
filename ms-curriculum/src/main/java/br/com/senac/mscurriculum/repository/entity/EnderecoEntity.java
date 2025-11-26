@@ -35,8 +35,4 @@ public class EnderecoEntity {
 
 	@Column(name = "bairro", nullable = false)
 	private String bairro;
-
-	@ManyToOne
-	@JoinColumn(name = "candidato_id")
-	private CandidatoEntity candidato;
 }

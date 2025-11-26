@@ -39,15 +39,14 @@ public class EducacaoDTO {
         this.candidatoId = candidatoId;
     }
 
-		public EducacaoEntity toEntity() {
-			EducacaoEntity educacaoEntity = new EducacaoEntity();
-			EducacaoDTO educacaoDTO = new EducacaoDTO(educacaoEntity);
-			educacaoDTO.setInstituicao(this.instituicao);
-			educacaoDTO.setCurso(this.curso);
-			educacaoDTO.setDataInicio(this.dataInicio);
-			educacaoDTO.setDataFim(this.dataFim);
-			educacaoDTO.setGrau(this.grau);
-			educacaoDTO.setId(this.id);
-			return educacaoEntity;
-		}
+    public EducacaoEntity toEntity() {
+        EducacaoEntity educacaoEntity = new EducacaoEntity();
+        educacaoEntity.setInstituicao(this.instituicao);
+        educacaoEntity.setCurso(this.curso);
+        educacaoEntity.setDataInicio(this.dataInicio);
+        educacaoEntity.setDataFim(this.dataFim);
+        educacaoEntity.setGrau(this.grau);
+        educacaoEntity.setId(this.id);
+        return educacaoEntity;
+    }
 }
