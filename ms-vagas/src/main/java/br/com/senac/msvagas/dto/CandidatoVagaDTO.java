@@ -1,5 +1,6 @@
 package br.com.senac.msvagas.dto;
 
+import br.com.senac.msvagas.repository.entity.CandidatoVagaEntity;
 import br.com.senac.msvagas.repository.entity.VagaEntity;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -22,4 +23,17 @@ public class CandidatoVagaDTO {
 		this.dataInscricao = dataInscricao;
 		this.candidatoId = candidatoId;
 	}
+
+	public CandidatoVagaDTO(CandidatoVagaEntity candidatoVagaEntity) {
+	}
+
+	public CandidatoVagaEntity toEntity() {
+		CandidatoVagaEntity candidatoVagaEntity = new CandidatoVagaEntity();
+		candidatoVagaEntity.setId(this.id);
+		candidatoVagaEntity.setVaga(this.vaga.toEntity());
+		candidatoVagaEntity.setDataInscricao(this.dataInscricao);
+		candidatoVagaEntity.setCandidatoId(this.candidatoId);
+		return candidatoVagaEntity;
+	}
+
 }

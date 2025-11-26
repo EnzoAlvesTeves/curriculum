@@ -3,9 +3,11 @@ package br.com.senac.mscurriculum.service;
 import br.com.senac.mscurriculum.dto.HabilidadeDTO;
 import br.com.senac.mscurriculum.repository.CandidatoRepository;
 import br.com.senac.mscurriculum.repository.HabilidadeRepository;
+import br.com.senac.mscurriculum.repository.entity.HabilidadeEntity;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class HabilidadeService {
@@ -21,21 +23,41 @@ public class HabilidadeService {
     }
 
     public HabilidadeDTO create(HabilidadeDTO habilidadeDTO) {
-        // Lógica para criar uma nova entrada de habilidade
-        return null;
+			if (!candidatoRepository.existsById(habilidadeDTO.getCandidatoId())) {
+				throw new RuntimeException("Candidato não encontrado!");
+			}
+			HabilidadeEntity habilidadeEntity = habilidadeDTO.toEntity();
+
+			HabilidadeEntity novaHabilidade = habilidadeRepository.save(habilidadeEntity);
+
+			return new HabilidadeDTO(novaHabilidade);
     }
 
     public List<HabilidadeDTO> getByCandidatoId(Long candidatoId) {
-        // Lógica para obter a habilidade por ID do candidato
-        return null;
+			List<HabilidadeEntity> habilidades = habilidadeRepository.findByCandidatoId(candidatoId);
+
+			return habilidades.stream()
+							.map(HabilidadeDTO::new)
+							.collect(Collectors.toList());
     }
 
     public HabilidadeDTO update(HabilidadeDTO habilidadeDTO) {
-        // Lógica para atualizar uma entrada de habilidade existente
-        return null;
+			HabilidadeEntity habilidadeEntity = habilidadeRepository.findById(habilidadeDTO.getId())
+							.orElseThrow(() -> new RuntimeException("Habilidade não encontrada!"));
+			habilidadeEntity.setDescricao(habilidadeDTO.getDescricao());
+			habilidadeEntity.setNivel(habilidadeDTO.getNivel());
+			habilidadeEntity.setEspecialidade(habilidadeDTO.getEspecialidade());
+			habilidadeEntity.setId(habilidadeDTO.getId());
+
+			HabilidadeEntity habilidadeAlterada = habilidadeRepository.save(habilidadeEntity);
+
+			return new HabilidadeDTO(habilidadeAlterada);
     }
 
     public void delete(Long habilidadeId) {
-        // Lógica para deletar uma entrada de habilidade
+			HabilidadeEntity habilidadeEntity = habilidadeRepository.findById(habilidadeId)
+							.orElseThrow(() -> new RuntimeException("Habilidade não encontrada!"));
+
+			habilidadeRepository.delete(habilidadeEntity);
     }
 }

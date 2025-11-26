@@ -29,4 +29,17 @@ public class EnderecoDTO {
         this.cep = enderecoEntity.getCep();
         this.bairro = enderecoEntity.getBairro();
     }
+
+	public EnderecoEntity toEntity() {
+		EnderecoEntity entity = new EnderecoEntity();
+		entity.setId(this.id);
+		entity.setCep(this.cep);
+		entity.setNumero(this.numero);
+		entity.setComplemento(this.complemento);
+		entity.setBairro(this.bairro);
+		entity.setCidade(this.cidade);
+		entity.setEstado(this.estado);
+		return entity;
+	}
+
 }

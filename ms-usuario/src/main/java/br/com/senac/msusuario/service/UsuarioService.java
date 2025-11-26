@@ -2,33 +2,53 @@ package br.com.senac.msusuario.service;
 
 import br.com.senac.msusuario.dto.UsuarioDTO;
 import br.com.senac.msusuario.repository.UsuarioRepository;
+import br.com.senac.msusuario.repository.entity.UsuarioEntity;
 import org.springframework.stereotype.Component;
+
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Component
 public class UsuarioService {
 
-    private UsuarioRepository usuarioRepository;
+	private UsuarioRepository usuarioRepository;
 
-    public UsuarioService(UsuarioRepository usuarioRepository) {
-        this.usuarioRepository = usuarioRepository;
-    }
+	public UsuarioService(UsuarioRepository usuarioRepository) {
+		this.usuarioRepository = usuarioRepository;
+	}
 
-    public UsuarioDTO create(UsuarioDTO usuarioDTO) {
-        // Lógica para criar um novo usuário
-        return null; // Retornar o usuário criado
-    }
+	public UsuarioDTO create(UsuarioDTO usuarioDTO) {
+		UsuarioEntity usuarioEntity = usuarioDTO.toEntity();
 
-    public UsuarioDTO getById(Long id) {
-        // Lógica para obter um usuário pelo ID
-        return null; // Retornar o usuário encontrado
-    }
+		UsuarioEntity novoUsuario = usuarioRepository.save(usuarioEntity);
 
-    public UsuarioDTO update(UsuarioDTO usuarioDTO) {
-        // Lógica para atualizar um usuário existente
-        return null; // Retornar o usuário atualizado
-    }
+		return new UsuarioDTO(novoUsuario);
+	}
 
-    public void delete(Long id) {
-        // Lógica para deletar um usuário
-    }
+	public UsuarioDTO getById(Long id) {
+		UsuarioEntity usuarioEntity = usuarioRepository.findById(id)
+						.orElseThrow(() -> new RuntimeException("Usuário não encontrado!"));
+
+		return new UsuarioDTO(usuarioEntity);
+	}
+
+	public UsuarioDTO update(UsuarioDTO usuarioDTO) {
+		UsuarioEntity usuarioEntity = usuarioRepository.findById(usuarioDTO.getId())
+						.orElseThrow(() -> new RuntimeException("Usuário não encontrado!"));
+		usuarioEntity.setId(usuarioDTO.getId());
+		usuarioEntity.setNome(usuarioDTO.getNome());
+		usuarioEntity.setEmail(usuarioDTO.getEmail());
+		usuarioEntity.setSenha(usuarioDTO.getSenha());
+
+		UsuarioEntity usuarioAlterado = usuarioRepository.save(usuarioEntity);
+
+		return new UsuarioDTO(usuarioAlterado);
+	}
+
+	public void delete(Long id) {
+		UsuarioEntity usuarioEntity = usuarioRepository.findById(id)
+						.orElseThrow(() -> new RuntimeException("Usuário não encontrado!"));
+
+		usuarioRepository.delete(usuarioEntity);
+	}
 }

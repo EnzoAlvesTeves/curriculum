@@ -38,4 +38,16 @@ public class EducacaoDTO {
         this.curso = educacao.getCurso();
         this.candidatoId = candidatoId;
     }
+
+		public EducacaoEntity toEntity() {
+			EducacaoEntity educacaoEntity = new EducacaoEntity();
+			EducacaoDTO educacaoDTO = new EducacaoDTO(educacaoEntity);
+			educacaoDTO.setInstituicao(this.instituicao);
+			educacaoDTO.setCurso(this.curso);
+			educacaoDTO.setDataInicio(this.dataInicio);
+			educacaoDTO.setDataFim(this.dataFim);
+			educacaoDTO.setGrau(this.grau);
+			educacaoDTO.setId(this.id);
+			return educacaoEntity;
+		}
 }

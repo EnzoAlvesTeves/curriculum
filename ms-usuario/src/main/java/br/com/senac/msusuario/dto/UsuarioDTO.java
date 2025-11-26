@@ -22,4 +22,13 @@ public class UsuarioDTO {
 		this.senha = entity.getSenha();
 	}
 
+	public UsuarioEntity toEntity() {
+		UsuarioEntity usuarioEntity = new UsuarioEntity();
+		usuarioEntity.setId(this.id);
+		usuarioEntity.setNome(this.nome);
+		usuarioEntity.setEmail(this.email);
+		usuarioEntity.setSenha(this.senha);
+		return usuarioEntity;
+	}
+
 }
