@@ -33,6 +33,7 @@ public class EnderecoDTO {
 	public EnderecoEntity toEntity() {
 		EnderecoEntity entity = new EnderecoEntity();
 		entity.setId(this.id);
+        entity.setRua(this.rua);
 		entity.setCep(this.cep);
 		entity.setNumero(this.numero);
 		entity.setComplemento(this.complemento);

@@ -4,5 +4,5 @@ CREATE TABLE habilidade (
     descricao VARCHAR(255) NOT NULL,
     nivel VARCHAR(50),
     especialidade VARCHAR(100),
-    FOREIGN KEY (candidato_id) REFERENCES candidato (id)
+    FOREIGN KEY (candidato_id) REFERENCES candidato (id) ON DELETE CASCADE
 );

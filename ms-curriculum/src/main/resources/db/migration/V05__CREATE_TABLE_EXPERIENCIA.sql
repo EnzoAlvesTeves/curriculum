@@ -5,5 +5,5 @@ CREATE TABLE experiencia (
     empresa VARCHAR(100) NOT NULL,
     data_inicio DATE,
     data_fim DATE,
-    FOREIGN KEY (candidato_id) REFERENCES candidato (id)
+    FOREIGN KEY (candidato_id) REFERENCES candidato (id) ON DELETE CASCADE
 );

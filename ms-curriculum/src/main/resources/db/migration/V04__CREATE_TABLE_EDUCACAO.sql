@@ -6,5 +6,5 @@ CREATE TABLE educacao (
     data_fim DATE,
     instituicao VARCHAR(100) NOT NULL,
     curso VARCHAR(100) NOT NULL,
-    FOREIGN KEY (candidato_id) REFERENCES candidato (id)
+    FOREIGN KEY (candidato_id) REFERENCES candidato (id) ON DELETE CASCADE
 );
