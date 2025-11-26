@@ -13,50 +13,63 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 public class CandidatoDTO {
-    private Long id;
-    private String nome;
-    private String email;
-    private String telefone;
-    private Sexo sexo;
-    private LocalDate dataNascimento;
-    private String resumoProfissional;
-    private Long usuarioId;
-    private EnderecoDTO endereco;
+	private Long id;
+	private String nome;
+	private String email;
+	private String telefone;
+	private Sexo sexo;
+	private LocalDate dataNascimento;
+	private String resumoProfissional;
+	private Long usuarioId;
+	private EnderecoDTO endereco;
 
-    private List<EducacaoDTO> educacoes;
-    private List<ExperienciaDTO> experiencias;
-    private List<HabilidadeDTO> habilidades;
+	private List<EducacaoDTO> educacoes;
+	private List<ExperienciaDTO> experiencias;
+	private List<HabilidadeDTO> habilidades;
 
-    public CandidatoDTO(CandidatoEntity entity) {
-        this.id = entity.getId();
-        this.nome = entity.getNome();
-        this.email = entity.getEmail();
-        this.telefone = entity.getTelefone();
-        this.sexo = entity.getSexo();
-        this.dataNascimento = entity.getDataNascimento();
-        this.resumoProfissional = entity.getResumoProfissional();
-        this.usuarioId = entity.getUsuarioId();
+	public CandidatoDTO(CandidatoEntity entity) {
+		this.id = entity.getId();
+		this.nome = entity.getNome();
+		this.email = entity.getEmail();
+		this.telefone = entity.getTelefone();
+		this.sexo = entity.getSexo();
+		this.dataNascimento = entity.getDataNascimento();
+		this.resumoProfissional = entity.getResumoProfissional();
+		this.usuarioId = entity.getUsuarioId();
 
-        if (entity.getEndereco() != null) {
-            this.endereco = new EnderecoDTO(entity.getEndereco());
-        }
+		if (entity.getEndereco() != null) {
+			this.endereco = new EnderecoDTO(entity.getEndereco());
+		}
 
-        if (entity.getEducacoes() != null) {
-            this.educacoes = entity.getEducacoes().stream()
-                    .map(educacao -> new EducacaoDTO(educacao, this.id))
-                    .toList();
-        }
+		if (entity.getEducacoes() != null) {
+			this.educacoes = entity.getEducacoes().stream()
+							.map(educacao -> new EducacaoDTO(educacao, this.id))
+							.toList();
+		}
 
-        if (entity.getExperiencias() != null) {
-            this.experiencias = entity.getExperiencias().stream()
-                    .map(experiencia -> new ExperienciaDTO(experiencia, this.id))
-                    .toList();
-        }
+		if (entity.getExperiencias() != null) {
+			this.experiencias = entity.getExperiencias().stream()
+							.map(experiencia -> new ExperienciaDTO(experiencia, this.id))
+							.toList();
+		}
 
-        if (entity.getHabilidades() != null) {
-            this.habilidades = entity.getHabilidades().stream()
-                    .map(habilidade -> new HabilidadeDTO(habilidade, this.id))
-                    .toList();
-        }
-    }
+		if (entity.getHabilidades() != null) {
+			this.habilidades = entity.getHabilidades().stream()
+							.map(habilidade -> new HabilidadeDTO(habilidade, this.id))
+							.toList();
+		}
+	}
+
+	public CandidatoEntity toEntity() {
+		CandidatoEntity entity = new CandidatoEntity();
+		entity.setId(this.id);
+		entity.setNome(this.nome);
+		entity.setEmail(this.email);
+		entity.setTelefone(this.telefone);
+		entity.setSexo(this.sexo);
+		entity.setDataNascimento(this.dataNascimento);
+		entity.setResumoProfissional(this.resumoProfissional);
+		entity.setUsuarioId(this.usuarioId);
+		return entity;
+	}
 }

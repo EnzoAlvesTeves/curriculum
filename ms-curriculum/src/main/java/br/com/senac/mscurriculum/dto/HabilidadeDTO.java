@@ -31,4 +31,13 @@ public class HabilidadeDTO {
         this.especialidade = habilidadeEntity.getEspecialidade();
         this.candidatoId = candidatoId;
     }
+
+	public HabilidadeEntity toEntity() {
+		HabilidadeEntity entity = new HabilidadeEntity();
+		entity.setId(this.id);
+		entity.setDescricao(this.descricao);
+		entity.setNivel(this.nivel);
+		entity.setEspecialidade(this.especialidade);
+		return entity;
+	}
 }

@@ -2,6 +2,7 @@ package br.com.senac.mscurriculum.service;
 
 import br.com.senac.mscurriculum.dto.EnderecoDTO;
 import br.com.senac.mscurriculum.repository.EnderecoRepository;
+import br.com.senac.mscurriculum.repository.entity.EnderecoEntity;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -13,21 +14,40 @@ public class EnderecoService {
     }
 
     public EnderecoDTO create(EnderecoDTO enderecoDTO) {
-        // Lógica para criar um novo endereço
-        return null;
+			EnderecoEntity enderecoEntity = enderecoDTO.toEntity();
+
+			EnderecoEntity novoEndereco = enderecoRepository.save(enderecoEntity);
+
+			return new EnderecoDTO(novoEndereco);
     }
 
     public EnderecoDTO update(EnderecoDTO enderecoDTO) {
-        // Lógica para atualizar um endereço existente
-        return null;
+			EnderecoEntity enderecoEntity = enderecoRepository.findById(enderecoDTO.getId())
+							.orElseThrow(() -> new RuntimeException("Endereço não encontrado!"));
+
+			enderecoEntity.setCep(enderecoDTO.getCep());
+			enderecoEntity.setNumero(enderecoDTO.getNumero());
+			enderecoEntity.setComplemento(enderecoDTO.getComplemento());
+			enderecoEntity.setBairro(enderecoDTO.getBairro());
+			enderecoEntity.setCidade(enderecoDTO.getCidade());
+			enderecoEntity.setEstado(enderecoDTO.getEstado());
+
+			EnderecoEntity enderecoAlterado = enderecoRepository.save(enderecoEntity);
+
+			return new EnderecoDTO(enderecoAlterado);
     }
 
     public EnderecoDTO getById(Long enderecoId) {
-        // Lógica para buscar um endereço por ID
-        return null;
+			EnderecoEntity enderecoEntity = enderecoRepository.findById(enderecoId)
+							.orElseThrow(() -> new RuntimeException("Endereço não encontrado!"));
+
+			return new EnderecoDTO(enderecoEntity);
     }
 
     public void delete(Long enderecoId) {
-        // Lógica para deletar um endereço
+			EnderecoEntity enderecoEntity = enderecoRepository.findById(enderecoId)
+							.orElseThrow(() -> new RuntimeException("Endereço não encontrado!"));
+
+			enderecoRepository.delete(enderecoEntity);
     }
 }

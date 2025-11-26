@@ -3,9 +3,11 @@ package br.com.senac.mscurriculum.service;
 import br.com.senac.mscurriculum.dto.ExperienciaDTO;
 import br.com.senac.mscurriculum.repository.CandidatoRepository;
 import br.com.senac.mscurriculum.repository.ExperienciaRepository;
+import br.com.senac.mscurriculum.repository.entity.ExperienciaEntity;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class ExperienciaService {
@@ -21,21 +23,43 @@ public class ExperienciaService {
     }
 
     public ExperienciaDTO create(ExperienciaDTO experienciaDTO) {
-        // Lógica para criar uma nova entrada de experiência
-        return null;
+			if (!candidatoRepository.existsById(experienciaDTO.getCandidatoId())) {
+				throw new RuntimeException("Candidato não encontrado!");
+			}
+
+			ExperienciaEntity experienciaEntity = experienciaDTO.toEntity();
+
+			ExperienciaEntity novaExperiencia = experienciaRepository.save(experienciaEntity);
+
+			return new ExperienciaDTO(novaExperiencia);
     }
 
     public List<ExperienciaDTO> getByCandidatoId(Long candidatoId) {
-        // Lógica para obter a experiência por ID do candidato
-        return null;
+			List<ExperienciaEntity> experiencias = experienciaRepository.findByCandidatoId(candidatoId);
+
+			return experiencias.stream()
+							.map(ExperienciaDTO::new)
+							.collect(Collectors.toList());
     }
 
     public ExperienciaDTO update(ExperienciaDTO experienciaDTO) {
-        // Lógica para atualizar uma entrada de experiência existente
-        return null;
+			ExperienciaEntity experienciaEntity = experienciaRepository.findById(experienciaDTO.getId())
+							.orElseThrow(() -> new RuntimeException("Experiência não encontrada!"));
+
+			experienciaEntity.setCargo(experienciaDTO.getCargo());
+			experienciaEntity.setEmpresa(experienciaDTO.getEmpresa());
+			experienciaEntity.setDataInicio(experienciaDTO.getDataInicio());
+			experienciaEntity.setDataFim(experienciaDTO.getDataFim());
+
+			ExperienciaEntity experienciaAlterada = experienciaRepository.save(experienciaEntity);
+
+			return new ExperienciaDTO(experienciaAlterada);
     }
 
     public void delete(Long experienciaId) {
-        // Lógica para deletar uma entrada de experiência
+			ExperienciaEntity experienciaEntity = experienciaRepository.findById(experienciaId)
+							.orElseThrow(() -> new RuntimeException("Experiência não encontrada!"));
+
+			experienciaRepository.delete(experienciaEntity);
     }
 }
