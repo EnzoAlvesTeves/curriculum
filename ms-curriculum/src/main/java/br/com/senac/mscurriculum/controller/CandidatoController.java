@@ -25,6 +25,12 @@ public class CandidatoController {
         return candidatoService.getById(id);
     }
 
+    @GetMapping("/usuario/{usuarioId}")
+    public CandidatoDTO getByUsuarioId(@PathVariable Long usuarioId) {
+       //TODO: implementar busca de candidato por usuarioId
+        return null;
+    }
+
     @GetMapping
     public List<CandidatoDTO> getAll() {
         return candidatoService.getAll();

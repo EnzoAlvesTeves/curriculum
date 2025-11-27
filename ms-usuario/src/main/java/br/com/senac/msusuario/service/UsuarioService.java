@@ -1,5 +1,6 @@
 package br.com.senac.msusuario.service;
 
+import br.com.senac.msusuario.dto.LoginRequestDTO;
 import br.com.senac.msusuario.dto.UsuarioDTO;
 import br.com.senac.msusuario.repository.UsuarioRepository;
 import br.com.senac.msusuario.repository.entity.UsuarioEntity;
@@ -65,4 +66,15 @@ public class UsuarioService {
             throw new RuntimeException("Erro ao deletar usuário", e);
         }
 	}
+
+    public UsuarioDTO login(LoginRequestDTO loginRequestDTO) {
+        UsuarioEntity usuario = usuarioRepository.findByEmail(loginRequestDTO.getEmail())
+                .orElseThrow(() -> new RuntimeException("Email não existente!"));
+
+        if(usuario.getSenha().equals(loginRequestDTO.getSenha())) {
+            return new UsuarioDTO(usuario);
+        }
+
+        throw new RuntimeException("Senha inválida!");
+    }
 }

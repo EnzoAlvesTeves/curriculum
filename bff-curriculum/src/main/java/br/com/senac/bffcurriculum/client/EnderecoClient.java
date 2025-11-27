@@ -1,7 +1,6 @@
 package br.com.senac.bffcurriculum.client;
 
 import br.com.senac.bffcurriculum.dto.EnderecoDTO;
-import br.com.senac.bffcurriculum.dto.UsuarioDTO;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
@@ -17,9 +16,7 @@ public class EnderecoClient {
 
     private RestTemplate restTemplate;
 
-    EnderecoClient(
-            RestTemplate restTemplate
-    ) {
+    EnderecoClient(RestTemplate restTemplate) {
         this.restTemplate = restTemplate;
     }
 
@@ -28,7 +25,7 @@ public class EnderecoClient {
                 new URI(BASE_URL),
                 HttpMethod.POST,
                 new HttpEntity<>(enderecoDTO),
-								EnderecoDTO.class
+                EnderecoDTO.class
         );
 
         return response.getBody();
@@ -39,7 +36,7 @@ public class EnderecoClient {
                 new URI(BASE_URL),
                 HttpMethod.PUT,
                 new HttpEntity<>(enderecoDTO),
-								EnderecoDTO.class
+                EnderecoDTO.class
         );
 
         return response.getBody();
@@ -50,7 +47,7 @@ public class EnderecoClient {
                 new URI(BASE_URL + "/" + id),
                 HttpMethod.GET,
                 null,
-								EnderecoDTO.class
+                EnderecoDTO.class
         );
 
         return response.getBody();
