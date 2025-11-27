@@ -1,11 +1,11 @@
 package br.com.senac.bffcurriculum.client;
 
+import br.com.senac.bffcurriculum.dto.LoginRequestDTO;
 import br.com.senac.bffcurriculum.dto.UsuarioDTO;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
-import org.springframework.web.bind.annotation.*;
 import org.springframework.web.client.RestTemplate;
 
 import java.net.URI;
@@ -23,45 +23,80 @@ public class UsuarioClient {
         this.restTemplate = restTemplate;
     }
 
-    public UsuarioDTO create(UsuarioDTO usuarioDTO) throws URISyntaxException {
-        ResponseEntity<UsuarioDTO> response = restTemplate.exchange(
-                new URI(BASE_URL),
-                HttpMethod.POST,
-                new HttpEntity<>(usuarioDTO),
-                UsuarioDTO.class
-        );
+    public UsuarioDTO create(UsuarioDTO usuarioDTO) {
+        ResponseEntity<UsuarioDTO> response = null;
+        try {
+            response = restTemplate.exchange(
+                    new URI(BASE_URL),
+                    HttpMethod.POST,
+                    new HttpEntity<>(usuarioDTO),
+                    UsuarioDTO.class
+            );
+        } catch (URISyntaxException e) {
+            throw new RuntimeException(e);
+        }
 
         return response.getBody();
     }
 
-    public UsuarioDTO update(UsuarioDTO usuarioDTO) throws URISyntaxException {
-        ResponseEntity<UsuarioDTO> response = restTemplate.exchange(
-                new URI(BASE_URL),
-                HttpMethod.PUT,
-                new HttpEntity<>(usuarioDTO),
-                UsuarioDTO.class
-        );
+    public UsuarioDTO update(UsuarioDTO usuarioDTO) {
+        ResponseEntity<UsuarioDTO> response = null;
+        try {
+            response = restTemplate.exchange(
+                    new URI(BASE_URL),
+                    HttpMethod.PUT,
+                    new HttpEntity<>(usuarioDTO),
+                    UsuarioDTO.class
+            );
+        } catch (URISyntaxException e) {
+            throw new RuntimeException(e);
+        }
 
         return response.getBody();
     }
 
-    public UsuarioDTO getById(Long id) throws URISyntaxException {
-        ResponseEntity<UsuarioDTO> response = restTemplate.exchange(
-                new URI(BASE_URL + "/" + id),
-                HttpMethod.GET,
-                null,
-                UsuarioDTO.class
-        );
+    public UsuarioDTO getById(Long id) {
+        ResponseEntity<UsuarioDTO> response = null;
+        try {
+            response = restTemplate.exchange(
+                    new URI(BASE_URL + "/" + id),
+                    HttpMethod.GET,
+                    null,
+                    UsuarioDTO.class
+            );
+        } catch (URISyntaxException e) {
+            throw new RuntimeException(e);
+        }
 
         return response.getBody();
     }
 
-    public void delete(Long id) throws URISyntaxException {
-        restTemplate.exchange(
-                new URI(BASE_URL + "/" + id),
-                HttpMethod.DELETE,
-                null,
-                Void.class
-        );
+    public void delete(Long id) {
+        try {
+            restTemplate.exchange(
+                    new URI(BASE_URL + "/" + id),
+                    HttpMethod.DELETE,
+                    null,
+                    Void.class
+            );
+        } catch (URISyntaxException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    public UsuarioDTO login(LoginRequestDTO loginDTO) {
+        ResponseEntity<UsuarioDTO> response = null;
+        try {
+            response = restTemplate.exchange(
+                    new URI(BASE_URL + "/login"),
+                    HttpMethod.POST,
+                    new HttpEntity<>(loginDTO),
+                    UsuarioDTO.class
+            );
+        } catch (URISyntaxException e) {
+            throw new RuntimeException(e);
+        }
+
+        return response.getBody();
     }
 }

@@ -23,55 +23,79 @@ public class VagaClient {
         this.restTemplate = restTemplate;
     }
 
-    public VagaDTO create(VagaDTO vagaDTO) throws URISyntaxException {
-        ResponseEntity<VagaDTO> response = restTemplate.exchange(
-                new URI(BASE_URL),
-                HttpMethod.POST,
-                new HttpEntity<>(vagaDTO),
-                VagaDTO.class
-        );
+    public VagaDTO create(VagaDTO vagaDTO) {
+        ResponseEntity<VagaDTO> response = null;
+        try {
+            response = restTemplate.exchange(
+                    new URI(BASE_URL),
+                    HttpMethod.POST,
+                    new HttpEntity<>(vagaDTO),
+                    VagaDTO.class
+            );
+        } catch (URISyntaxException e) {
+            throw new RuntimeException(e);
+        }
 
         return response.getBody();
     }
 
-    public VagaDTO update(VagaDTO vagaDTO) throws URISyntaxException {
-        ResponseEntity<VagaDTO> response = restTemplate.exchange(
-                new URI(BASE_URL),
-                HttpMethod.PUT,
-                new HttpEntity<>(vagaDTO),
-                VagaDTO.class
-        );
+    public VagaDTO update(VagaDTO vagaDTO) {
+        ResponseEntity<VagaDTO> response = null;
+        try {
+            response = restTemplate.exchange(
+                    new URI(BASE_URL),
+                    HttpMethod.PUT,
+                    new HttpEntity<>(vagaDTO),
+                    VagaDTO.class
+            );
+        } catch (URISyntaxException e) {
+            throw new RuntimeException(e);
+        }
 
         return response.getBody();
     }
 
-    public void delete(Long id) throws URISyntaxException {
-        restTemplate.exchange(
-                new URI(BASE_URL + "/" + id),
-                HttpMethod.DELETE,
-                null,
-                Void.class
-        );
+    public void delete(Long id) {
+        try {
+            restTemplate.exchange(
+                    new URI(BASE_URL + "/" + id),
+                    HttpMethod.DELETE,
+                    null,
+                    Void.class
+            );
+        } catch (URISyntaxException e) {
+            throw new RuntimeException(e);
+        }
     }
 
-    public VagaDTO getById(Long id) throws URISyntaxException {
-        ResponseEntity<VagaDTO> response = restTemplate.exchange(
-                new URI(BASE_URL + "/" + id),
-                HttpMethod.GET,
-                null,
-                VagaDTO.class
-        );
+    public VagaDTO getById(Long id) {
+        ResponseEntity<VagaDTO> response = null;
+        try {
+            response = restTemplate.exchange(
+                    new URI(BASE_URL + "/" + id),
+                    HttpMethod.GET,
+                    null,
+                    VagaDTO.class
+            );
+        } catch (URISyntaxException e) {
+            throw new RuntimeException(e);
+        }
 
         return response.getBody();
     }
 
-    public List<VagaDTO> getall() throws URISyntaxException {
-        ResponseEntity<VagaDTO[]> response = restTemplate.exchange(
-                new URI(BASE_URL),
-                HttpMethod.GET,
-                null,
-                VagaDTO[].class
-        );
+    public List<VagaDTO> getall() {
+        ResponseEntity<VagaDTO[]> response = null;
+        try {
+            response = restTemplate.exchange(
+                    new URI(BASE_URL),
+                    HttpMethod.GET,
+                    null,
+                    VagaDTO[].class
+            );
+        } catch (URISyntaxException e) {
+            throw new RuntimeException(e);
+        }
 
         return response.getBody() != null
                 ? Arrays.stream(response.getBody()).toList()

@@ -6,6 +6,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 
 @Data
@@ -25,4 +26,17 @@ public class CandidatoDTO {
     private List<EducacaoDTO> educacao;
     private List<ExperienciaDTO> experiencia;
     private List<HabilidadeDTO> habilidade;
+
+    private UsuarioDTO usuario;
+
+    public CandidatoDTO(UsuarioDTO usuarioDTO) {
+        this.usuarioId = usuarioDTO.getId();
+        this.usuario = usuarioDTO;
+        this.nome = usuarioDTO.getNome();
+        this.email = usuarioDTO.getEmail();
+
+        this.experiencia = new ArrayList<>();
+        this.educacao = new ArrayList<>();
+        this.habilidade = new ArrayList<>();
+    }
 }

@@ -1,8 +1,6 @@
 package br.com.senac.bffcurriculum.client;
 
-import br.com.senac.bffcurriculum.dto.ExperienciaDTO;
 import br.com.senac.bffcurriculum.dto.HabilidadeDTO;
-import br.com.senac.bffcurriculum.dto.UsuarioDTO;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
@@ -21,9 +19,7 @@ public class HabilidadeClient {
 
     private RestTemplate restTemplate;
 
-    HabilidadeClient(
-            RestTemplate restTemplate
-    ) {
+    HabilidadeClient(RestTemplate restTemplate) {
         this.restTemplate = restTemplate;
     }
 
@@ -32,7 +28,7 @@ public class HabilidadeClient {
                 new URI(BASE_URL),
                 HttpMethod.POST,
                 new HttpEntity<>(habilidadeDTO),
-								HabilidadeDTO.class
+                HabilidadeDTO.class
         );
 
         return response.getBody();
@@ -43,24 +39,24 @@ public class HabilidadeClient {
                 new URI(BASE_URL),
                 HttpMethod.PUT,
                 new HttpEntity<>(habilidadeDTO),
-								HabilidadeDTO.class
+                HabilidadeDTO.class
         );
 
         return response.getBody();
     }
 
-	public List<HabilidadeDTO> getByCandidatoId(Long candidatoId) throws URISyntaxException {
-		ResponseEntity<HabilidadeDTO[]> response = restTemplate.exchange(
-						new URI(BASE_URL + "/candidato/" + candidatoId),
-						HttpMethod.GET,
-						null,
-						HabilidadeDTO[].class
-		);
+    public List<HabilidadeDTO> getByCandidatoId(Long candidatoId) throws URISyntaxException {
+        ResponseEntity<HabilidadeDTO[]> response = restTemplate.exchange(
+                new URI(BASE_URL + "/candidato/" + candidatoId),
+                HttpMethod.GET,
+                null,
+                HabilidadeDTO[].class
+        );
 
-		return  response.getBody() != null
-						? Arrays.stream(response.getBody()).toList()
-						: new ArrayList<>();
-	}
+        return response.getBody() != null
+                ? Arrays.stream(response.getBody()).toList()
+                : new ArrayList<>();
+    }
 
     public void delete(Long id) throws URISyntaxException {
         restTemplate.exchange(

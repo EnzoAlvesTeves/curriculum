@@ -23,48 +23,67 @@ public class CandidatoVagaClient {
         this.restTemplate = restTemplate;
     }
 
-    public CandidatoVagaDTO create(CandidatoVagaDTO candidatoVagaDTO) throws URISyntaxException {
-        ResponseEntity<CandidatoVagaDTO> response = restTemplate.exchange(
-                new URI(BASE_URL),
-                HttpMethod.POST,
-                new HttpEntity<>(candidatoVagaDTO),
-                CandidatoVagaDTO.class
-        );
+    public CandidatoVagaDTO create(CandidatoVagaDTO candidatoVagaDTO) {
+        ResponseEntity<CandidatoVagaDTO> response = null;
+        try {
+            response = restTemplate.exchange(
+                    new URI(BASE_URL),
+                    HttpMethod.POST,
+                    new HttpEntity<>(candidatoVagaDTO),
+                    CandidatoVagaDTO.class
+            );
+        } catch (URISyntaxException e) {
+            throw new RuntimeException(e);
+        }
 
         return response.getBody();
     }
 
-    public void delete(Long id) throws URISyntaxException {
-        restTemplate.exchange(
-                new URI(BASE_URL + "/" + id),
-                HttpMethod.DELETE,
-                null,
-                Void.class
-        );
+    public void delete(Long id) {
+        try {
+            restTemplate.exchange(
+                    new URI(BASE_URL + "/" + id),
+                    HttpMethod.DELETE,
+                    null,
+                    Void.class
+            );
+        } catch (URISyntaxException e) {
+            throw new RuntimeException(e);
+        }
     }
 
-    public List<CandidatoVagaDTO> getByCandidatoId(Long candidatoId) throws URISyntaxException {
-        ResponseEntity<CandidatoVagaDTO[]> response = restTemplate.exchange(
-                new URI(BASE_URL + "/candidato/" + candidatoId),
-                HttpMethod.GET,
-                null,
-                CandidatoVagaDTO[].class
-        );
+    public List<CandidatoVagaDTO> getByCandidatoId(Long candidatoId) {
+        ResponseEntity<CandidatoVagaDTO[]> response = null;
+        try {
+            response = restTemplate.exchange(
+                    new URI(BASE_URL + "/candidato/" + candidatoId),
+                    HttpMethod.GET,
+                    null,
+                    CandidatoVagaDTO[].class
+            );
+        } catch (URISyntaxException e) {
+            throw new RuntimeException(e);
+        }
 
-        return  response.getBody() != null
+        return response.getBody() != null
                 ? Arrays.stream(response.getBody()).toList()
                 : new ArrayList<>();
     }
 
-    public List<CandidatoVagaDTO> getByVagaId(Long vagaId) throws URISyntaxException {
-        ResponseEntity<CandidatoVagaDTO[]> response = restTemplate.exchange(
-                new URI(BASE_URL + "/vaga/" + vagaId),
-                HttpMethod.GET,
-                null,
-                CandidatoVagaDTO[].class
-        );
+    public List<CandidatoVagaDTO> getByVagaId(Long vagaId) {
+        ResponseEntity<CandidatoVagaDTO[]> response = null;
+        try {
+            response = restTemplate.exchange(
+                    new URI(BASE_URL + "/vaga/" + vagaId),
+                    HttpMethod.GET,
+                    null,
+                    CandidatoVagaDTO[].class
+            );
+        } catch (URISyntaxException e) {
+            throw new RuntimeException(e);
+        }
 
-        return  response.getBody() != null
+        return response.getBody() != null
                 ? Arrays.stream(response.getBody()).toList()
                 : new ArrayList<>();
     }

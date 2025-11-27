@@ -1,5 +1,6 @@
 package br.com.senac.msusuario.controller;
 
+import br.com.senac.msusuario.dto.LoginRequestDTO;
 import br.com.senac.msusuario.dto.UsuarioDTO;
 import br.com.senac.msusuario.service.UsuarioService;
 import org.springframework.web.bind.annotation.*;
@@ -26,6 +27,11 @@ public class UsuarioController {
     @GetMapping("/{id}")
     public UsuarioDTO getById(@PathVariable Long id) {
         return this.service.getById(id);
+    }
+
+    @PostMapping("/login")
+    public UsuarioDTO getByLogin(@RequestBody LoginRequestDTO loginRequestDTO) {
+        return service.login(loginRequestDTO);
     }
 
     @DeleteMapping("/{id}")
