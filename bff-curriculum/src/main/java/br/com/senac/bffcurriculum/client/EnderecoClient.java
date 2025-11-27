@@ -1,5 +1,6 @@
 package br.com.senac.bffcurriculum.client;
 
+import br.com.senac.bffcurriculum.dto.EnderecoDTO;
 import br.com.senac.bffcurriculum.dto.UsuarioDTO;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpMethod;
@@ -22,34 +23,34 @@ public class EnderecoClient {
         this.restTemplate = restTemplate;
     }
 
-    public UsuarioDTO create(UsuarioDTO usuarioDTO) throws URISyntaxException {
-        ResponseEntity<UsuarioDTO> response = restTemplate.exchange(
+    public EnderecoDTO create(EnderecoDTO enderecoDTO) throws URISyntaxException {
+        ResponseEntity<EnderecoDTO> response = restTemplate.exchange(
                 new URI(BASE_URL),
                 HttpMethod.POST,
-                new HttpEntity<>(usuarioDTO),
-                UsuarioDTO.class
+                new HttpEntity<>(enderecoDTO),
+								EnderecoDTO.class
         );
 
         return response.getBody();
     }
 
-    public UsuarioDTO update(UsuarioDTO usuarioDTO) throws URISyntaxException {
-        ResponseEntity<UsuarioDTO> response = restTemplate.exchange(
+    public EnderecoDTO update(EnderecoDTO enderecoDTO) throws URISyntaxException {
+        ResponseEntity<EnderecoDTO> response = restTemplate.exchange(
                 new URI(BASE_URL),
                 HttpMethod.PUT,
-                new HttpEntity<>(usuarioDTO),
-                UsuarioDTO.class
+                new HttpEntity<>(enderecoDTO),
+								EnderecoDTO.class
         );
 
         return response.getBody();
     }
 
-    public UsuarioDTO getById(Long id) throws URISyntaxException {
-        ResponseEntity<UsuarioDTO> response = restTemplate.exchange(
+    public EnderecoDTO getById(Long id) throws URISyntaxException {
+        ResponseEntity<EnderecoDTO> response = restTemplate.exchange(
                 new URI(BASE_URL + "/" + id),
                 HttpMethod.GET,
                 null,
-                UsuarioDTO.class
+								EnderecoDTO.class
         );
 
         return response.getBody();

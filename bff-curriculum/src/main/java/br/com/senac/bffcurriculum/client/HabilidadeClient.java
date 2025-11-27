@@ -1,5 +1,7 @@
 package br.com.senac.bffcurriculum.client;
 
+import br.com.senac.bffcurriculum.dto.ExperienciaDTO;
+import br.com.senac.bffcurriculum.dto.HabilidadeDTO;
 import br.com.senac.bffcurriculum.dto.UsuarioDTO;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpMethod;
@@ -9,6 +11,9 @@ import org.springframework.web.client.RestTemplate;
 
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
 @Component
 public class HabilidadeClient {
@@ -22,38 +27,40 @@ public class HabilidadeClient {
         this.restTemplate = restTemplate;
     }
 
-    public UsuarioDTO create(UsuarioDTO usuarioDTO) throws URISyntaxException {
-        ResponseEntity<UsuarioDTO> response = restTemplate.exchange(
+    public HabilidadeDTO create(HabilidadeDTO habilidadeDTO) throws URISyntaxException {
+        ResponseEntity<HabilidadeDTO> response = restTemplate.exchange(
                 new URI(BASE_URL),
                 HttpMethod.POST,
-                new HttpEntity<>(usuarioDTO),
-                UsuarioDTO.class
+                new HttpEntity<>(habilidadeDTO),
+								HabilidadeDTO.class
         );
 
         return response.getBody();
     }
 
-    public UsuarioDTO update(UsuarioDTO usuarioDTO) throws URISyntaxException {
-        ResponseEntity<UsuarioDTO> response = restTemplate.exchange(
+    public HabilidadeDTO update(HabilidadeDTO habilidadeDTO) throws URISyntaxException {
+        ResponseEntity<HabilidadeDTO> response = restTemplate.exchange(
                 new URI(BASE_URL),
                 HttpMethod.PUT,
-                new HttpEntity<>(usuarioDTO),
-                UsuarioDTO.class
+                new HttpEntity<>(habilidadeDTO),
+								HabilidadeDTO.class
         );
 
         return response.getBody();
     }
 
-    public UsuarioDTO getById(Long id) throws URISyntaxException {
-        ResponseEntity<UsuarioDTO> response = restTemplate.exchange(
-                new URI(BASE_URL + "/" + id),
-                HttpMethod.GET,
-                null,
-                UsuarioDTO.class
-        );
+	public List<HabilidadeDTO> getByCandidatoId(Long candidatoId) throws URISyntaxException {
+		ResponseEntity<HabilidadeDTO[]> response = restTemplate.exchange(
+						new URI(BASE_URL + "/candidato/" + candidatoId),
+						HttpMethod.GET,
+						null,
+						HabilidadeDTO[].class
+		);
 
-        return response.getBody();
-    }
+		return  response.getBody() != null
+						? Arrays.stream(response.getBody()).toList()
+						: new ArrayList<>();
+	}
 
     public void delete(Long id) throws URISyntaxException {
         restTemplate.exchange(
