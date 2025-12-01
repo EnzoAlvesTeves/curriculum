@@ -7,6 +7,7 @@ import lombok.NoArgsConstructor;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class EsqueciSenhaRequest {
-    private String email;
+public class Candidatura {
+    private Long candidatoId;
+    private Long vagaId;
 }

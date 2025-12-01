@@ -29,6 +29,11 @@ public class UsuarioController {
         return this.service.getById(id);
     }
 
+    @GetMapping("/email/{email}")
+    public UsuarioDTO getByEmail(@PathVariable String email) {
+        return this.service.getByEmail(email);
+    }
+
     @PostMapping("/login")
     public UsuarioDTO getByLogin(@RequestBody LoginRequestDTO loginRequestDTO) {
         return service.login(loginRequestDTO);

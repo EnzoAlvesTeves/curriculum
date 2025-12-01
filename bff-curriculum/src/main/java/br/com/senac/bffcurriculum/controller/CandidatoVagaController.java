@@ -2,7 +2,7 @@ package br.com.senac.bffcurriculum.controller;
 
 
 import br.com.senac.bffcurriculum.client.CandidatoVagaClient;
-import br.com.senac.bffcurriculum.controller.request.CandidaturaRequest;
+import br.com.senac.bffcurriculum.controller.request.Candidatura;
 import br.com.senac.bffcurriculum.dto.CandidatoDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -21,13 +21,13 @@ public class CandidatoVagaController {
 
 
 	@PostMapping("/candidatura")
-	public String candidatarVaga(@ModelAttribute CandidaturaRequest candidaturaRequest, Model model){
+	public String candidatarVaga(@ModelAttribute Candidatura candidatura, Model model){
 //        candidatoVagaClient.create(
 //				candidaturaRequest.getCandidatoId(),
 //				candidaturaRequest.getVagaId()
 //		);
 
-		return "redirect:/candidato-vaga/candidato/" + candidaturaRequest.getCandidatoId();
+		return "redirect:/candidato-vaga/candidato/" + candidatura.getCandidatoId();
 	}
 
 	//listagem de candidatos por vaga
