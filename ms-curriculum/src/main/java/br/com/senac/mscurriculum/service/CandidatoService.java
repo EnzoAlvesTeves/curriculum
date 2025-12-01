@@ -118,4 +118,11 @@ public class CandidatoService {
         }
 
 	}
+
+    public CandidatoDTO getByUsuarioId(Long usuarioId) {
+        CandidatoEntity candidateEntity = candidatoRepository.findByUsuarioId(usuarioId)
+                .orElseThrow(() -> new RuntimeException("Candidato não encontrado!"));
+
+        return new CandidatoDTO(candidateEntity);
+    }
 }

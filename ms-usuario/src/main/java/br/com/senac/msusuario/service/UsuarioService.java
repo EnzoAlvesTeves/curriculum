@@ -77,4 +77,11 @@ public class UsuarioService {
 
         throw new RuntimeException("Senha inválida!");
     }
+
+    public UsuarioDTO getByEmail(String email) {
+        UsuarioEntity usuarioEntity = usuarioRepository.findByEmail(email)
+                .orElseThrow(() -> new RuntimeException("Usuário não encontrado!"));
+
+        return new UsuarioDTO(usuarioEntity);
+    }
 }

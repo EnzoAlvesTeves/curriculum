@@ -99,4 +99,20 @@ public class UsuarioClient {
 
         return response.getBody();
     }
+
+    public UsuarioDTO getByEmail(String email) {
+        ResponseEntity<UsuarioDTO> response = null;
+        try {
+            response = restTemplate.exchange(
+                    new URI(BASE_URL + "/email/" + email),
+                    HttpMethod.GET,
+                    null,
+                    UsuarioDTO.class
+            );
+        } catch (URISyntaxException e) {
+            throw new RuntimeException(e);
+        }
+
+        return response.getBody();
+    }
 }

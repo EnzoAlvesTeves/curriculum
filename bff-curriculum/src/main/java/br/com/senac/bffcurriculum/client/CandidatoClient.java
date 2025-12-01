@@ -100,6 +100,21 @@ public class CandidatoClient {
         }
     }
 
+    public CandidatoDTO getByUsuarioId(Long id) {
+        ResponseEntity<CandidatoDTO> response = null;
+        try {
+            response = restTemplate.exchange(
+                    new URI(BASE_URL + "/usuario/" + id),
+                    HttpMethod.GET,
+                    null,
+                    CandidatoDTO.class
+            );
+        } catch (URISyntaxException e) {
+            throw new RuntimeException(e);
+        }
+
+        return response.getBody();
+    }
 }
 
 

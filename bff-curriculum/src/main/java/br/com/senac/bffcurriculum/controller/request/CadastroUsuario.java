@@ -7,7 +7,9 @@ import lombok.NoArgsConstructor;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class CandidaturaRequest {
-    private Long candidatoId;
-    private Long vagaId;
+public class CadastroUsuario {
+    private String nome;
+    private String email;
+    private String senha;
+    private String confirmarSenha;
 }
