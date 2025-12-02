@@ -6,6 +6,6 @@ RUN mvn -B -DskipTests package
 
 FROM eclipse-temurin:21-jdk-jammy
 WORKDIR /app
-COPY --from=builder /workspace/target/*.jar ms-vagas.jar
+COPY --from=builder /workspace/target/*.jar bff-curriculum.jar
 EXPOSE 8092
-ENTRYPOINT ["java","-jar","ms-vagas.jar"]
+ENTRYPOINT ["java","-jar","bff-curriculum.jar"]

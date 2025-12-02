@@ -2,6 +2,7 @@ package br.com.senac.bffcurriculum.client;
 
 import br.com.senac.bffcurriculum.dto.LoginRequestDTO;
 import br.com.senac.bffcurriculum.dto.UsuarioDTO;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
@@ -13,7 +14,10 @@ import java.net.URISyntaxException;
 
 @Component
 public class UsuarioClient {
-    private static final String BASE_URL = "http://localhost:8091/usuarios";
+    @Value("${base-url.ms-usuario}")
+    private String baseUrl;
+
+    private static final String USUARIOS = "/usuarios";
 
     private RestTemplate restTemplate;
 
@@ -27,7 +31,7 @@ public class UsuarioClient {
         ResponseEntity<UsuarioDTO> response = null;
         try {
             response = restTemplate.exchange(
-                    new URI(BASE_URL),
+                    new URI(baseUrl + USUARIOS),
                     HttpMethod.POST,
                     new HttpEntity<>(usuarioDTO),
                     UsuarioDTO.class
@@ -43,7 +47,7 @@ public class UsuarioClient {
         ResponseEntity<UsuarioDTO> response = null;
         try {
             response = restTemplate.exchange(
-                    new URI(BASE_URL),
+                    new URI(baseUrl + USUARIOS),
                     HttpMethod.PUT,
                     new HttpEntity<>(usuarioDTO),
                     UsuarioDTO.class
@@ -59,7 +63,7 @@ public class UsuarioClient {
         ResponseEntity<UsuarioDTO> response = null;
         try {
             response = restTemplate.exchange(
-                    new URI(BASE_URL + "/" + id),
+                    new URI(baseUrl + USUARIOS + "/" + id),
                     HttpMethod.GET,
                     null,
                     UsuarioDTO.class
@@ -74,7 +78,7 @@ public class UsuarioClient {
     public void delete(Long id) {
         try {
             restTemplate.exchange(
-                    new URI(BASE_URL + "/" + id),
+                    new URI(baseUrl + USUARIOS + "/" + id),
                     HttpMethod.DELETE,
                     null,
                     Void.class
@@ -88,7 +92,7 @@ public class UsuarioClient {
         ResponseEntity<UsuarioDTO> response = null;
         try {
             response = restTemplate.exchange(
-                    new URI(BASE_URL + "/login"),
+                    new URI(baseUrl + USUARIOS + "/login"),
                     HttpMethod.POST,
                     new HttpEntity<>(loginDTO),
                     UsuarioDTO.class
@@ -104,7 +108,7 @@ public class UsuarioClient {
         ResponseEntity<UsuarioDTO> response = null;
         try {
             response = restTemplate.exchange(
-                    new URI(BASE_URL + "/email/" + email),
+                    new URI(baseUrl + USUARIOS + "/email/" + email),
                     HttpMethod.GET,
                     null,
                     UsuarioDTO.class

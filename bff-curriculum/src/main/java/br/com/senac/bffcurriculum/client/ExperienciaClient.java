@@ -1,6 +1,7 @@
 package br.com.senac.bffcurriculum.client;
 
 import br.com.senac.bffcurriculum.dto.ExperienciaDTO;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
@@ -15,7 +16,10 @@ import java.util.List;
 
 @Component
 public class ExperienciaClient {
-    private static final String BASE_URL = "http://localhost:8090/experiencias";
+    @Value("${base-url.ms-curriculum}")
+    private String baseUrl;
+
+    private static final String EXPERIENCIAS = "/experiencias";
 
     private RestTemplate restTemplate;
 
@@ -25,7 +29,7 @@ public class ExperienciaClient {
 
     public ExperienciaDTO create(ExperienciaDTO experienciaDTO) throws URISyntaxException {
         ResponseEntity<ExperienciaDTO> response = restTemplate.exchange(
-                new URI(BASE_URL),
+                new URI(baseUrl + EXPERIENCIAS),
                 HttpMethod.POST,
                 new HttpEntity<>(experienciaDTO),
                 ExperienciaDTO.class
@@ -36,7 +40,7 @@ public class ExperienciaClient {
 
     public List<ExperienciaDTO> getByCandidatoId(Long candidatoId) throws URISyntaxException {
         ResponseEntity<ExperienciaDTO[]> response = restTemplate.exchange(
-                new URI(BASE_URL + "/candidato/" + candidatoId),
+                new URI(baseUrl + EXPERIENCIAS + "/candidato/" + candidatoId),
                 HttpMethod.GET,
                 null,
                 ExperienciaDTO[].class
@@ -49,7 +53,7 @@ public class ExperienciaClient {
 
     public ExperienciaDTO update(ExperienciaDTO experienciaDTO) throws URISyntaxException {
         ResponseEntity<ExperienciaDTO> response = restTemplate.exchange(
-                new URI(BASE_URL),
+                new URI(baseUrl + EXPERIENCIAS),
                 HttpMethod.PUT,
                 new HttpEntity<>(experienciaDTO),
                 ExperienciaDTO.class
@@ -60,7 +64,7 @@ public class ExperienciaClient {
 
     public void delete(Long id) throws URISyntaxException {
         restTemplate.exchange(
-                new URI(BASE_URL + "/" + id),
+                new URI(baseUrl + EXPERIENCIAS + "/" + id),
                 HttpMethod.DELETE,
                 null,
                 Void.class

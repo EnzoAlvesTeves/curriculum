@@ -1,6 +1,7 @@
 package br.com.senac.bffcurriculum.client;
 
 import br.com.senac.bffcurriculum.dto.CandidatoDTO;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
@@ -15,7 +16,10 @@ import java.util.List;
 
 @Component
 public class CandidatoClient {
-    private static final String BASE_URL = "http://localhost:8090/candidatos";
+    @Value("${base-url.ms-vagas}")
+    private String baseUrl;
+
+    private static final String CANDIDATOS = "/candidatos";
 
     private RestTemplate restTemplate;
 
@@ -27,7 +31,7 @@ public class CandidatoClient {
         ResponseEntity<CandidatoDTO> response = null;
         try {
             response = restTemplate.exchange(
-                    new URI(BASE_URL),
+                    new URI(baseUrl + CANDIDATOS),
                     HttpMethod.POST,
                     new HttpEntity<>(candidatoDTO),
                     CandidatoDTO.class
@@ -42,7 +46,7 @@ public class CandidatoClient {
         ResponseEntity<CandidatoDTO> response = null;
         try {
             response = restTemplate.exchange(
-                    new URI(BASE_URL + "/" + id),
+                    new URI(baseUrl + CANDIDATOS + "/" + id),
                     HttpMethod.GET,
                     null,
                     CandidatoDTO.class
@@ -58,7 +62,7 @@ public class CandidatoClient {
         ResponseEntity<CandidatoDTO[]> response = null;
         try {
             response = restTemplate.exchange(
-                    new URI(BASE_URL),
+                    new URI(baseUrl + CANDIDATOS),
                     HttpMethod.GET,
                     null,
                     CandidatoDTO[].class
@@ -76,7 +80,7 @@ public class CandidatoClient {
         ResponseEntity<CandidatoDTO> response = null;
         try {
             response = restTemplate.exchange(
-                    new URI(BASE_URL),
+                    new URI(baseUrl + CANDIDATOS),
                     HttpMethod.PUT,
                     new HttpEntity<>(candidatoDTO),
                     CandidatoDTO.class
@@ -90,7 +94,7 @@ public class CandidatoClient {
     public void delete(Long id) {
         try {
             restTemplate.exchange(
-                    new URI(BASE_URL + "/" + id),
+                    new URI(baseUrl + CANDIDATOS + "/" + id),
                     HttpMethod.DELETE,
                     null,
                     Void.class
@@ -104,7 +108,7 @@ public class CandidatoClient {
         ResponseEntity<CandidatoDTO> response = null;
         try {
             response = restTemplate.exchange(
-                    new URI(BASE_URL + "/usuario/" + id),
+                    new URI(baseUrl + CANDIDATOS + "/usuario/" + id),
                     HttpMethod.GET,
                     null,
                     CandidatoDTO.class

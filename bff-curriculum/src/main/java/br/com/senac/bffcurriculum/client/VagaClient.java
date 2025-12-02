@@ -1,6 +1,7 @@
 package br.com.senac.bffcurriculum.client;
 
 import br.com.senac.bffcurriculum.dto.VagaDTO;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
@@ -15,7 +16,10 @@ import java.util.List;
 
 @Component
 public class VagaClient {
-    private static final String BASE_URL = "http://localhost:8092/vagas";
+    @Value("${base-url.ms-vagas}")
+    private String baseUrl;
+
+    private static final String VAGAS = "/vagas";
 
     private RestTemplate restTemplate;
 
@@ -27,7 +31,7 @@ public class VagaClient {
         ResponseEntity<VagaDTO> response = null;
         try {
             response = restTemplate.exchange(
-                    new URI(BASE_URL),
+                    new URI(baseUrl + VAGAS),
                     HttpMethod.POST,
                     new HttpEntity<>(vagaDTO),
                     VagaDTO.class
@@ -43,7 +47,7 @@ public class VagaClient {
         ResponseEntity<VagaDTO> response = null;
         try {
             response = restTemplate.exchange(
-                    new URI(BASE_URL),
+                    new URI(baseUrl + VAGAS),
                     HttpMethod.PUT,
                     new HttpEntity<>(vagaDTO),
                     VagaDTO.class
@@ -58,7 +62,7 @@ public class VagaClient {
     public void delete(Long id) {
         try {
             restTemplate.exchange(
-                    new URI(BASE_URL + "/" + id),
+                    new URI(baseUrl + VAGAS + "/" + id),
                     HttpMethod.DELETE,
                     null,
                     Void.class
@@ -72,7 +76,7 @@ public class VagaClient {
         ResponseEntity<VagaDTO> response = null;
         try {
             response = restTemplate.exchange(
-                    new URI(BASE_URL + "/" + id),
+                    new URI(baseUrl + VAGAS + "/" + id),
                     HttpMethod.GET,
                     null,
                     VagaDTO.class
@@ -88,7 +92,7 @@ public class VagaClient {
         ResponseEntity<VagaDTO[]> response = null;
         try {
             response = restTemplate.exchange(
-                    new URI(BASE_URL),
+                    new URI(baseUrl + VAGAS),
                     HttpMethod.GET,
                     null,
                     VagaDTO[].class
