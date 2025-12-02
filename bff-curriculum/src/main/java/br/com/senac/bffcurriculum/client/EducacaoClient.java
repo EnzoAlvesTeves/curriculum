@@ -1,6 +1,7 @@
 package br.com.senac.bffcurriculum.client;
 
 import br.com.senac.bffcurriculum.dto.EducacaoDTO;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
@@ -15,7 +16,10 @@ import java.util.List;
 
 @Component
 public class EducacaoClient {
-    private static final String BASE_URL = "http://localhost:8090/educacoes";
+    @Value("${base-url.ms-curriculum}")
+    private String baseUrl;
+
+    private static final String EDUCACOES = "/educacoes";
 
     private RestTemplate restTemplate;
 
@@ -25,7 +29,7 @@ public class EducacaoClient {
 
     public EducacaoDTO create(EducacaoDTO educacaoDTO) throws URISyntaxException {
         ResponseEntity<EducacaoDTO> response = restTemplate.exchange(
-                new URI(BASE_URL),
+                new URI(baseUrl + EDUCACOES),
                 HttpMethod.POST,
                 new HttpEntity<>(educacaoDTO),
                 EducacaoDTO.class
@@ -35,7 +39,7 @@ public class EducacaoClient {
 
     public List<EducacaoDTO> getByCandidatoId(Long candidatoId) throws URISyntaxException {
         ResponseEntity<EducacaoDTO[]> response = restTemplate.exchange(
-                new URI(BASE_URL + "/candidato/" + candidatoId),
+                new URI(baseUrl + EDUCACOES + "/candidato/" + candidatoId),
                 HttpMethod.GET,
                 null,
                 EducacaoDTO[].class
@@ -48,7 +52,7 @@ public class EducacaoClient {
 
     public EducacaoDTO update(EducacaoDTO educacaoDTO) throws URISyntaxException {
         ResponseEntity<EducacaoDTO> response = restTemplate.exchange(
-                new URI(BASE_URL),
+                new URI(baseUrl + EDUCACOES),
                 HttpMethod.PUT,
                 new HttpEntity<>(educacaoDTO),
                 EducacaoDTO.class
@@ -59,7 +63,7 @@ public class EducacaoClient {
 
     public void delete(Long educacaoId) throws URISyntaxException {
         restTemplate.exchange(
-                new URI(BASE_URL + "/" + educacaoId),
+                new URI(baseUrl + EDUCACOES + "/" + educacaoId),
                 HttpMethod.DELETE,
                 null,
                 Void.class

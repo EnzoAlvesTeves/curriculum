@@ -60,6 +60,23 @@ services:
     ports:
       - "8092:8092"
 
+  bff-curriculum:
+    build: './bff-curriculum'
+    container_name: bff-curriculum
+    depends_on:
+      - curriculum-db
+      - ms-vagas
+      - ms-curriculum
+      - ms-usuario
+    environment:
+      - MS_CURRICULUM=http://ms-curriculum:8090
+      - MS_USUARIO=http://ms-usuario:8091
+      - MS_VAGAS=http://ms-vagas:8092
+    networks:
+      - curriculum-net
+    ports:
+      - "8080:8080"
+
 networks:
   curriculum-net:
     driver: bridge

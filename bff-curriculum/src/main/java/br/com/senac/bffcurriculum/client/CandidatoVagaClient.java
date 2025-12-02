@@ -1,6 +1,7 @@
 package br.com.senac.bffcurriculum.client;
 
 import br.com.senac.bffcurriculum.dto.CandidatoVagaDTO;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
@@ -15,7 +16,10 @@ import java.util.List;
 
 @Component
 public class CandidatoVagaClient {
-    private static final String BASE_URL = "http://localhost:8092/candidato-vaga";
+    @Value("${base-url.ms-vagas}")
+    private String baseUrl;
+
+    private static final String CANDIDATO_VAGA = "/candidato-vaga";
 
     private RestTemplate restTemplate;
 
@@ -27,7 +31,7 @@ public class CandidatoVagaClient {
         ResponseEntity<CandidatoVagaDTO> response = null;
         try {
             response = restTemplate.exchange(
-                    new URI(BASE_URL),
+                    new URI(baseUrl + CANDIDATO_VAGA),
                     HttpMethod.POST,
                     new HttpEntity<>(candidatoVagaDTO),
                     CandidatoVagaDTO.class
@@ -42,7 +46,7 @@ public class CandidatoVagaClient {
     public void delete(Long id) {
         try {
             restTemplate.exchange(
-                    new URI(BASE_URL + "/" + id),
+                    new URI(baseUrl + CANDIDATO_VAGA + "/" + id),
                     HttpMethod.DELETE,
                     null,
                     Void.class
@@ -56,7 +60,7 @@ public class CandidatoVagaClient {
         ResponseEntity<CandidatoVagaDTO[]> response = null;
         try {
             response = restTemplate.exchange(
-                    new URI(BASE_URL + "/candidato/" + candidatoId),
+                    new URI(baseUrl + CANDIDATO_VAGA + "/candidato/" + candidatoId),
                     HttpMethod.GET,
                     null,
                     CandidatoVagaDTO[].class
@@ -74,7 +78,7 @@ public class CandidatoVagaClient {
         ResponseEntity<CandidatoVagaDTO[]> response = null;
         try {
             response = restTemplate.exchange(
-                    new URI(BASE_URL + "/vaga/" + vagaId),
+                    new URI(baseUrl + CANDIDATO_VAGA + "/vaga/" + vagaId),
                     HttpMethod.GET,
                     null,
                     CandidatoVagaDTO[].class
@@ -87,6 +91,4 @@ public class CandidatoVagaClient {
                 ? Arrays.stream(response.getBody()).toList()
                 : new ArrayList<>();
     }
-
-
 }

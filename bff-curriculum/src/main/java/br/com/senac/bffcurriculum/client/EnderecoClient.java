@@ -1,6 +1,7 @@
 package br.com.senac.bffcurriculum.client;
 
 import br.com.senac.bffcurriculum.dto.EnderecoDTO;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
@@ -12,7 +13,10 @@ import java.net.URISyntaxException;
 
 @Component
 public class EnderecoClient {
-    private static final String BASE_URL = "http://localhost:8090/enderecos";
+    @Value("${base-url.ms-curriculum}")
+    private String baseUrl;
+
+    private static final String ENDERECOS = "/enderecos";
 
     private RestTemplate restTemplate;
 
@@ -22,7 +26,7 @@ public class EnderecoClient {
 
     public EnderecoDTO create(EnderecoDTO enderecoDTO) throws URISyntaxException {
         ResponseEntity<EnderecoDTO> response = restTemplate.exchange(
-                new URI(BASE_URL),
+                new URI(baseUrl + ENDERECOS),
                 HttpMethod.POST,
                 new HttpEntity<>(enderecoDTO),
                 EnderecoDTO.class
@@ -33,7 +37,7 @@ public class EnderecoClient {
 
     public EnderecoDTO update(EnderecoDTO enderecoDTO) throws URISyntaxException {
         ResponseEntity<EnderecoDTO> response = restTemplate.exchange(
-                new URI(BASE_URL),
+                new URI(baseUrl + ENDERECOS),
                 HttpMethod.PUT,
                 new HttpEntity<>(enderecoDTO),
                 EnderecoDTO.class
@@ -44,7 +48,7 @@ public class EnderecoClient {
 
     public EnderecoDTO getById(Long id) throws URISyntaxException {
         ResponseEntity<EnderecoDTO> response = restTemplate.exchange(
-                new URI(BASE_URL + "/" + id),
+                new URI(baseUrl + ENDERECOS + "/" + id),
                 HttpMethod.GET,
                 null,
                 EnderecoDTO.class
@@ -55,7 +59,7 @@ public class EnderecoClient {
 
     public void delete(Long id) throws URISyntaxException {
         restTemplate.exchange(
-                new URI(BASE_URL + "/" + id),
+                new URI(baseUrl + ENDERECOS + "/" + id),
                 HttpMethod.DELETE,
                 null,
                 Void.class
