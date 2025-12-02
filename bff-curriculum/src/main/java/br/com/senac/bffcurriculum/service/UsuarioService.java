@@ -46,10 +46,15 @@ public class UsuarioService {
     }
 
     public UsuarioDTO login(Login login) {
-        LoginRequestDTO loginRequestDTO = new LoginRequestDTO();
-        loginRequestDTO.setEmail(login.getEmail());
-        loginRequestDTO.setSenha(login.getSenha());
+        try {
+            LoginRequestDTO loginRequestDTO = new LoginRequestDTO();
+            loginRequestDTO.setEmail(login.getEmail());
+            loginRequestDTO.setSenha(login.getSenha());
 
-        return usuarioClient.login(loginRequestDTO);
+            return usuarioClient.login(loginRequestDTO);
+        } catch (Exception e) {
+            throw new RuntimeException("Usuário ou Senha inválidos!");
+        }
+
     }
 }

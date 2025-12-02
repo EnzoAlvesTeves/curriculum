@@ -10,7 +10,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Service
 public class CandidatoVagaService {
@@ -64,11 +63,11 @@ public class CandidatoVagaService {
                 .toList();
     }
 
-    public List<Long> getByVagaId(Long vagaId) {
+    public List<CandidatoVagaDTO> getByVagaId(Long vagaId) {
         List<CandidatoVagaEntity> candidaturas = candidatoVagaRepository.findByVagaId(vagaId);
 
         return candidaturas.stream()
-                .map(CandidatoVagaEntity::getCandidatoId)
+                .map(CandidatoVagaDTO::new)
                 .toList();
     }
 }

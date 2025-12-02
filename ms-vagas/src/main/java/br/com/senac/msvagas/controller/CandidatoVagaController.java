@@ -33,7 +33,7 @@ public class CandidatoVagaController {
     }
 
     @GetMapping("/vaga/{vagaId}")
-    public List<Long> getByVagaId(@PathVariable Long vagaId) {
+    public List<CandidatoVagaDTO> getByVagaId(@PathVariable Long vagaId) {
         return candidatoVagaService.getByVagaId(vagaId);
     }
 }
