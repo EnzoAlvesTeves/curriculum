@@ -16,7 +16,7 @@ import java.util.List;
 
 @Component
 public class CandidatoClient {
-    @Value("${base-url.ms-vagas}")
+    @Value("${base-url.ms-curriculum}")
     private String baseUrl;
 
     private static final String CANDIDATOS = "/candidatos";
