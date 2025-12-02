@@ -25,6 +25,10 @@ public class CandidatoVagaDTO {
 	}
 
 	public CandidatoVagaDTO(CandidatoVagaEntity candidatoVagaEntity) {
+        this.id = candidatoVagaEntity.getId();
+        this.vaga = new VagaDTO(candidatoVagaEntity.getVaga());
+        this.dataInscricao = candidatoVagaEntity.getDataInscricao();
+        this.candidatoId = candidatoVagaEntity.getCandidatoId();
 	}
 
 	public CandidatoVagaEntity toEntity() {
