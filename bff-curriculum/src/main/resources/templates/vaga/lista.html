@@ -163,6 +163,10 @@
 								<input type="hidden" name="candidatoId" th:value="${candidato.id}" />
 								<button type="submit">Inscrever-se</button>
 						</form>
+						<li th:if="${usuario.id == 1}">
+								<a th:href="@{/candidato-vaga/vaga/{id}(id=${vaga.id})}" class="button">Candidatos</a>
+						</li>
+
 				</div>
 		</div>
 </div>
