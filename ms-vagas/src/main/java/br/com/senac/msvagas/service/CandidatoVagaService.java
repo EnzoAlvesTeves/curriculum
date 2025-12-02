@@ -61,7 +61,7 @@ public class CandidatoVagaService {
 
         return candidaturas.stream()
                 .map(CandidatoVagaDTO::new)
-                .collect(Collectors.toList());
+                .toList();
     }
 
     public List<Long> getByVagaId(Long vagaId) {
@@ -69,6 +69,6 @@ public class CandidatoVagaService {
 
         return candidaturas.stream()
                 .map(CandidatoVagaEntity::getCandidatoId)
-                .collect(Collectors.toList());
+                .toList();
     }
 }

@@ -183,6 +183,7 @@
 
 		<form th:action="@{/candidato/cadastrar}" method="post">
 				<input type="hidden" name="usuario.id" th:value="${candidato.usuario.id}"/>
+				<input type="hidden" name="usuarioId" th:value="${candidato.usuarioId}"/>
 				<fieldset>
 						<legend>Informações Pessoais</legend>
 						<label>Nome:</label>

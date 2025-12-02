@@ -33,12 +33,12 @@ public class UsuarioService {
     }
 
     public String esqueciMinhaSenha(EsqueciSenha esqueciSenha) {
-        UsuarioDTO usuario = usuarioClient.getByEmail(esqueciSenha.getEmail());
-        if (usuario == null) {
+        try {
+            UsuarioDTO usuario = usuarioClient.getByEmail(esqueciSenha.getEmail());
+            return usuario.getSenha();
+        } catch (Exception e) {
             throw new RuntimeException("Não foi encontrado usuário para o email informado!");
         }
-
-        return usuario.getSenha();
     }
 
     public UsuarioDTO getById(Long id) {

@@ -23,9 +23,9 @@ public class CandidatoDTO {
     private Long usuarioId;
     private EnderecoDTO endereco;
 
-    private List<EducacaoDTO> educacao;
-    private List<ExperienciaDTO> experiencia;
-    private List<HabilidadeDTO> habilidade;
+    private List<EducacaoDTO> educacoes;
+    private List<ExperienciaDTO> experiencias;
+    private List<HabilidadeDTO> habilidades;
 
     private UsuarioDTO usuario;
 
@@ -35,8 +35,8 @@ public class CandidatoDTO {
         this.nome = usuarioDTO.getNome();
         this.email = usuarioDTO.getEmail();
 
-        this.experiencia = new ArrayList<>();
-        this.educacao = new ArrayList<>();
-        this.habilidade = new ArrayList<>();
+        this.experiencias = new ArrayList<>();
+        this.educacoes = new ArrayList<>();
+        this.habilidades = new ArrayList<>();
     }
 }

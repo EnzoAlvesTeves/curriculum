@@ -1,10 +1,9 @@
 package br.com.senac.bffcurriculum.controller;
 
 
-import br.com.senac.bffcurriculum.client.CandidatoClient;
-import br.com.senac.bffcurriculum.client.UsuarioClient;
 import br.com.senac.bffcurriculum.dto.*;
-import org.springframework.beans.factory.annotation.Autowired;
+import br.com.senac.bffcurriculum.service.CandidatoService;
+import br.com.senac.bffcurriculum.service.UsuarioService;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -15,15 +14,23 @@ import java.util.List;
 @RequestMapping(value = "/candidato")
 public class CandidatoController {
 
-	@Autowired
-	private CandidatoClient candidatoClient;
+    private final UsuarioService usuarioService;
+    private final CandidatoService candidatoService;
 
-	@Autowired
-	private UsuarioClient usuarioClient;
+    CandidatoController(
+            UsuarioService usuarioService,
+            CandidatoService candidatoService
+    ) {
+        this.usuarioService = usuarioService;
+        this.candidatoService = candidatoService;
+    }
 
 	@GetMapping("/{id}")
 	public String buscar(@PathVariable Long id, Model model) {
-		CandidatoDTO candidatoDTO = candidatoClient.getById(id);
+		CandidatoDTO candidatoDTO = candidatoService.getById(id);
+        UsuarioDTO usuarioDTO = usuarioService.getById(candidatoDTO.getUsuarioId());
+
+        candidatoDTO.setUsuario(usuarioDTO);
 
 		model.addAttribute("candidato", candidatoDTO);
 		return "candidato/curriculo";
@@ -31,12 +38,13 @@ public class CandidatoController {
 
 	@GetMapping("/cadastrar")
 	public String novoCandidato(Long usuarioId, Model model) {
-        UsuarioDTO usuarioDTO = usuarioClient.getById(usuarioId);
+        UsuarioDTO usuarioDTO = usuarioService.getById(usuarioId);
+
         CandidatoDTO candidatoDTO = new CandidatoDTO(usuarioDTO);
         candidatoDTO.setEndereco(new EnderecoDTO());
-        candidatoDTO.getEducacao().add(new EducacaoDTO());
-        candidatoDTO.getExperiencia().add(new ExperienciaDTO());
-        candidatoDTO.getHabilidade().add(new HabilidadeDTO());
+        candidatoDTO.getEducacoes().add(new EducacaoDTO());
+        candidatoDTO.getExperiencias().add(new ExperienciaDTO());
+        candidatoDTO.getHabilidades().add(new HabilidadeDTO());
 
 		model.addAttribute("candidato", candidatoDTO);
 		return "candidato/cadastro";
@@ -44,7 +52,7 @@ public class CandidatoController {
 
 	@GetMapping("/lista")
 	public String listaCandidatos(Model model) {
-		List<CandidatoDTO> candidatos = candidatoClient.getall();
+		List<CandidatoDTO> candidatos = candidatoService.getall();
 
 		model.addAttribute("candidatos", candidatos);
 		return "candidato/lista";
@@ -52,15 +60,13 @@ public class CandidatoController {
 
 	@PostMapping("/cadastrar")
 	public String cadastrar(@ModelAttribute CandidatoDTO candidatoDTO, Model model){
-		CandidatoDTO candidato = candidatoClient.create(candidatoDTO);
-
+		CandidatoDTO candidato = candidatoService.create(candidatoDTO);
 		return "redirect:/candidato/" + candidato.getId();
 	}
 
 	@PostMapping("/editar")
 	public String editar(@ModelAttribute CandidatoDTO candidatoDTO, Model model){
-		CandidatoDTO candidato = candidatoClient.update(candidatoDTO);
-
+		CandidatoDTO candidato = candidatoService.update(candidatoDTO);
 		return "redirect:/candidato/" + candidato.getId();
 	}
 }
