@@ -1,14 +1,11 @@
 package br.com.senac.bffcurriculum.controller;
 
-import br.com.senac.bffcurriculum.client.UsuarioClient;
-import br.com.senac.bffcurriculum.client.VagaClient;
 import br.com.senac.bffcurriculum.dto.CandidatoDTO;
 import br.com.senac.bffcurriculum.dto.UsuarioDTO;
 import br.com.senac.bffcurriculum.dto.VagaDTO;
 import br.com.senac.bffcurriculum.service.CandidatoService;
 import br.com.senac.bffcurriculum.service.UsuarioService;
 import br.com.senac.bffcurriculum.service.VagaService;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -47,7 +44,7 @@ public class VagaController {
 	}
 
 	@GetMapping("/lista/usuario/{usuarioId}")
-	public String listaVaga(@PathVariable Long usuarioId, Model model) {
+	public String listaVaga(@PathVariable Long usuarioId, @RequestParam(name = "error", required = false) String error, Model model) {
 		UsuarioDTO usuarioDTO = usuarioService.getById(usuarioId);
         CandidatoDTO candidatoDTO = candidatoService.getByUsuarioId(usuarioDTO.getId());
         List<VagaDTO> vagas = vagaService.getAll();
@@ -55,6 +52,9 @@ public class VagaController {
 		model.addAttribute("usuario", usuarioDTO);
 		model.addAttribute("candidato", candidatoDTO);
         model.addAttribute("vagas", vagas);
+        if (error != null && !error.isBlank()) {
+            model.addAttribute("error", error);
+        }
 		return "vaga/lista";
 	}
 

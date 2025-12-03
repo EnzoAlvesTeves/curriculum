@@ -1,0 +1,42 @@
+@keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
+
+.vaga {
+    border-left: 5px solid #ff7a00;
+    margin: 1rem;
+    padding: 1rem;
+    border-radius: 8px;
+    transition: 0.3s;
+    cursor: pointer;
+    background: #ffffff;
+}
+
+.vaga .detalhes {
+    display: none;
+    margin-top: 1rem;
+}
+
+.vaga.ativa .detalhes {
+    display: block;
+}
+
+nav ul {
+    list-style: none;
+    display: flex;
+    gap: 16px;
+}
+
+nav a {
+    text-decoration: none;
+    color: white;
+    font-weight: 600;
+    padding: 10px 14px;
+    border-radius: 8px;
+    transition: background 0.3s;
+}
+
+nav a:hover {
+    background-color: var(--laranja-claro);
+}

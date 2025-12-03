@@ -4,50 +4,9 @@
 		<meta charset="UTF-8"/>
 		<title>Editar Candidato</title>
 		<link rel="icon" href="/img/logo.jpg" type="image/jpg">
-		<link rel="stylesheet" href="/styles/estilo.css" />
+		<link rel="stylesheet" href="/styles/header.css">
+		<link rel="stylesheet" href="/styles/main.css">
 		<style>
-        body {
-            font-family: Arial, sans-serif;
-            background-color: #fff5eb;
-            margin: 0;
-            padding: 0;
-        }
-
-        .navbar {
-            width: 100%;
-            background-color: #ff7f27;
-            padding: 15px 20px;
-            color: white;
-            position: fixed;
-            top: 0;
-            left: 0;
-            z-index: 1000;
-        }
-
-        .navbar h2 {
-            display: inline-block;
-            margin: 0;
-            font-size: 20px;
-        }
-
-        .navbar ul {
-            display: inline-block;
-            list-style-type: none;
-            margin: 0;
-            padding: 0;
-        }
-
-        .navbar ul li {
-            display: inline-block;
-            margin-left: 20px;
-        }
-
-        .navbar ul li a {
-            color: white;
-            text-decoration: none;
-            font-weight: bold;
-        }
-
         .content {
             margin-top: 80px;
             padding: 30px;
@@ -170,13 +129,43 @@
         }
 		</script>
 </head>
-<body>
-<div class="navbar">
-		<ul>
-				<li><a th:href="@{/usuario/home/{id}(id=${candidato.usuario.id})}">Home</a></li>
-				<li><a th:href="@{/vaga/lista/usuario/{id}(id=${candidato.usuario.id})}">Vagas</a></li>
-		</ul>
-</div>
+<body class="wise-background">
+<header>
+		<div class="logo" >
+				<a th:href="@{/usuario/home/{id}(id=${usuario.id})}">
+						WiseCorp
+				</a>
+		</div>
+
+		<nav>
+				<ul>
+						<li th:if="${usuario != null}">
+								<span style="font-weight:bold;">Olá, <span th:text="${usuario.nome}"></span></span>
+						</li>
+
+						<li th:if="${usuario != null && candidato == null && usuario.id != 1}">
+								<a th:href="@{/candidato/cadastrar(usuarioId=${usuario.id})}">Cadastrar Currículo</a>
+						</li>
+
+						<li th:if="${usuario != null && candidato != null && usuario.id != 1}">
+								<a th:href="@{/candidato/{id}(id=${candidato.id})}">Meu Currículo</a>
+						</li>
+
+						<li th:if="${candidato != null && usuario.id != 1}">
+								<a th:href="@{/candidato-vaga/candidato/{id}(id=${candidato.id})}">Minhas Candidaturas</a>
+						</li>
+
+						<li th:if="${usuario != null}">
+								<a th:href="@{/vaga/lista/usuario/{id}(id=${usuario.id})}">Vagas</a>
+						</li>
+
+						<li th:if="${usuario.id == 1}">
+								<a th:href="@{/vaga/cadastrar/usuario/{id}(id=${usuario.id})}">Cadastrar Vagas</a>
+						</li>
+				</ul>
+		</nav>
+</header>
+
 
 <div class="content">
 		<h1>Editar Candidato</h1>

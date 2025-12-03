@@ -2,77 +2,77 @@
 <html lang="pt-BR" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8" />
-    <title>Vagas Disponíveis - WiseCorp</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            background-color: #fff8f0;
-            margin: 0;
-        }
-        header {
-            background-color: #ff7a00;
-            color: white;
-            padding: 1rem;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-        .vaga {
-            background-color: #fff;
-            border-left: 5px solid #ff7a00;
-            margin: 1rem;
-            padding: 1rem;
-            border-radius: 8px;
-            transition: 0.3s;
-            cursor: pointer;
-        }
-        .vaga:hover {
-            transform: scale(1.02);
-            box-shadow: 0 0 10px rgba(0,0,0,0.1);
-        }
-        .vaga .detalhes {
-            display: none;
-            margin-top: 1rem;
-        }
-        .vaga.ativa .detalhes {
-            display: block;
-        }
-        button {
-            background-color: #ff7a00;
-            color: white;
-            border: none;
-            padding: 0.5rem 1rem;
-            border-radius: 6px;
-            cursor: pointer;
-        }
-    </style>
+    <title>Candidatos - WiseCorp</title>
+		<link rel="icon" href="/img/logo.jpg" type="image/jpg">
+		<link rel="stylesheet" href="/styles/header.css">
+		<link rel="stylesheet" href="/styles/main.css">
+		<link rel="stylesheet" href="/styles/vaga.css">
 </head>
-<body>
+<body class="wise-background">
 
-<header>
-    <h1>Vagas Disponíveis</h1>
-    <a th:href="@{/home}">
-        <button>Home</button>
-    </a>
-</header>
+		<header>
+				<div class="logo" >
+						<a th:href="@{/usuario/home/{id}(id=${usuario.id})}">
+								WiseCorp
+						</a>
+				</div>
 
-<div id="lista-vagas">
-    <div class="vaga" th:each="vaga : ${vagas}" onclick="this.classList.toggle('ativa')">
-        <h2 th:text="${vaga.titulo}"></h2>
-        <p th:text="${vaga.empresa}"></p>
-        <div class="detalhes">
-            <p><strong>Descrição:</strong> <span th:text=" ${vaga.descricao}"></span></p>
-            <p><strong>Benefícios:</strong> <span th:text="${vaga.beneficios}"></span></p>
-            <p><strong>Salário:</strong> R$ <span th:text="${vaga.salario}"></span></p>
+				<nav>
+						<ul>
+								<li th:if="${usuario != null}">
+										<span style="font-weight:bold;">Olá, <span th:text="${usuario.nome}"></span></span>
+								</li>
 
-            <form th:action="@{/candidato-vaga/candidatura}" method="post">
-                <input type="hidden" name="vagaId" th:value="${vaga.id}" />
-                <input type="hidden" name="candidatoId" th:value="${candidato.id}" />
-                <button type="submit">Inscrever-se</button>
-            </form>
-        </div>
-    </div>
-</div>
+								<li th:if="${usuario != null && candidato == null && usuario.id != 1}">
+										<a th:href="@{/candidato/cadastrar(usuarioId=${usuario.id})}">Cadastrar Currículo</a>
+								</li>
+
+								<li th:if="${usuario != null}">
+										<a th:href="@{/vaga/lista/usuario/{id}(id=${usuario.id})}">Vagas</a>
+								</li>
+
+								<li th:if="${usuario.id == 1}">
+										<a th:href="@{/vaga/cadastrar/usuario/{id}(id=${usuario.id})}">Cadastrar Vagas</a>
+								</li>
+						</ul>
+				</nav>
+		</header>
+
+		<div id="lista-candidatos">
+				<div class="vaga wise-background" th:each="candidato : ${candidatos}" onclick="this.classList.toggle('ativa')">
+						<h2 th:text="${candidato.nome}">Nome do Candidato</h2>
+
+						<p th:if="${candidato.resumoProfissional != null}">
+								<strong>Resumo:</strong>
+								<span th:text="${candidato.resumoProfissional}"></span>
+						</p>
+
+						<div class="detalhes">
+							<!-- substituído #lists.isNotEmpty(...) por checagem SpEL segura -->
+								<p th:if="${candidato.experiencias != null and !candidato.experiencias.isEmpty()}">
+										<strong>Experiências:</strong>
+										<span th:text="${candidato.experiencias.size()}"></span> registro(s)
+								</p>
+
+								<p>
+										<strong>Contato:</strong>
+										<span th:if="${candidato.usuario != null}">
+												<span th:text="${candidato.usuario.email}">email@exemplo.com</span>
+												<span th:if="${candidato.telefone != null}"> - <span th:text="${candidato.telefone}"></span></span>
+										</span>
+
+										<span th:if="${candidato.usuario == null}">
+												<span th:if="${candidato.email != null}" th:text="${candidato.email}">email@exemplo.com</span>
+												<span th:if="${candidato.telefone != null}"> - <span th:text="${candidato.telefone}"></span></span>
+										</span>
+								</p>
+
+								<br>
+
+								<a th:href="@{/candidato/{id}(id=${candidato.id})}" class="wise-btn">Ver Currículo</a>
+						</div>
+				</div>
+		</div>
 
 </body>
 </html>

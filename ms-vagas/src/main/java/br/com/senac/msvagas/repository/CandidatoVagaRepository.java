@@ -4,9 +4,12 @@ import br.com.senac.msvagas.repository.entity.CandidatoVagaEntity;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.List;
+import java.util.Optional;
 
 public interface CandidatoVagaRepository extends JpaRepository<CandidatoVagaEntity, Long> {
 	List<CandidatoVagaEntity> findByCandidatoId(Long candidatoId);
 
 	List<CandidatoVagaEntity> findByVagaId(Long vagaId);
+
+    Optional<CandidatoVagaEntity> findByCandidatoIdAndVagaId(Long candidatoId, Long vagaId);
 }
