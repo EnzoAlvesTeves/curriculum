@@ -3,173 +3,86 @@
 <head>
 		<meta charset="UTF-8" />
 		<title>Vagas Disponíveis - WiseCorp</title>
-		<style>
-        :root {
-            --laranja: #FF7514;
-            --laranja-claro: #ffe2ca;
-            --cinza-fundo: #f9fafc;
-            --sombra: rgba(0, 0, 0, 0.1);
-        }
-
-        body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background-color: var(--cinza-fundo);
-            animation: fadeIn 1.2s ease-in;
-        }
-
-        @keyframes fadeIn {
-            from { opacity: 0; }
-            to { opacity: 1; }
-        }
-
-        .topo {
-            background-color: var(--laranja);
-            padding: 20px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            box-shadow: 0 4px 12px var(--sombra);
-        }
-
-        .vaga {
-            background-color: #fff;
-            border-left: 5px solid #ff7a00;
-            margin: 1rem;
-            padding: 1rem;
-            border-radius: 8px;
-            transition: 0.3s;
-            cursor: pointer;
-        }
-        .vaga .detalhes {
-            display: none;
-            margin-top: 1rem;
-        }
-        .vaga.ativa .detalhes {
-            display: block;
-        }
-        button {
-            background-color: #ff7a00;
-            color: white;
-            border: none;
-            padding: 0.5rem 1rem;
-            border-radius: 6px;
-            cursor: pointer;
-        }
-
-        .topo {
-            background-color: var(--laranja);
-            padding: 20px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            box-shadow: 0 4px 12px var(--sombra);
-        }
-
-        .logo {
-            font-size: 28px;
-            font-weight: bold;
-            color: white;
-        }
-
-        nav ul {
-            list-style: none;
-            display: flex;
-            gap: 16px;
-        }
-
-        nav a {
-            text-decoration: none;
-            color: white;
-            font-weight: 600;
-            padding: 10px 14px;
-            border-radius: 8px;
-            transition: background 0.3s;
-        }
-
-        nav a:hover {
-            background-color: var(--laranja-claro);
-        }
-
-        .botao-laranja {
-            background-color: white;
-            color: var(--laranja);
-        }
-
-        .botoes {
-            margin-top: 20px;
-        }
-
-        .btn-claro, .btn-escuro {
-            padding: 12px 20px;
-            border-radius: 8px;
-            margin: 0 10px;
-            text-decoration: none;
-            font-weight: bold;
-        }
-
-        .btn-claro {
-            background-color: white;
-            color: var(--laranja);
-            border: 2px solid var(--laranja);
-        }
-
-        .btn-escuro {
-            background-color: var(--laranja);
-            color: white;
-            border: none;
-        }
-
-        #user-name {
-            margin-right: 10px;
-        }
-		</style>
+		<link rel="icon" href="/img/logo.jpg" type="image/jpg">
+		<link rel="stylesheet" href="/styles/header.css">
+		<link rel="stylesheet" href="/styles/main.css">
+		<link rel="stylesheet" href="/styles/vaga.css">
 </head>
-<body>
 
-<header class="topo">
-		<div class="logo">WiseCorp</div>
-		<nav>
-				<ul>
-						<li th:if="${usuario != null}">
-								<span id="user-name"><span th:text="${usuario.nome}"></span></span>
-						</li>
-						<li th:if="${usuario != null}">
-								<a th:href="@{/usuario/home/{id}(id=${usuario.id})}" class="button">Home</a>
-						</li>
-						<li th:if="${candidato != null}">
-								<a th:href="@{/candidato/{id}(id=${candidato.id})}" class="botao-laranja">Meu Currículo</a>
-						</li>
-						<li th:if="${candidato != null && usuario.id != 1}">
-								<a th:href="@{/candidato-vaga/candidato/{id}(id=${candidato.id})}" class="button">Minhas Candidaturas</a>
-						</li>
-					<li th:if="${usuario.id == 1}">
-						<a th:href="@{/vaga/cadastrar/usuario/{id}(id=${usuario.id})}" class="button">Cadastrar Vagas</a>
-					</li>
-				</ul>
-		</nav>
-</header>
+<body class="wise-background">
+		<header>
+				<div class="logo" >
+						<a th:href="@{/usuario/home/{id}(id=${usuario.id})}">
+								WiseCorp
+						</a>
+				</div>
 
-<div id="lista-vagas">
-		<div class="vaga" th:each="vaga : ${vagas}" onclick="this.classList.toggle('ativa')">
-				<h2 th:text="${vaga.titulo}"></h2>
-				<p th:text="${vaga.empresa}"></p>
-				<div class="detalhes">
-						<p><strong>Descrição:</strong> <span th:text=" ${vaga.descricao}"></span></p>
-						<p><strong>Benefícios:</strong> <span th:text="${vaga.beneficios}"></span></p>
-						<p><strong>Salário:</strong> R$ <span th:text="${vaga.salario}"></span></p>
+				<nav>
+						<ul>
+								<li th:if="${usuario != null}">
+										<span style="font-weight:bold;">Olá, <span th:text="${usuario.nome}"></span></span>
+								</li>
 
-						<form th:if="${candidato != null && usuario.id != 1}" th:action="@{/candidato-vaga/candidatura}" method="post">
-								<input type="hidden" name="vagaId" th:value="${vaga.id}" />
-								<input type="hidden" name="candidatoId" th:value="${candidato.id}" />
-								<button type="submit">Inscrever-se</button>
-						</form>
-						<li th:if="${usuario.id == 1}">
-								<a th:href="@{/candidato-vaga/vaga/{id}(id=${vaga.id})}" class="button">Candidatos</a>
-						</li>
+								<li th:if="${usuario != null && candidato == null && usuario.id != 1}">
+										<a th:href="@{/candidato/cadastrar(usuarioId=${usuario.id})}">Cadastrar Currículo</a>
+								</li>
 
+								<li th:if="${usuario != null && candidato != null && usuario.id != 1}">
+										<a th:href="@{/candidato/{id}(id=${candidato.id})}">Meu Currículo</a>
+								</li>
+
+								<li th:if="${candidato != null && usuario.id != 1}">
+										<a th:href="@{/candidato-vaga/candidato/{id}(id=${candidato.id})}">Minhas Candidaturas</a>
+								</li>
+
+								<li th:if="${usuario != null}">
+										<a th:href="@{/vaga/lista/usuario/{id}(id=${usuario.id})}">Vagas</a>
+								</li>
+
+								<li th:if="${usuario.id == 1}">
+										<a th:href="@{/vaga/cadastrar/usuario/{id}(id=${usuario.id})}">Cadastrar Vagas</a>
+								</li>
+						</ul>
+				</nav>
+		</header>
+
+		<!-- Alerta de erro quando existir o atributo 'error' no model -->
+		<div th:if="${error != null}" id="alert-error" style="margin:16px auto;max-width:980px;padding:12px 16px;border-radius:6px;background:#f8d7da;color:#842029;display:flex;justify-content:space-between;align-items:center;border:1px solid #f5c2c7;">
+				<span th:text="${error}">Erro ao candidatar-se</span>
+				<button type="button" onclick="document.getElementById('alert-error').style.display='none'" style="background:transparent;border:none;font-weight:bold;color:#842029;cursor:pointer;">×</button>
+		</div>
+
+		<script>
+				// auto-hide após 5s
+				(function() {
+						setTimeout(function() {
+								const el = document.getElementById('alert-error');
+								if (el) el.style.display = 'none';
+						}, 5000);
+				})();
+		</script>
+
+		<div id="lista-vagas">
+				<div class="vaga wise-background" th:each="vaga : ${vagas}" onclick="this.classList.toggle('ativa')">
+						<h2 th:text="${vaga.titulo}"></h2>
+						<p th:text="${vaga.empresa}"></p>
+						<div class="detalhes">
+								<p><strong>Descrição:</strong> <span th:text=" ${vaga.descricao}"></span></p>
+								<p><strong>Benefícios:</strong> <span th:text="${vaga.beneficios}"></span></p>
+								<p><strong>Salário:</strong> R$ <span th:text="${vaga.salario}"></span></p>
+
+								<form th:if="${candidato != null && usuario.id != 1}" th:action="@{/candidato-vaga/candidatura}" method="post">
+										<input type="hidden" name="vagaId" th:value="${vaga.id}" />
+										<input type="hidden" name="candidatoId" th:value="${candidato.id}" />
+										<button type="submit" class="wise-btn">Inscrever-se</button>
+								</form>
+
+								<br>
+
+								<a th:if="${usuario != null and usuario.id == 1}" th:href="@{/candidato-vaga/vaga/{vagaId}/usuario/{usuarioId}(vagaId=${vaga.id},usuarioId=${usuario.id})}" class="wise-btn">Candidatos</a>
+
+						</div>
 				</div>
 		</div>
-</div>
-
 </body>
 </html>

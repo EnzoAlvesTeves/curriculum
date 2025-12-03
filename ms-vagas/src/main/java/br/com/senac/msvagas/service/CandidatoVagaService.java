@@ -29,6 +29,13 @@ public class CandidatoVagaService {
         VagaEntity vagaEntity = vagaRepository.findById(candidatoVagaDTO.getVaga().getId())
                 .orElseThrow(() -> new RuntimeException("Vaga inexistente!"));
 
+        candidatoVagaRepository.findByCandidatoIdAndVagaId(
+                candidatoVagaDTO.getCandidatoId(),
+                vagaEntity.getId()
+        ).ifPresent(existingCandidatura -> {
+            throw new RuntimeException("Candidato já inscrito nesta vaga!");
+        });
+
         try {
             CandidatoVagaEntity candidatoVagaEntity = new CandidatoVagaEntity();
             candidatoVagaEntity.setDataInscricao(LocalDateTime.now());

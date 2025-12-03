@@ -4,43 +4,10 @@
 	<meta charset="UTF-8"/>
 	<title>Cadastro de Vaga</title>
 	<link rel="icon" href="/img/logo.jpg" type="image/jpg">
-	<link rel="stylesheet" href="/styles/estilo.css" />
+	<link rel="stylesheet" href="/styles/header.css">
+	<link rel="stylesheet" href="/styles/main.css">
+
 	<style>
-		body {
-			font-family: Arial, sans-serif;
-			background-color: #fff5eb;
-			margin: 0;
-			padding: 0;
-		}
-
-		.navbar {
-			width: 100%;
-			background-color: #ff7f27;
-			padding: 15px 20px;
-			color: white;
-			position: fixed;
-			top: 0;
-			left: 0;
-			z-index: 1000;
-		}
-
-		.navbar ul {
-			list-style-type: none;
-			margin: 0;
-			padding: 0;
-			display: flex;
-		}
-
-		.navbar ul li {
-			margin-left: 20px;
-		}
-
-		.navbar ul li a {
-			color: white;
-			text-decoration: none;
-			font-weight: bold;
-		}
-
 		.content {
 			margin-top: 100px;
 			display: flex;
@@ -92,64 +59,72 @@
 			height: 80px;
 		}
 
-		button {
-			background-color: #ff7f27;
-			color: white;
-			padding: 10px 20px;
-			border: none;
-			border-radius: 5px;
-			font-size: 14px;
-			cursor: pointer;
-			display: block;
-			margin: 0 auto;
-		}
-
-		button:hover {
-			background-color: #e86f1a;
-		}
 	</style>
 </head>
-<body>
-<div class="navbar">
-	<ul>
-		<li><a th:href="@{/usuario/home/{id}(id=${usuario.id})}" class="button">Home</a></li>
-		<li><a th:href="@{/vaga/lista/usuario/{id}(id=${usuario.id})}" class="button">Vagas</a></li>
-	</ul>
-</div>
+<body class="wise-background">
+		<header>
+				<div class="logo" >
+						<a th:href="@{/usuario/home/{id}(id=${usuario.id})}">
+								WiseCorp
+						</a>
+				</div>
 
-<div class="content">
-	<form th:action="@{/vaga/cadastrar}" method="post">
-		<h1>Cadastro de Vaga</h1>
-		<fieldset>
+				<nav>
+						<ul>
+								<li th:if="${usuario != null}">
+										<span style="font-weight:bold;">Olá, <span th:text="${usuario.nome}"></span></span>
+								</li>
 
-			<div class="form-group">
-				<label>Titulo:</label>
-				<input type="text" name="titulo"/>
-			</div>
+								<li th:if="${usuario != null && candidato == null && usuario.id != 1}">
+										<a th:href="@{/candidato/cadastrar(usuarioId=${usuario.id})}">Cadastrar Currículo</a>
+								</li>
 
-			<div class="form-group">
-				<label>Descricao:</label>
-				<textarea name="descricao"></textarea>
-			</div>
+								<li th:if="${usuario != null}">
+										<a th:href="@{/vaga/lista/usuario/{id}(id=${usuario.id})}">Vagas</a>
+								</li>
 
-			<div class="form-group">
-				<label>Empresa:</label>
-				<input type="text" name="empresa">
-			</div>
+								<li th:if="${usuario.id == 1}">
+										<a th:href="@{/vaga/cadastrar/usuario/{id}(id=${usuario.id})}">Cadastrar Vagas</a>
+								</li>
+						</ul>
+				</nav>
+		</header>
 
-			<div class="form-group">
-				<label>Beneficio:</label>
-				<textarea name="beneficios"></textarea>
-			</div>
+		<div class="content">
+			<form th:action="@{/vaga/cadastrar}" method="post">
+				<h1>Cadastro de Vaga</h1>
+				<fieldset>
 
-			<div class="form-group">
-				<label>Salario:</label>
-				<input type="text" name="salario"/>
-			</div>
+					<div class="form-group">
+						<label>Titulo:</label>
+						<input type="text" name="titulo"/>
+					</div>
 
-		</fieldset>
-		<button type="submit">Salvar</button>
-	</form>
-</div>
+					<div class="form-group">
+						<label>Descricao:</label>
+						<textarea name="descricao"></textarea>
+					</div>
+
+					<div class="form-group">
+						<label>Empresa:</label>
+						<input type="text" name="empresa">
+					</div>
+
+					<div class="form-group">
+						<label>Beneficio:</label>
+						<textarea name="beneficios"></textarea>
+					</div>
+
+					<div class="form-group">
+						<label>Salario:</label>
+						<input type="text" name="salario"/>
+					</div>
+
+				</fieldset>
+
+				<button class="wise-btn" type="submit">Salvar</button>
+
+			</form>
+		</div>
 </body>
 </html>

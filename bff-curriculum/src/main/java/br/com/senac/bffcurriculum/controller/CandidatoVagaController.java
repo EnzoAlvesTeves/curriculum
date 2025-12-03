@@ -41,14 +41,23 @@ public class CandidatoVagaController {
 	public String candidatarVaga(@ModelAttribute Candidatura candidatura, Model model) {
         VagaDTO vaga = vagaService.getById(candidatura.getVagaId());
         CandidatoDTO candidato = candidatoService.getById(candidatura.getCandidatoId());
+        UsuarioDTO usuario = usuarioService.getById(candidato.getUsuarioId());
 
-        candidatoVagaService.candidatarVaga(vaga, candidato);
-		return "redirect:/candidato-vaga/candidato/" + candidato.getId();
+        try {
+            candidatoVagaService.candidatarVaga(vaga, candidato);
+            return "redirect:/candidato-vaga/candidato/" + candidato.getId();
+        } catch (Exception e) {
+            String errorMessage = "Erro ao candidatar-se à vaga: Candidato já inscrito nesta vaga.";
+            model.addAttribute("errorMessage", errorMessage);
+            return  "redirect:/vaga/lista/usuario/" + usuario.getId() + "?error=" + errorMessage;
+        }
 	}
 
 	//listagem de candidatos por vaga
-	@GetMapping("/vaga/{vagaId}")
-	public String candidatosPorVaga(@PathVariable Long vagaId, Model model) {
+	@GetMapping("/vaga/{vagaId}/usuario/{usuarioId}")
+	public String candidatosPorVaga(@PathVariable Long vagaId, @PathVariable Long usuarioId, Model model) {
+        UsuarioDTO usuarioDTO = usuarioService.getById(usuarioId);
+
         List<CandidatoVagaDTO> candidatoVagas = candidatoVagaService.candidatosPorVaga(vagaId);
         List<CandidatoDTO> candidatos = candidatoVagas.stream().map(candidatoVagaDTO -> {
             CandidatoDTO candidato = candidatoService.getById(candidatoVagaDTO.getCandidatoId());
@@ -58,6 +67,7 @@ public class CandidatoVagaController {
             return candidato;
         }).toList();
 
+        model.addAttribute("usuario", usuarioDTO);
 		model.addAttribute("candidatos", candidatos);
 		return "vaga/candidatos";
 	}
@@ -75,6 +85,7 @@ public class CandidatoVagaController {
         ).toList();
 
 		model.addAttribute("candidato", candidato);
+        model.addAttribute("usuario", usuario);
 		model.addAttribute("vagas", vagas);
 		return "candidato/vagas";
 	}

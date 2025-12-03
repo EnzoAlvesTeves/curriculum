@@ -32,6 +32,7 @@ public class CandidatoController {
 
         candidatoDTO.setUsuario(usuarioDTO);
 
+        model.addAttribute("usuario", usuarioDTO);
 		model.addAttribute("candidato", candidatoDTO);
 		return "candidato/curriculo";
 	}
@@ -47,6 +48,7 @@ public class CandidatoController {
         candidatoDTO.getHabilidades().add(new HabilidadeDTO());
 
 		model.addAttribute("candidato", candidatoDTO);
+        model.addAttribute("usuario", usuarioDTO);
 		return "candidato/cadastro";
 	}
 
