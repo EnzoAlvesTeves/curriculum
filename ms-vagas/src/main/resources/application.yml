@@ -16,3 +16,22 @@ spring:
     enabled: true
     locations: classpath:db/migration
     cleanDisabled: false
+  security:
+    oauth2:
+      resourceserver:
+        jwt:
+          issuer-uri: ${KEYCLOAK_ISSUER_URI:http://localhost:8093/realms/curriculum}
+          jwk-set-uri: ${KEYCLOAK_JWK_SET_URI:http://localhost:8093/realms/curriculum/protocol/openid-connect/certs}
+
+feign:
+  ms-usuario:
+    url: ${MS_USUARIO_URL:http://localhost:8091}
+    logger-level: ${FEIGN_MS_USUARIO_LOGGER_LEVEL:FULL}
+    connect-timeout: ${FEIGN_MS_USUARIO_CONNECT_TIMEOUT:5000}
+    read-timeout: ${FEIGN_MS_USUARIO_READ_TIMEOUT:10000}
+
+logging:
+  level:
+    br.com.senac.msvagas: DEBUG
+    br.com.senac.msvagas.client.MsUsuarioClient: DEBUG
+

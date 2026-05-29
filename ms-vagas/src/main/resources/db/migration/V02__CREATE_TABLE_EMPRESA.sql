@@ -1,0 +1,9 @@
+CREATE TABLE empresa (
+    id          BIGINT AUTO_INCREMENT PRIMARY KEY,
+    nome        VARCHAR (255) NOT NULL,
+    estado      VARCHAR (255) NOT NULL,
+    cidade      VARCHAR (255) NOT NULL,
+    bairro      VARCHAR (255),
+    created_at  TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    updated_at  TIMESTAMP NULL DEFAULT NULL ON UPDATE CURRENT_TIMESTAMP
+);

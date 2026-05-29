@@ -7,9 +7,10 @@ import java.util.List;
 import java.util.Optional;
 
 public interface CandidatoVagaRepository extends JpaRepository<CandidatoVagaEntity, Long> {
-	List<CandidatoVagaEntity> findByCandidatoId(Long candidatoId);
+    boolean existsByIdUsuarioAndIdVaga(Long idUsuario, Long idVaga);
 
-	List<CandidatoVagaEntity> findByVagaId(Long vagaId);
+    Optional<CandidatoVagaEntity> findByIdUsuarioAndIdVaga(Long idUsuario, Long idVaga);
 
-    Optional<CandidatoVagaEntity> findByCandidatoIdAndVagaId(Long candidatoId, Long vagaId);
+    List<CandidatoVagaEntity> findByIdUsuario(Long idUsuario);
 }
+
