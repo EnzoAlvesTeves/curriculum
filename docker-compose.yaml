@@ -68,6 +68,7 @@ services:
     container_name: ms-vagas
     depends_on:
       - curriculum-db
+      - keycloak
     networks:
       - curriculum-net
     environment:
@@ -76,6 +77,9 @@ services:
       - DB_NAME=ms_vagas
       - DB_USER=user_vagas
       - DB_PASSWORD=admin
+      - MS_USUARIO_URL=http://ms-usuario:8091
+      - KEYCLOAK_ISSUER_URI=http://keycloak:8080/realms/curriculum
+      - KEYCLOAK_JWK_SET_URI=http://keycloak:8080/realms/curriculum/protocol/openid-connect/certs
     ports:
       - "8092:8092"
 

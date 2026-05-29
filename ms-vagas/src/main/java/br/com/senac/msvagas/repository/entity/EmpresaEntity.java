@@ -10,38 +10,31 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
 @Entity
-@Table(name = "vaga")
+@Table(name = "empresa")
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class VagaEntity {
+public class EmpresaEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
     private Long id;
 
-    @Column(name = "titulo", nullable = false, length = 255)
-    private String titulo;
+    @Column(name = "nome", nullable = false, length = 255)
+    private String nome;
 
-    @Column(name = "descricao", nullable = false, columnDefinition = "TEXT")
-    private String descricao;
+    @Column(name = "estado", nullable = false, length = 255)
+    private String estado;
 
-    @Column(name = "salario", precision = 10, scale = 2)
-    private BigDecimal salario;
+    @Column(name = "cidade", nullable = false, length = 255)
+    private String cidade;
 
-    @Column(name = "beneficios", columnDefinition = "TEXT")
-    private String beneficios;
-
-    @Column(name = "id_empresa", nullable = false)
-    private Long idEmpresa;
-
-    @Column(name = "created_by", nullable = false)
-    private Long createdBy;
+    @Column(name = "bairro", length = 255)
+    private String bairro;
 
     @Column(name = "created_at", nullable = false, insertable = false, updatable = false)
     private LocalDateTime createdAt;
