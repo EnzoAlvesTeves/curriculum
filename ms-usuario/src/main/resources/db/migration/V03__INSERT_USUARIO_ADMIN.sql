@@ -1,1 +1,0 @@
-INSERT INTO usuario (nome, email, senha) VALUES ('admin', 'admin@wisecorp.com', 'admin123');

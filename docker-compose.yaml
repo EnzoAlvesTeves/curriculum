@@ -12,6 +12,17 @@ services:
     volumes:
       - ./mysql-init:/docker-entrypoint-initdb.d
 
+  keycloak:
+    image: quay.io/keycloak/keycloak:26.0
+    command: start-dev
+    networks:
+      - curriculum-net
+    environment:
+      KEYCLOAK_ADMIN: admin
+      KEYCLOAK_ADMIN_PASSWORD: admin
+    ports:
+      - "8093:8080"
+
   ms-curriculum:
     build: './ms-curriculum'
     container_name: ms-curriculum
@@ -33,6 +44,7 @@ services:
     container_name: ms-usuario
     depends_on:
       - curriculum-db
+      - keycloak
     networks:
       - curriculum-net
     environment:
@@ -41,6 +53,13 @@ services:
       - DB_NAME=ms_usuario
       - DB_USER=user_usuario
       - DB_PASSWORD=admin
+      - KEYCLOAK_SERVER_URL=http://keycloak:8080
+      - KEYCLOAK_REALM=curriculum
+      - KEYCLOAK_ADMIN_CLIENT_ID=curriculum-app-admin
+      - KEYCLOAK_ADMIN_CLIENT_SECRET=cJLeqvJ5KE8OUCPIUuIhULXmx3CCdwGO
+      - KEYCLOAK_USER_CLIENT_ID=curriculum-app-user
+      - KEYCLOAK_ISSUER_URI=http://keycloak:8080/realms/curriculum
+      - KEYCLOAK_JWK_SET_URI=http://keycloak:8080/realms/curriculum/protocol/openid-connect/certs
     ports:
       - "8091:8091"
 

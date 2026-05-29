@@ -1,13 +1,23 @@
 package br.com.senac.msusuario.controller;
 
-import br.com.senac.msusuario.dto.LoginRequestDTO;
-import br.com.senac.msusuario.dto.UsuarioDTO;
+import br.com.senac.msusuario.dto.CreateUsuarioRequest;
+import br.com.senac.msusuario.dto.UpdateUsuarioRequest;
+import br.com.senac.msusuario.dto.UsuarioResponse;
 import br.com.senac.msusuario.service.UsuarioService;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
+import jakarta.validation.Valid;
+import org.springframework.http.HttpStatus;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RestController
-@RequestMapping("/usuarios")
+@RequestMapping("/api/usuarios")
+@SecurityRequirement(name = "bearerAuth")
 public class UsuarioController {
+
     private final UsuarioService service;
 
     public UsuarioController(UsuarioService service) {
@@ -15,32 +25,36 @@ public class UsuarioController {
     }
 
     @PostMapping
-    public UsuarioDTO create(@RequestBody UsuarioDTO usuarioDTO) {
-        return this.service.create(usuarioDTO);
+    @ResponseStatus(HttpStatus.CREATED)
+    public UsuarioResponse criar(@Valid @RequestBody CreateUsuarioRequest req) {
+        return service.criar(req);
     }
 
-    @PutMapping
-    public UsuarioDTO update(@RequestBody UsuarioDTO usuarioDTO) {
-        return this.service.update(usuarioDTO);
+    @GetMapping
+    public List<UsuarioResponse> listar() {
+        return service.listar();
+    }
+
+    @GetMapping("/me")
+    public UsuarioResponse me(@AuthenticationPrincipal Jwt jwt) {
+        return service.buscarMe(jwt);
     }
 
     @GetMapping("/{id}")
-    public UsuarioDTO getById(@PathVariable Long id) {
-        return this.service.getById(id);
+    public UsuarioResponse buscar(@PathVariable Long id) {
+        return service.buscarPorId(id);
     }
 
-    @GetMapping("/email/{email}")
-    public UsuarioDTO getByEmail(@PathVariable String email) {
-        return this.service.getByEmail(email);
-    }
-
-    @PostMapping("/login")
-    public UsuarioDTO getByLogin(@RequestBody LoginRequestDTO loginRequestDTO) {
-        return service.login(loginRequestDTO);
+    @PutMapping("/{id}")
+    public UsuarioResponse atualizar(@PathVariable Long id,
+                                     @Valid @RequestBody UpdateUsuarioRequest req) {
+        return service.atualizar(id, req);
     }
 
     @DeleteMapping("/{id}")
-    public void delete(@PathVariable Long id) {
-        this.service.delete(id);
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void deletar(@PathVariable Long id) {
+        service.deletar(id);
     }
 }
+

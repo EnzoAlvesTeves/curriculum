@@ -1,87 +1,113 @@
 package br.com.senac.msusuario.service;
 
-import br.com.senac.msusuario.dto.LoginRequestDTO;
-import br.com.senac.msusuario.dto.UsuarioDTO;
+import br.com.senac.msusuario.dto.CreateUsuarioRequest;
+import br.com.senac.msusuario.dto.UpdateUsuarioRequest;
+import br.com.senac.msusuario.dto.UsuarioResponse;
 import br.com.senac.msusuario.repository.UsuarioRepository;
 import br.com.senac.msusuario.repository.entity.UsuarioEntity;
-import org.springframework.stereotype.Component;
+import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
+import org.springframework.security.oauth2.jwt.Jwt;
+import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.server.ResponseStatusException;
 
-@Component
+import java.time.LocalDateTime;
+import java.util.List;
+
+@Service
+@RequiredArgsConstructor
 public class UsuarioService {
 
-	private UsuarioRepository usuarioRepository;
+    private final UsuarioRepository repository;
+    private final KeycloakService keycloakService;
 
-	public UsuarioService(UsuarioRepository usuarioRepository) {
-		this.usuarioRepository = usuarioRepository;
-	}
-
+    // CREATE
     @Transactional
-	public UsuarioDTO create(UsuarioDTO usuarioDTO) {
-        try {
-            UsuarioEntity usuarioEntity = usuarioDTO.toEntity();
+    public UsuarioResponse criar(CreateUsuarioRequest req) {
+        repository.findByEmail(req.email()).ifPresent(u -> {
+            throw new ResponseStatusException(HttpStatus.CONFLICT, "E-mail já cadastrado");
+        });
 
-            UsuarioEntity novoUsuario = usuarioRepository.save(usuarioEntity);
+        String keycloakId = keycloakService.criarUsuarioKeycloak(
+                req.nome(),
+                req.sobrenome(),
+                req.email(),
+                req.senha()
+        );
 
-            return new UsuarioDTO(novoUsuario);
-        } catch (Exception e) {
-            throw new RuntimeException("Erro ao gravar usuário ", e);
-        }
-	}
+        UsuarioEntity entity = new UsuarioEntity();
+        entity.setKeycloakUserId(keycloakId);
+        entity.setNome(req.nome());
+        entity.setSobrenome(req.sobrenome());
+        entity.setEmail(req.email());
+        entity.setTelefone(req.telefone());
+        entity.setTipo(req.tipo());
 
-
-	public UsuarioDTO getById(Long id) {
-		UsuarioEntity usuarioEntity = usuarioRepository.findById(id)
-						.orElseThrow(() -> new RuntimeException("Usuário não encontrado!"));
-
-		return new UsuarioDTO(usuarioEntity);
-	}
-
-    @Transactional
-	public UsuarioDTO update(UsuarioDTO usuarioDTO) {
-		UsuarioEntity usuarioEntity = usuarioRepository.findById(usuarioDTO.getId())
-						.orElseThrow(() -> new RuntimeException("Usuário não encontrado!"));
-        try {
-            usuarioEntity.setId(usuarioDTO.getId());
-            usuarioEntity.setNome(usuarioDTO.getNome());
-            usuarioEntity.setEmail(usuarioDTO.getEmail());
-            usuarioEntity.setSenha(usuarioDTO.getSenha());
-
-            UsuarioEntity usuarioAlterado = usuarioRepository.save(usuarioEntity);
-
-            return new UsuarioDTO(usuarioAlterado);
-        }  catch (Exception e) {
-            throw new RuntimeException("Erro ao editar usuário", e);
-        }
-	}
-
-    @Transactional
-	public void delete(Long id) {
-		UsuarioEntity usuarioEntity = usuarioRepository.findById(id)
-						.orElseThrow(() -> new RuntimeException("Usuário não encontrado!"));
-
-        try {
-            usuarioRepository.delete(usuarioEntity);
-        }   catch (Exception e) {
-            throw new RuntimeException("Erro ao deletar usuário", e);
-        }
-	}
-
-    public UsuarioDTO login(LoginRequestDTO loginRequestDTO) {
-        UsuarioEntity usuario = usuarioRepository.findByEmail(loginRequestDTO.getEmail())
-                .orElseThrow(() -> new RuntimeException("Email não existente!"));
-
-        if(usuario.getSenha().equals(loginRequestDTO.getSenha())) {
-            return new UsuarioDTO(usuario);
-        }
-
-        throw new RuntimeException("Senha inválida!");
+        return toResponse(repository.save(entity));
     }
 
-    public UsuarioDTO getByEmail(String email) {
-        UsuarioEntity usuarioEntity = usuarioRepository.findByEmail(email)
-                .orElseThrow(() -> new RuntimeException("Usuário não encontrado!"));
+    // READ ALL
+    @Transactional(readOnly = true)
+    public List<UsuarioResponse> listar() {
+        return repository.findAll().stream().map(this::toResponse).toList();
+    }
 
-        return new UsuarioDTO(usuarioEntity);
+    // READ BY ID
+    @Transactional(readOnly = true)
+    public UsuarioResponse buscarPorId(Long id) {
+        return toResponse(encontrarPorId(id));
+    }
+
+    // READ LOGGED USER
+    @Transactional(readOnly = true)
+    public UsuarioResponse buscarMe(Jwt jwt) {
+        String keycloakUserId = jwt.getSubject();
+
+        return repository.findByKeycloakUserId(keycloakUserId)
+                .map(this::toResponse)
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Usuário não encontrado"));
+    }
+
+    // UPDATE
+    @Transactional
+    public UsuarioResponse atualizar(Long id, UpdateUsuarioRequest req) {
+        UsuarioEntity entity = encontrarPorId(id);
+        entity.setNome(req.nome());
+        entity.setSobrenome(req.sobrenome());
+        entity.setTelefone(req.telefone());
+        entity.setTipo(req.tipo());
+        entity.setUpdatedAt(LocalDateTime.now());
+        return toResponse(repository.save(entity));
+    }
+
+    // DELETE
+    @Transactional
+    public void deletar(Long id) {
+        UsuarioEntity entity = encontrarPorId(id);
+        keycloakService.deletarUsuarioKeycloak(entity.getKeycloakUserId());
+        repository.delete(entity);
+    }
+
+    // HELPERS
+    private UsuarioEntity encontrarPorId(Long id) {
+        return repository.findById(id)
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND,
+                        "Usuário não encontrado"));
+    }
+
+    private UsuarioResponse toResponse(UsuarioEntity e) {
+        return new UsuarioResponse(
+                e.getId(),
+                e.getKeycloakUserId(),
+                e.getNome(),
+                e.getSobrenome(),
+                e.getEmail(),
+                e.getTelefone(),
+                e.getTipo(),
+                e.getCreatedAt(),
+                e.getUpdatedAt()
+        );
     }
 }
+
