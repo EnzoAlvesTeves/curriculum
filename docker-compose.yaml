@@ -11,17 +11,24 @@ services:
       - "3306:3306"
     volumes:
       - ./mysql-init:/docker-entrypoint-initdb.d
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-uroot", "-padmin"]
+      interval: 5s
+      timeout: 5s
+      retries: 20
+      start_period: 30s
 
   keycloak:
     image: quay.io/keycloak/keycloak:26.0
+    container_name: curriculum-keycloak
     command:
       - start-dev
       - --import-realm
     networks:
       - curriculum-net
     environment:
-      KEYCLOAK_ADMIN: admin
-      KEYCLOAK_ADMIN_PASSWORD: admin
+      KC_BOOTSTRAP_ADMIN_USERNAME: admin
+      KC_BOOTSTRAP_ADMIN_PASSWORD: admin
     ports:
       - "8093:8080"
     volumes:
@@ -30,9 +37,12 @@ services:
   ms-usuario:
     build: './ms-usuario'
     container_name: ms-usuario
+    restart: on-failure
     depends_on:
-      - curriculum-db
-      - keycloak
+      curriculum-db:
+        condition: service_healthy
+      keycloak:
+        condition: service_started
     networks:
       - curriculum-net
     environment:
@@ -54,10 +64,14 @@ services:
   ms-curriculum:
     build: './ms-curriculum'
     container_name: ms-curriculum
+    restart: on-failure
     depends_on:
-      - curriculum-db
-      - keycloak
-      - ms-usuario
+      curriculum-db:
+        condition: service_healthy
+      keycloak:
+        condition: service_started
+      ms-usuario:
+        condition: service_started
     networks:
       - curriculum-net
     environment:
@@ -75,10 +89,14 @@ services:
   ms-vagas:
     build: './ms-vagas'
     container_name: ms-vagas
+    restart: on-failure
     depends_on:
-      - curriculum-db
-      - keycloak
-      - ms-usuario
+      curriculum-db:
+        condition: service_healthy
+      keycloak:
+        condition: service_started
+      ms-usuario:
+        condition: service_started
     networks:
       - curriculum-net
     environment:
@@ -92,8 +110,18 @@ services:
       - KEYCLOAK_JWK_SET_URI=http://keycloak:8080/realms/curriculum/protocol/openid-connect/certs
     ports:
       - "8092:8092"
+
   kong:
     image: kong:3.7
+    container_name: curriculum-kong
+    restart: on-failure
+    depends_on:
+      ms-usuario:
+        condition: service_started
+      ms-curriculum:
+        condition: service_started
+      ms-vagas:
+        condition: service_started
     networks:
       - curriculum-net
     environment:
@@ -109,25 +137,6 @@ services:
       - "8000:8000"
       - "8001:8001"
 
-
-#  bff-curriculum:
-#    build: './bff-curriculum'
-#    container_name: bff-curriculum
-#    depends_on:
-#      - curriculum-db
-#      - ms-vagas
-#      - ms-curriculum
-#      - ms-usuario
-#    environment:
-#      - MS_CURRICULUM=http://ms-curriculum:8090
-#      - MS_USUARIO=http://ms-usuario:8091
-#      - MS_VAGAS=http://ms-vagas:8092
-#    networks:
-#      - curriculum-net
-#    ports:
-#      - "8080:8080"
-
 networks:
   curriculum-net:
     driver: bridge
-
