@@ -6,7 +6,7 @@ services:
     routes:
       - name: ms-usuario-route
         paths:
-          - /usuarios
+          - /ms-usuarios
         strip_path: true
 
   - name: ms-vagas
@@ -14,7 +14,7 @@ services:
     routes:
       - name: ms-vagas-route
         paths:
-          - /vagas
+          - /ms-vagas
         strip_path: true
 
   - name: ms-curriculum
@@ -22,5 +22,5 @@ services:
     routes:
       - name: ms-curriculum-route
         paths:
-          - /curriculum
+          - /ms-curriculum
         strip_path: true

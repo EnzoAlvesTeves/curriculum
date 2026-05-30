@@ -16,6 +16,7 @@ import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -25,16 +26,13 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
+@RequiredArgsConstructor
 @RequestMapping("/api/usuarios")
 @SecurityRequirement(name = "bearerAuth")
 @Tag(name = "Usuários", description = "Gerenciamento de usuários da plataforma")
 public class UsuarioController {
 
     private final UsuarioService service;
-
-    public UsuarioController(UsuarioService service) {
-        this.service = service;
-    }
 
     @Operation(
             summary = "Criar usuário",
