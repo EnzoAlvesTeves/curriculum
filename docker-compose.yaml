@@ -92,6 +92,23 @@ services:
       - KEYCLOAK_JWK_SET_URI=http://keycloak:8080/realms/curriculum/protocol/openid-connect/certs
     ports:
       - "8092:8092"
+  kong:
+    image: kong:3.7
+    networks:
+      - curriculum-net
+    environment:
+      KONG_DATABASE: "off"
+      KONG_DECLARATIVE_CONFIG: /kong/kong.yml
+      KONG_PROXY_ACCESS_LOG: /dev/stdout
+      KONG_ADMIN_ACCESS_LOG: /dev/stdout
+      KONG_PROXY_ERROR_LOG: /dev/stderr
+      KONG_ADMIN_ERROR_LOG: /dev/stderr
+    volumes:
+      - ./kong/kong.yml:/kong/kong.yml
+    ports:
+      - "8000:8000"
+      - "8001:8001"
+
 
 #  bff-curriculum:
 #    build: './bff-curriculum'
