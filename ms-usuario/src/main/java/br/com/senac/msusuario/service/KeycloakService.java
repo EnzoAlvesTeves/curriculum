@@ -58,6 +58,31 @@ public class KeycloakService {
     }
 
     // -------------------------------------------------------------------
+    // Refresh token — grant_type=refresh_token
+    // -------------------------------------------------------------------
+    public AuthTokenResponse refreshToken(String refreshToken) {
+        MultiValueMap<String, String> form = new LinkedMultiValueMap<>();
+        form.add("grant_type", "refresh_token");
+        form.add("client_id", props.getUserClientId());
+        form.add("refresh_token", refreshToken);
+
+        log.debug("Refresh token Keycloak - client={}", props.getUserClientId());
+
+        Map<?, ?> resp = restClient.post()
+                .uri(tokenUrl())
+                .contentType(MediaType.APPLICATION_FORM_URLENCODED)
+                .body(form)
+                .retrieve()
+                .onStatus(HttpStatusCode::isError, (req, res) -> {
+                    log.error("Erro ao fazer refresh token - status={}", res.getStatusCode());
+                    throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "Refresh token inválido ou expirado");
+                })
+                .body(Map.class);
+
+        return toTokenResponse(resp);
+    }
+
+    // -------------------------------------------------------------------
     // Criar usuário — Admin API com token client_credentials
     // -------------------------------------------------------------------
     public String criarUsuarioKeycloak(String nome, String sobrenome, String email, String senha) {

@@ -1,6 +1,7 @@
 package br.com.senac.msusuario.controller;
 
 import br.com.senac.msusuario.dto.AuthLoginRequest;
+import br.com.senac.msusuario.dto.AuthRefreshTokenRequest;
 import br.com.senac.msusuario.dto.AuthTokenResponse;
 import br.com.senac.msusuario.service.KeycloakService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -41,6 +42,22 @@ public class AuthController {
     @PostMapping("/login")
     public AuthTokenResponse login(@Valid @RequestBody AuthLoginRequest req) {
         return keycloakService.login(req.username(), req.senha());
+    }
+
+    @Operation(
+            summary = "Refresh token",
+            description = "Renova o access token usando um refresh token válido do Keycloak."
+    )
+    @ApiResponses({
+            @ApiResponse(responseCode = "200", description = "Token renovado com sucesso",
+                    content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE,
+                            schema = @Schema(implementation = AuthTokenResponse.class))),
+            @ApiResponse(responseCode = "400", description = "Dados inválidos ou ausentes", content = @Content),
+            @ApiResponse(responseCode = "401", description = "Refresh token inválido ou expirado", content = @Content)
+    })
+    @PostMapping("/refresh")
+    public AuthTokenResponse refresh(@Valid @RequestBody AuthRefreshTokenRequest req) {
+        return keycloakService.refreshToken(req.refreshToken());
     }
 }
 
