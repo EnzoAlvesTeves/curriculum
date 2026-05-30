@@ -8,30 +8,31 @@ import lombok.NoArgsConstructor;
 import java.time.LocalDate;
 
 @Entity
-@Data
-@AllArgsConstructor
-@NoArgsConstructor
 @Table(name = "experiencia")
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
 public class ExperienciaEntity {
 
-	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	@Column(name = "id")
-	private Long id;
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
 
-	@Column(name = "cargo", nullable = false, length = 100)
-	private String cargo;
+    @Column(name = "id_candidato", nullable = false)
+    private Long idCandidato;
 
-	@Column(name = "empresa", nullable = false, length = 100)
-	private String empresa;
+    @Column(nullable = false, length = 100)
+    private String cargo;
 
-	@Column(name = "data_inicio")
-	private LocalDate dataInicio;
+    @Column(nullable = false, length = 100)
+    private String empresa;
 
-	@Column(name = "data_fim")
-	private LocalDate dataFim;
+    @Column(columnDefinition = "TEXT")
+    private String resumo;
 
-	@ManyToOne
-	@JoinColumn(name = "candidato_id")
-	private CandidatoEntity candidato;
+    @Column(name = "data_inicio", nullable = false)
+    private LocalDate dataInicio;
+
+    @Column(name = "data_fim")
+    private LocalDate dataFim;
 }

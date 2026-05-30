@@ -1,43 +1,16 @@
 package br.com.senac.mscurriculum.dto;
 
-import br.com.senac.mscurriculum.repository.entity.HabilidadeEntity;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @Data
-@AllArgsConstructor
 @NoArgsConstructor
+@AllArgsConstructor
 public class HabilidadeDTO {
-
     private Long id;
+    private Long idCandidato;
     private String descricao;
     private String nivel;
-    private String especialidade;
-    private Long candidatoId;
-
-    public HabilidadeDTO(HabilidadeEntity habilidadeEntity) {
-        this.id = habilidadeEntity.getId();
-        this.descricao = habilidadeEntity.getDescricao();
-        this.nivel = habilidadeEntity.getNivel();
-        this.especialidade = habilidadeEntity.getEspecialidade();
-        this.candidatoId = habilidadeEntity.getCandidato().getId();
-    }
-
-    public HabilidadeDTO(HabilidadeEntity habilidadeEntity, Long candidatoId) {
-        this.id = habilidadeEntity.getId();
-        this.descricao = habilidadeEntity.getDescricao();
-        this.nivel = habilidadeEntity.getNivel();
-        this.especialidade = habilidadeEntity.getEspecialidade();
-        this.candidatoId = candidatoId;
-    }
-
-	public HabilidadeEntity toEntity() {
-		HabilidadeEntity entity = new HabilidadeEntity();
-		entity.setId(this.id);
-		entity.setDescricao(this.descricao);
-		entity.setNivel(this.nivel);
-		entity.setEspecialidade(this.especialidade);
-		return entity;
-	}
 }
+

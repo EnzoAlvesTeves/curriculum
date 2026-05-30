@@ -1,8 +1,7 @@
 CREATE TABLE habilidade (
-    id INT AUTO_INCREMENT PRIMARY KEY,
-    candidato_id INT,
-    descricao VARCHAR(255) NOT NULL,
-    nivel VARCHAR(50),
-    especialidade VARCHAR(100),
-    FOREIGN KEY (candidato_id) REFERENCES candidato (id) ON DELETE CASCADE
+    id              BIGINT AUTO_INCREMENT PRIMARY KEY,
+    descricao       VARCHAR(255) NOT NULL,
+    nivel           VARCHAR(50),
+    id_candidato    BIGINT NOT NULL,
+    FOREIGN KEY (id_candidato) REFERENCES candidato (id) ON DELETE CASCADE
 );

@@ -1,47 +1,46 @@
 package br.com.senac.mscurriculum.controller;
 
+import br.com.senac.mscurriculum.dto.AlterarCandidatoRequest;
 import br.com.senac.mscurriculum.dto.CandidatoDTO;
 import br.com.senac.mscurriculum.service.CandidatoService;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
+import jakarta.validation.Valid;
+import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
-
 @RestController
-@RequestMapping("/candidatos")
+@RequestMapping("/api/candidatos")
+@SecurityRequirement(name = "bearerAuth")
+@RequiredArgsConstructor
 public class CandidatoController {
+
     private final CandidatoService candidatoService;
 
-    public CandidatoController(CandidatoService candidatoService) {
-       this.candidatoService = candidatoService;
-    }
-
     @PostMapping
-    public CandidatoDTO create(@RequestBody CandidatoDTO candidatoDTO) {
-        return candidatoService.create(candidatoDTO);
+    @ResponseStatus(HttpStatus.CREATED)
+    public CandidatoDTO cadastrar(@Valid @RequestBody CandidatoDTO candidato,
+                                  @AuthenticationPrincipal Jwt jwt) {
+        return candidatoService.cadastrar(candidato, jwt);
     }
 
-    @GetMapping("/{id}")
-    public CandidatoDTO getById(@PathVariable Long id) {
-        return candidatoService.getById(id);
-    }
-
-    @GetMapping("/usuario/{usuarioId}")
-    public CandidatoDTO getByUsuarioId(@PathVariable Long usuarioId) {
-        return candidatoService.getByUsuarioId(usuarioId);
-    }
-
-    @GetMapping
-    public List<CandidatoDTO> getAll() {
-        return candidatoService.getAll();
+    @GetMapping("/{candidatoId}")
+    public CandidatoDTO buscar(@PathVariable Long candidatoId) {
+        return candidatoService.buscarPorId(candidatoId);
     }
 
     @PutMapping
-    public CandidatoDTO update(CandidatoDTO candidatoDTO) {
-        return candidatoService.update(candidatoDTO);
+    @ResponseStatus(HttpStatus.OK)
+    public CandidatoDTO atualizar(@Valid @RequestBody AlterarCandidatoRequest request,
+                                  @AuthenticationPrincipal Jwt jwt) {
+        return candidatoService.alterar(request, jwt);
     }
 
-    @DeleteMapping("/{id}")
-    public void delete(@PathVariable Long id) {
-        candidatoService.delete(id);
+    @DeleteMapping
+    @ResponseStatus(HttpStatus.OK)
+    public void deletar(@AuthenticationPrincipal Jwt jwt) {
+        candidatoService.deletar(jwt);
     }
 }

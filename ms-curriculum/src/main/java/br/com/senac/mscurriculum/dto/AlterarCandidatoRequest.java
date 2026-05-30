@@ -11,7 +11,7 @@ import java.util.List;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class CandidatoDTO {
+public class AlterarCandidatoRequest {
     private Long id;
     private Long idUsuario;
     private String nome;
@@ -20,8 +20,4 @@ public class CandidatoDTO {
     private String telefone;
     private LocalDate dataNascimento;
     private String resumoProfissional;
-    private EnderecoDTO endereco;
-    private List<EducacaoDTO> educacoes = new ArrayList<>();
-    private List<ExperienciaDTO> experiencias = new ArrayList<>();
-    private List<HabilidadeDTO> habilidades = new ArrayList<>();
 }
