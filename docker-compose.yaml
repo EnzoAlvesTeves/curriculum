@@ -27,27 +27,6 @@ services:
     volumes:
       - ./keycloak:/opt/keycloak/data/import
 
-  ms-curriculum:
-    build: './ms-curriculum'
-    container_name: ms-curriculum
-    depends_on:
-      - curriculum-db
-      - keycloak
-      - ms-usuario
-    networks:
-      - curriculum-net
-    environment:
-      - DB_HOST=curriculum-db
-      - DB_PORT=3306
-      - DB_NAME=ms_curriculum
-      - DB_USER=user_curriculum
-      - DB_PASSWORD=admin
-      - MS_USUARIO_URL=http://ms-usuario:8091
-      - KEYCLOAK_ISSUER_URI=http://keycloak:8080/realms/curriculum
-      - KEYCLOAK_JWK_SET_URI=http://keycloak:8080/realms/curriculum/protocol/openid-connect/certs
-    ports:
-      - "8090:8090"
-
   ms-usuario:
     build: './ms-usuario'
     container_name: ms-usuario
@@ -72,12 +51,34 @@ services:
     ports:
       - "8091:8091"
 
+  ms-curriculum:
+    build: './ms-curriculum'
+    container_name: ms-curriculum
+    depends_on:
+      - curriculum-db
+      - keycloak
+      - ms-usuario
+    networks:
+      - curriculum-net
+    environment:
+      - DB_HOST=curriculum-db
+      - DB_PORT=3306
+      - DB_NAME=ms_curriculum
+      - DB_USER=user_curriculum
+      - DB_PASSWORD=admin
+      - MS_USUARIO_URL=http://ms-usuario:8091
+      - KEYCLOAK_ISSUER_URI=http://keycloak:8080/realms/curriculum
+      - KEYCLOAK_JWK_SET_URI=http://keycloak:8080/realms/curriculum/protocol/openid-connect/certs
+    ports:
+      - "8090:8090"
+
   ms-vagas:
     build: './ms-vagas'
     container_name: ms-vagas
     depends_on:
       - curriculum-db
       - keycloak
+      - ms-usuario
     networks:
       - curriculum-net
     environment:
@@ -92,22 +93,22 @@ services:
     ports:
       - "8092:8092"
 
-  bff-curriculum:
-    build: './bff-curriculum'
-    container_name: bff-curriculum
-    depends_on:
-      - curriculum-db
-      - ms-vagas
-      - ms-curriculum
-      - ms-usuario
-    environment:
-      - MS_CURRICULUM=http://ms-curriculum:8090
-      - MS_USUARIO=http://ms-usuario:8091
-      - MS_VAGAS=http://ms-vagas:8092
-    networks:
-      - curriculum-net
-    ports:
-      - "8080:8080"
+#  bff-curriculum:
+#    build: './bff-curriculum'
+#    container_name: bff-curriculum
+#    depends_on:
+#      - curriculum-db
+#      - ms-vagas
+#      - ms-curriculum
+#      - ms-usuario
+#    environment:
+#      - MS_CURRICULUM=http://ms-curriculum:8090
+#      - MS_USUARIO=http://ms-usuario:8091
+#      - MS_VAGAS=http://ms-vagas:8092
+#    networks:
+#      - curriculum-net
+#    ports:
+#      - "8080:8080"
 
 networks:
   curriculum-net:
