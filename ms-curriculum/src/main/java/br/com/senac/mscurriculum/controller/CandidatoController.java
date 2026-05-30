@@ -26,20 +26,20 @@ public class CandidatoController {
         return candidatoService.cadastrar(candidato, jwt);
     }
 
+    @PutMapping
+    @ResponseStatus(HttpStatus.OK)
+    public CandidatoDTO alterar(@Valid @RequestBody AlterarCandidatoRequest request,
+                                  @AuthenticationPrincipal Jwt jwt) {
+        return candidatoService.alterar(request, jwt);
+    }
+
     @GetMapping("/{candidatoId}")
     public CandidatoDTO buscar(@PathVariable Long candidatoId) {
         return candidatoService.buscarPorId(candidatoId);
     }
 
-    @PutMapping
-    @ResponseStatus(HttpStatus.OK)
-    public CandidatoDTO atualizar(@Valid @RequestBody AlterarCandidatoRequest request,
-                                  @AuthenticationPrincipal Jwt jwt) {
-        return candidatoService.alterar(request, jwt);
-    }
-
     @DeleteMapping
-    @ResponseStatus(HttpStatus.OK)
+    @ResponseStatus(HttpStatus.NO_CONTENT)
     public void deletar(@AuthenticationPrincipal Jwt jwt) {
         candidatoService.deletar(jwt);
     }
