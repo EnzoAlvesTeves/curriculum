@@ -1,58 +1,49 @@
 package br.com.senac.mscurriculum.repository.entity;
 
-import br.com.senac.mscurriculum.enums.Sexo;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.time.LocalDate;
-import java.util.List;
+import java.time.LocalDateTime;
 
 @Entity
-@Data
-@AllArgsConstructor
-@NoArgsConstructor
 @Table(name = "candidato")
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
 public class CandidatoEntity {
 
-	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private Long id;
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
 
-	@Column(name = "nome", nullable = false)
-	private String nome;
+    @Column(nullable = false, length = 255)
+    private String nome;
 
-	@Column(name = "email", nullable = false)
-	private String email;
+    @Column(nullable = false, length = 255)
+    private String email;
 
-	@Column(name = "telefone", length = 15)
-	private String telefone;
+    @Column(length = 100)
+    private String sexo;
 
-	@Column(name = "data_nascimento")
-	private LocalDate dataNascimento;
+    @Column(length = 15)
+    private String telefone;
 
-	@Column(name = "resumo_profissional", length = 1000)
-	private String resumoProfissional;
+    @Column(name = "data_nascimento", nullable = false)
+    private LocalDate dataNascimento;
 
-	@ManyToOne
-	@JoinColumn(name = "endereco_id")
-	private EnderecoEntity endereco;
+    @Column(name = "resumo_profissional", columnDefinition = "TEXT")
+    private String resumoProfissional;
 
-	@Column(name = "usuario_id", nullable = false)
-	private Long usuarioId;
+    @Column(name = "id_usuario", nullable = false)
+    private Long idUsuario;
 
-	@Column(name = "sexo", nullable = false)
-	@Enumerated(EnumType.STRING)
-	private Sexo sexo;
+    @Column(name = "created_at", insertable = false, updatable = false)
+    private LocalDateTime createdAt;
 
-    @OneToMany(mappedBy = "candidato")
-    private List<ExperienciaEntity> experiencias;
-
-    @OneToMany(mappedBy = "candidato")
-    private List<EducacaoEntity> educacoes;
-
-    @OneToMany(mappedBy = "candidato")
-    private List<HabilidadeEntity> habilidades;
+    @Column(name = "updated_at")
+    private LocalDateTime updatedAt;
 }
 

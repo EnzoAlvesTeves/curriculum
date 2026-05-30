@@ -1,69 +1,62 @@
 package br.com.senac.mscurriculum.service;
 
 import br.com.senac.mscurriculum.dto.EnderecoDTO;
+import br.com.senac.mscurriculum.mapper.EnderecoMapper;
 import br.com.senac.mscurriculum.repository.EnderecoRepository;
-import br.com.senac.mscurriculum.repository.entity.EnderecoEntity;
+import lombok.RequiredArgsConstructor;
+import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 @Service
+@RequiredArgsConstructor
 public class EnderecoService {
+
     private final EnderecoRepository enderecoRepository;
+    private final CandidatoAuthorizationService candidatoAuthorizationService;
 
-    public EnderecoService(EnderecoRepository enderecoRepository) {
-        this.enderecoRepository = enderecoRepository;
+    public EnderecoDTO cadastrar(Long candidatoId, EnderecoDTO enderecoDTO, Jwt jwt) {
+        candidatoAuthorizationService.validarAcessoDoUsuario(candidatoId, jwt);
+        return cadastrar(candidatoId, enderecoDTO);
     }
 
-    @Transactional
-    public EnderecoDTO create(EnderecoDTO enderecoDTO) {
-        try {
-            EnderecoEntity enderecoEntity = enderecoDTO.toEntity();
+    public EnderecoDTO cadastrar(Long candidatoId, EnderecoDTO dto) {
+        var entity = EnderecoMapper.toEntity(dto, candidatoId);
+        var endereco = enderecoRepository.save(entity);
 
-            EnderecoEntity novoEndereco = enderecoRepository.save(enderecoEntity);
-
-            return new EnderecoDTO(novoEndereco);
-        } catch (Exception e) {
-            throw new RuntimeException("Erro ao cadastrar endereço", e);
-        }
+        return EnderecoMapper.toDTO(endereco);
     }
 
-    @Transactional
-    public EnderecoDTO update(EnderecoDTO enderecoDTO) {
-        EnderecoEntity enderecoEntity = enderecoRepository.findById(enderecoDTO.getId())
-                .orElseThrow(() -> new RuntimeException("Endereço não encontrado!"));
-
-        try {
-            enderecoEntity.setCep(enderecoDTO.getCep());
-            enderecoEntity.setNumero(enderecoDTO.getNumero());
-            enderecoEntity.setComplemento(enderecoDTO.getComplemento());
-            enderecoEntity.setBairro(enderecoDTO.getBairro());
-            enderecoEntity.setCidade(enderecoDTO.getCidade());
-            enderecoEntity.setEstado(enderecoDTO.getEstado());
-
-            EnderecoEntity enderecoAlterado = enderecoRepository.save(enderecoEntity);
-
-            return new EnderecoDTO(enderecoAlterado);
-        } catch (Exception e) {
-            throw new RuntimeException("Erro ao editar endereço", e);
-        }
+    public EnderecoDTO buscarPorCandidato(Long candidatoId) {
+        var endereco = enderecoRepository.findByIdCandidato(candidatoId);
+        return endereco.map(EnderecoMapper::toDTO)
+                        .orElse(null);
     }
 
-    public EnderecoDTO getById(Long enderecoId) {
-        EnderecoEntity enderecoEntity = enderecoRepository.findById(enderecoId)
-                .orElseThrow(() -> new RuntimeException("Endereço não encontrado!"));
+    public EnderecoDTO alterar(Long candidatoId, EnderecoDTO enderecoDTO, Jwt jwt) {
+        candidatoAuthorizationService.validarAcessoDoUsuario(candidatoId, jwt);
+        var endereco = enderecoRepository.findByIdCandidato(candidatoId)
+                .orElseThrow(() -> new RuntimeException("Endereço não encontrado para o candidato ID: " + candidatoId));
 
-        return new EnderecoDTO(enderecoEntity);
+        endereco.setRua(enderecoDTO.getRua());
+        endereco.setNumero(enderecoDTO.getNumero());
+        endereco.setComplemento(enderecoDTO.getComplemento());
+        endereco.setCidade(enderecoDTO.getCidade());
+        endereco.setEstado(enderecoDTO.getEstado());
+        endereco.setCep(enderecoDTO.getCep());
+        endereco.setBairro(enderecoDTO.getBairro());
+        endereco.setLatitude(enderecoDTO.getLatitude());
+        endereco.setLongitude(enderecoDTO.getLongitude());
+
+        var enderecoAtualizado = enderecoRepository.save(endereco);
+        return EnderecoMapper.toDTO(enderecoAtualizado);
     }
 
-    @Transactional
-    public void delete(Long enderecoId) {
-        EnderecoEntity enderecoEntity = enderecoRepository.findById(enderecoId)
-                .orElseThrow(() -> new RuntimeException("Endereço não encontrado!"));
+    public void deletar(Long candidatoId, Jwt jwt) {
+        candidatoAuthorizationService.validarAcessoDoUsuario(candidatoId, jwt);
+        var endereco = enderecoRepository.findByIdCandidato(candidatoId)
+                .orElseThrow(() -> new RuntimeException("Endereço não encontrado para o candidato ID: " + candidatoId));
 
-        try {
-            enderecoRepository.delete(enderecoEntity);
-        } catch (Exception e) {
-            throw new RuntimeException("Erro ao deletar endereço", e);
-        }
+        enderecoRepository.delete(endereco);
     }
 }
+

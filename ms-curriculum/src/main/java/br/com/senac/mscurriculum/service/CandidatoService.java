@@ -1,128 +1,114 @@
 package br.com.senac.mscurriculum.service;
 
+import br.com.senac.mscurriculum.dto.AlterarCandidatoRequest;
 import br.com.senac.mscurriculum.dto.CandidatoDTO;
-import br.com.senac.mscurriculum.repository.*;
-import br.com.senac.mscurriculum.repository.entity.*;
+import br.com.senac.mscurriculum.dto.UsuarioMeResponse;
+import br.com.senac.mscurriculum.repository.CandidatoRepository;
+import br.com.senac.mscurriculum.repository.entity.CandidatoEntity;
+import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
+import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
-import java.util.List;
-import java.util.stream.Collectors;
+import org.springframework.web.server.ResponseStatusException;
 
 @Service
+@RequiredArgsConstructor
 public class CandidatoService {
-	private final CandidatoRepository candidatoRepository;
-	private final EnderecoRepository enderecoRepository;
-	private final ExperienciaRepository experienciaRepository;
-	private final HabilidadeRepository habilidadeRepository;
-	private final EducacaoRepository educacaoRepository;
 
-	public CandidatoService(
-            CandidatoRepository candidatoRepository,
-            EnderecoRepository enderecoRepository,
-            ExperienciaRepository experienciaRepository,
-            HabilidadeRepository habilidadeRepository,
-            EducacaoRepository educacaoRepository
-    ) {
-		this.candidatoRepository = candidatoRepository;
-		this.enderecoRepository = enderecoRepository;
-		this.experienciaRepository = experienciaRepository;
-		this.habilidadeRepository = habilidadeRepository;
-		this.educacaoRepository = educacaoRepository;
-	}
+    private final CandidatoRepository candidatoRepository;
+    private final CandidatoAuthorizationService authorizationService;
+    private final EnderecoService enderecoService;
+    private final HabilidadeService habilidadeService;
+    private final ExperienciaService experienciaService;
+    private final EducacaoService educacaoService;
 
     @Transactional
-	public CandidatoDTO create(CandidatoDTO candidatoDTO) {
-        try {
-            EnderecoEntity enderecoEntity = candidatoDTO.getEndereco().toEntity();
-            EnderecoEntity novoEndereco = enderecoRepository.save(enderecoEntity);
+    public CandidatoDTO cadastrar(CandidatoDTO request, Jwt jwt) {
+        UsuarioMeResponse usuario = authorizationService.validarTipoCandidato(jwt);
 
-            CandidatoEntity candidatoEntity = candidatoDTO.toEntity();
-            candidatoEntity.setEndereco(novoEndereco);
-
-            CandidatoEntity novoCandidato = candidatoRepository.save(candidatoEntity);
-
-            candidatoDTO.getEducacoes().forEach(educacao -> {
-                EducacaoEntity educacaoEntity = educacao.toEntity();
-                educacaoEntity.setCandidato(novoCandidato);
-
-                educacaoRepository.save(educacaoEntity);
-            });
-
-            candidatoDTO.getExperiencias().forEach(experiencia -> {
-                ExperienciaEntity experienciaEntity = experiencia.toEntity();
-                experienciaEntity.setCandidato(novoCandidato);
-
-                experienciaRepository.save(experienciaEntity);
-            });
-
-            candidatoDTO.getHabilidades().forEach(habilidade -> {
-                HabilidadeEntity habilidadeEntity = habilidade.toEntity();
-                habilidadeEntity.setCandidato(novoCandidato);
-
-                habilidadeRepository.save(habilidadeEntity);
-            });
-
-            return new CandidatoDTO(novoCandidato);
-        } catch (Exception e) {
-            throw new RuntimeException("Erro ao criar candidato", e);
+        if (candidatoRepository.findByIdUsuario(usuario.id()).isPresent()) {
+            throw new ResponseStatusException(HttpStatus.CONFLICT, "Candidato já cadastrado para este usuário");
         }
-	}
 
-	public CandidatoDTO getById(Long id) {
-		CandidatoEntity candidateEntity = candidatoRepository.findById(id)
-						.orElseThrow(() -> new RuntimeException("Candidato não encontrado!"));
+        CandidatoEntity candidato = new CandidatoEntity();
+        candidato.setIdUsuario(usuario.id());
+        candidato.setNome(request.getNome());
+        candidato.setEmail(request.getEmail());
+        candidato.setSexo(request.getSexo());
+        candidato.setTelefone(request.getTelefone());
+        candidato.setDataNascimento(request.getDataNascimento());
+        candidato.setResumoProfissional(request.getResumoProfissional());
 
-		return new CandidatoDTO(candidateEntity);
-	}
+        var candidatoCadastrado = candidatoRepository.save(candidato);
 
-	public List<CandidatoDTO> getAll() {
-		List<CandidatoEntity> candidates = candidatoRepository.findAll();
+        enderecoService.cadastrar(candidatoCadastrado.getId(), request.getEndereco());
 
-		return candidates.stream()
-						.map(CandidatoDTO::new)
-						.collect(Collectors.toList());
-	}
+        request.getHabilidades().forEach(habilidadeDTO -> {
+            habilidadeService.cadastrar(candidatoCadastrado.getId(), habilidadeDTO);
+        });
+
+        request.getExperiencias().forEach(experienciaDTO -> {
+            experienciaService.cadastrar(candidatoCadastrado.getId(), experienciaDTO);
+        });
+
+        request.getEducacoes().forEach(educacaoDTO -> {
+            educacaoService.cadastrar(candidatoCadastrado.getId(), educacaoDTO);
+        });
+
+        return carregarCandidatoCompleto(candidatoCadastrado.getId());
+    }
 
     @Transactional
-	public CandidatoDTO update(CandidatoDTO candidatoDTO) {
-        CandidatoEntity candidatoEntity = candidatoRepository.findById(candidatoDTO.getId())
-                .orElseThrow(() -> new RuntimeException("Candidato não encontrado!"));
-        try {
-            candidatoEntity.setId(candidatoDTO.getId());
-            candidatoEntity.setNome(candidatoDTO.getNome());
-            candidatoEntity.setEmail(candidatoDTO.getEmail());
-            candidatoEntity.setTelefone(candidatoDTO.getTelefone());
-            candidatoEntity.setSexo(candidatoDTO.getSexo());
-            candidatoEntity.setDataNascimento(candidatoDTO.getDataNascimento());
-            candidatoEntity.setResumoProfissional(candidatoDTO.getResumoProfissional());
-            candidatoEntity.setUsuarioId(candidatoDTO.getUsuarioId());
+    public CandidatoDTO alterar(AlterarCandidatoRequest request, Jwt jwt) {
+        var candidato = authorizationService.validarAcessoDoUsuario(request.getId(), jwt);
 
-            CandidatoEntity candidateAlterado = candidatoRepository.saveAndFlush(candidatoEntity);
+        candidato.setNome(request.getNome());
+        candidato.setEmail(request.getEmail());
+        candidato.setSexo(request.getSexo());
+        candidato.setTelefone(request.getTelefone());
+        candidato.setDataNascimento(request.getDataNascimento());
+        candidato.setResumoProfissional(request.getResumoProfissional());
 
-            return new CandidatoDTO(candidateAlterado);
-        } catch (Exception e) {
-            throw new RuntimeException("Erro ao editar candidato", e);
-        }
-	}
+        var candidatoAlterado = candidatoRepository.save(candidato);
+
+        return carregarCandidatoCompleto(candidatoAlterado.getId());
+    }
+
+    @Transactional(readOnly = true)
+    public CandidatoDTO buscarPorId(Long candidatoId) {
+        return carregarCandidatoCompleto(candidatoId);
+    }
+
+    private CandidatoDTO carregarCandidatoCompleto(Long candidatoId) {
+        CandidatoEntity candidato = candidatoRepository.findById(candidatoId)
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Candidato não encontrado"));
+
+        CandidatoDTO dto = new CandidatoDTO();
+        dto.setId(candidato.getId());
+        dto.setIdUsuario(candidato.getIdUsuario());
+        dto.setNome(candidato.getNome());
+        dto.setEmail(candidato.getEmail());
+        dto.setSexo(candidato.getSexo());
+        dto.setTelefone(candidato.getTelefone());
+        dto.setDataNascimento(candidato.getDataNascimento());
+        dto.setResumoProfissional(candidato.getResumoProfissional());
+        dto.setEndereco(enderecoService.buscarPorCandidato(candidato.getId()));
+        dto.setHabilidades(habilidadeService.buscarPorCandidato(candidato.getId()));
+        dto.setExperiencias(experienciaService.buscarPorCandidato(candidato.getId()));
+        dto.setEducacoes(educacaoService.buscarPorCandidato(candidato.getId()));
+
+        return dto;
+    }
 
     @Transactional
-	public void delete(Long id) {
-		CandidatoEntity candidateEntity = candidatoRepository.findById(id)
-						.orElseThrow(() -> new RuntimeException("Candidato não encontrado!"));
+    public void deletar(Jwt jwt) {
+        var usuario = authorizationService.usuarioAtual(jwt);
+        var candidato = candidatoRepository.findByIdUsuario(usuario.id())
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Candidato não encontrado"));
 
-        try {
-            candidatoRepository.delete(candidateEntity);
-        } catch (Exception e) {
-            throw new RuntimeException("Erro ao deletar candidato", e);
-        }
+        authorizationService.validarAcessoDoUsuario(candidato.getId(), jwt);
 
-	}
-
-    public CandidatoDTO getByUsuarioId(Long usuarioId) {
-        CandidatoEntity candidateEntity = candidatoRepository.findByUsuarioId(usuarioId)
-                .orElseThrow(() -> new RuntimeException("Candidato não encontrado!"));
-
-        return new CandidatoDTO(candidateEntity);
+        candidatoRepository.deleteById(candidato.getId());
     }
 }

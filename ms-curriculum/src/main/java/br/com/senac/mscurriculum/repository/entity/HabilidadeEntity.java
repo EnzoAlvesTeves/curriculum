@@ -6,27 +6,22 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @Entity
-@Data
-@AllArgsConstructor
-@NoArgsConstructor
 @Table(name = "habilidade")
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
 public class HabilidadeEntity {
 
-	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	@Column(name = "id")
-	private Long id;
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
 
-	@Column(name = "descricao", nullable = false, length = 100)
-	private String descricao;
+    @Column(name = "id_candidato", nullable = false)
+    private Long idCandidato;
 
-	@Column(name = "nivel", length = 50)
-	private String nivel;
+    @Column(nullable = false, length = 255)
+    private String descricao;
 
-	@Column(name = "especialidade", length = 100)
-	private String especialidade;
-
-	@ManyToOne
-	@JoinColumn(name = "candidato_id")
-	private CandidatoEntity candidato;
+    @Column(length = 50)
+    private String nivel;
 }

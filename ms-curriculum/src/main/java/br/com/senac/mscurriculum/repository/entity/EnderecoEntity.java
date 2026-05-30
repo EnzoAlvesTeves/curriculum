@@ -1,38 +1,58 @@
 package br.com.senac.mscurriculum.repository.entity;
 
 import jakarta.persistence.*;
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+
+import java.math.BigDecimal;
+import java.time.LocalDateTime;
 
 @Entity
-@Data
-@AllArgsConstructor
-@NoArgsConstructor
 @Table(name = "endereco")
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
 public class EnderecoEntity {
 
-	@Id
-	@Column(name = "id")
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private Long id;
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
 
-	@Column(name = "rua", nullable = false, length = 500)
-	private String rua;
+    @Column(name = "id_candidato", nullable = false)
+    private Long idCandidato;
 
-	@Column(name = "numero")
-	private String numero;
+    @Column(nullable = false, length = 500)
+    private String rua;
 
-	@Column(name = "complemento")
-	private String complemento;
+    @Column(length = 255)
+    private String numero;
 
-	@Column(name = "cidade", nullable = false, length = 100)
-	private String cidade;
+    @Column(length = 255)
+    private String complemento;
 
-	@Column(name = "estado",nullable = false, length = 2)
-	private String estado;
+    @Column(nullable = false, length = 100)
+    private String cidade;
 
-	@Column(name = "cep", nullable = false, length = 10)
-	private String cep;
+    @Column(nullable = false, length = 100)
+    private String estado;
 
-	@Column(name = "bairro", nullable = false)
-	private String bairro;
+    @Column(nullable = false, length = 10)
+    private String cep;
+
+    @Column(length = 255)
+    private String bairro;
+
+    @Column(precision = 9, scale = 6)
+    private BigDecimal latitude;
+
+    @Column(precision = 9, scale = 6)
+    private BigDecimal longitude;
+
+    @Column(name = "created_at", insertable = false, updatable = false)
+    private LocalDateTime createdAt;
+
+    @Column(name = "updated_at")
+    private LocalDateTime updatedAt;
 }
+
