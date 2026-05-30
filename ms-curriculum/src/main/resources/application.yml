@@ -31,5 +31,5 @@ feign:
 
 logging:
   level:
-    br.com.senac.msvagas: DEBUG
-    br.com.senac.msvagas.client.MsUsuarioClient: DEBUG
+    br.com.senac.mscurriculum: DEBUG
+    br.com.senac.mscurriculum.client.MsUsuarioClient: DEBUG

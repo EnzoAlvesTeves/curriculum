@@ -28,6 +28,8 @@ services:
     container_name: ms-curriculum
     depends_on:
       - curriculum-db
+      - keycloak
+      - ms-usuario
     networks:
       - curriculum-net
     environment:
@@ -36,6 +38,9 @@ services:
       - DB_NAME=ms_curriculum
       - DB_USER=user_curriculum
       - DB_PASSWORD=admin
+      - MS_USUARIO_URL=http://ms-usuario:8091
+      - KEYCLOAK_ISSUER_URI=http://keycloak:8080/realms/curriculum
+      - KEYCLOAK_JWK_SET_URI=http://keycloak:8080/realms/curriculum/protocol/openid-connect/certs
     ports:
       - "8090:8090"
 
