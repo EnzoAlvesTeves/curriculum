@@ -1,6 +1,8 @@
 package br.com.senac.msusuario.service;
 
 import br.com.senac.msusuario.dto.CreateUsuarioRequest;
+import br.com.senac.msusuario.dto.AlterarSenhaPorUsernameRequest;
+import br.com.senac.msusuario.dto.AlterarSenhaRequest;
 import br.com.senac.msusuario.dto.UpdateUsuarioRequest;
 import br.com.senac.msusuario.dto.UsuarioResponse;
 import br.com.senac.msusuario.repository.UsuarioRepository;
@@ -79,6 +81,32 @@ public class UsuarioService {
         entity.setTipo(req.tipo());
         entity.setUpdatedAt(LocalDateTime.now());
         return toResponse(repository.save(entity));
+    }
+
+    // CHANGE PASSWORD (AUTHENTICATED USER)
+    @Transactional(readOnly = true)
+    public void alterarMinhaSenha(Jwt jwt, AlterarSenhaRequest req) {
+        String keycloakUserId = jwt.getSubject();
+
+        UsuarioEntity entity = repository.findByKeycloakUserId(keycloakUserId)
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Usuário não encontrado"));
+
+        try {
+            keycloakService.login(entity.getEmail(), req.senhaAtual());
+        } catch (ResponseStatusException ex) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Senha atual inválida");
+        }
+
+        keycloakService.alterarSenhaKeycloak(entity.getKeycloakUserId(), req.novaSenha());
+    }
+
+    // CHANGE PASSWORD BY USERNAME
+    @Transactional(readOnly = true)
+    public void alterarSenhaPorUsername(AlterarSenhaPorUsernameRequest req) {
+        UsuarioEntity entity = repository.findByEmail(req.username())
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Usuário não encontrado"));
+
+        keycloakService.alterarSenhaKeycloak(entity.getKeycloakUserId(), req.novaSenha());
     }
 
     // DELETE
