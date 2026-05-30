@@ -26,7 +26,6 @@ public class EnderecoController {
         return enderecoService.cadastrar(candidatoId, enderecoDTO, jwt);
     }
 
-
     @PutMapping
     @ResponseStatus(HttpStatus.OK)
     public EnderecoDTO alterar(@PathVariable Long candidatoId,
@@ -36,7 +35,7 @@ public class EnderecoController {
     }
 
     @DeleteMapping
-    @ResponseStatus(HttpStatus.OK)
+    @ResponseStatus(HttpStatus.NO_CONTENT)
     public void deletar(@PathVariable Long candidatoId,
                         @AuthenticationPrincipal Jwt jwt) {
         enderecoService.deletar(candidatoId, jwt);

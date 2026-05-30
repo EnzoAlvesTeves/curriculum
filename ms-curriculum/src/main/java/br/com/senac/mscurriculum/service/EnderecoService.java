@@ -6,6 +6,7 @@ import br.com.senac.mscurriculum.repository.EnderecoRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @RequiredArgsConstructor
@@ -14,11 +15,13 @@ public class EnderecoService {
     private final EnderecoRepository enderecoRepository;
     private final CandidatoAuthorizationService candidatoAuthorizationService;
 
+    @Transactional
     public EnderecoDTO cadastrar(Long candidatoId, EnderecoDTO enderecoDTO, Jwt jwt) {
         candidatoAuthorizationService.validarAcessoDoUsuario(candidatoId, jwt);
         return cadastrar(candidatoId, enderecoDTO);
     }
 
+    @Transactional
     public EnderecoDTO cadastrar(Long candidatoId, EnderecoDTO dto) {
         var entity = EnderecoMapper.toEntity(dto, candidatoId);
         var endereco = enderecoRepository.save(entity);
