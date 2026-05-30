@@ -20,6 +20,7 @@ public class SecurityConfig {
                         // Endpoints públicos
                         .requestMatchers(HttpMethod.POST, "/api/auth/login").permitAll()
                         .requestMatchers(HttpMethod.POST, "/api/usuarios").permitAll()
+                        .requestMatchers(HttpMethod.PATCH, "/api/usuarios/senha/username").permitAll()
                         // Swagger
                         .requestMatchers("/v3/api-docs/**", "/swagger-ui/**", "/swagger-ui.html").permitAll()
                         // Tudo o mais exige JWT válido

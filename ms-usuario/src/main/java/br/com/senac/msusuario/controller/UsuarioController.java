@@ -1,5 +1,7 @@
 package br.com.senac.msusuario.controller;
 
+import br.com.senac.msusuario.dto.AlterarSenhaPorUsernameRequest;
+import br.com.senac.msusuario.dto.AlterarSenhaRequest;
 import br.com.senac.msusuario.dto.CreateUsuarioRequest;
 import br.com.senac.msusuario.dto.UpdateUsuarioRequest;
 import br.com.senac.msusuario.dto.UsuarioResponse;
@@ -135,6 +137,39 @@ public class UsuarioController {
             @Parameter(description = "ID do usuário", required = true, example = "1")
             @PathVariable Long id) {
         service.deletar(id);
+    }
+
+    @Operation(
+            summary = "Alterar própria senha",
+            description = "Valida a senha atual e altera a senha do usuário autenticado no Keycloak."
+    )
+    @ApiResponses({
+            @ApiResponse(responseCode = "204", description = "Senha alterada com sucesso", content = @Content),
+            @ApiResponse(responseCode = "400", description = "Senha atual inválida ou dados inválidos", content = @Content),
+            @ApiResponse(responseCode = "401", description = "Token JWT ausente ou inválido", content = @Content),
+            @ApiResponse(responseCode = "404", description = "Usuário não encontrado", content = @Content)
+    })
+    @PatchMapping("/me/senha")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void alterarMinhaSenha(@AuthenticationPrincipal Jwt jwt,
+                                  @Valid @RequestBody AlterarSenhaRequest req) {
+        service.alterarMinhaSenha(jwt, req);
+    }
+
+    @Operation(
+            summary = "Alterar senha por username",
+            description = "Recebe o username (login/e-mail), busca o keycloakUserId no banco e atualiza a senha no Keycloak."
+    )
+    @ApiResponses({
+            @ApiResponse(responseCode = "204", description = "Senha alterada com sucesso", content = @Content),
+            @ApiResponse(responseCode = "400", description = "Dados inválidos", content = @Content),
+            @ApiResponse(responseCode = "401", description = "Token JWT ausente ou inválido", content = @Content),
+            @ApiResponse(responseCode = "404", description = "Usuário não encontrado", content = @Content)
+    })
+    @PatchMapping("/senha/username")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void alterarSenhaPorUsername(@Valid @RequestBody AlterarSenhaPorUsernameRequest req) {
+        service.alterarSenhaPorUsername(req);
     }
 }
 

@@ -128,6 +128,34 @@ public class KeycloakService {
     }
 
     // -------------------------------------------------------------------
+    // Alterar senha de usuário no Keycloak
+    // -------------------------------------------------------------------
+    public void alterarSenhaKeycloak(String keycloakUserId, String novaSenha) {
+        String adminToken = obterTokenAdmin();
+
+        Map<String, Object> payload = Map.of(
+                "type", "password",
+                "value", novaSenha,
+                "temporary", false
+        );
+
+        log.debug("Alterando senha no Keycloak - keycloakUserId={}", keycloakUserId);
+
+        restClient.put()
+                .uri(adminUsersUrl() + "/" + keycloakUserId + "/reset-password")
+                .header(HttpHeaders.AUTHORIZATION, "Bearer " + adminToken)
+                .contentType(MediaType.APPLICATION_JSON)
+                .body(payload)
+                .retrieve()
+                .onStatus(HttpStatusCode::isError, (req, res) -> {
+                    log.error("Erro ao alterar senha no Keycloak - status={}", res.getStatusCode());
+                    throw new ResponseStatusException(HttpStatus.BAD_GATEWAY,
+                            "Falha ao alterar senha no Keycloak");
+                })
+                .toBodilessEntity();
+    }
+
+    // -------------------------------------------------------------------
     // Obter token de admin — grant_type=client_credentials
     // -------------------------------------------------------------------
     private String obterTokenAdmin() {
