@@ -8,6 +8,7 @@ import br.com.senac.msusuario.dto.UsuarioResponse;
 import br.com.senac.msusuario.repository.UsuarioRepository;
 import br.com.senac.msusuario.repository.entity.UsuarioEntity;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.stereotype.Service;
@@ -17,6 +18,7 @@ import org.springframework.web.server.ResponseStatusException;
 import java.time.LocalDateTime;
 import java.util.List;
 
+@Slf4j
 @Service
 @RequiredArgsConstructor
 public class UsuarioService {
