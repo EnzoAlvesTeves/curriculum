@@ -14,7 +14,9 @@ services:
 
   keycloak:
     image: quay.io/keycloak/keycloak:26.0
-    command: start-dev
+    command:
+      - start-dev
+      - --import-realm
     networks:
       - curriculum-net
     environment:
@@ -22,6 +24,8 @@ services:
       KEYCLOAK_ADMIN_PASSWORD: admin
     ports:
       - "8093:8080"
+    volumes:
+      - ./keycloak:/opt/keycloak/data/import
 
   ms-curriculum:
     build: './ms-curriculum'
