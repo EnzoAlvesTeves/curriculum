@@ -1,0 +1,26 @@
+_format_version: "3.0"
+
+services:
+  - name: ms-usuario
+    url: http://ms-usuario:8091
+    routes:
+      - name: ms-usuario-route
+        paths:
+          - /usuarios
+        strip_path: true
+
+  - name: ms-vagas
+    url: http://ms-vagas:8092
+    routes:
+      - name: ms-vagas-route
+        paths:
+          - /vagas
+        strip_path: true
+
+  - name: ms-curriculum
+    url: http://ms-curriculum:8090
+    routes:
+      - name: ms-curriculum-route
+        paths:
+          - /curriculum
+        strip_path: true
