@@ -67,6 +67,25 @@ public class UsuarioController {
     }
 
     @Operation(
+            summary = "Buscar usuários por IDs",
+            description = "Retorna os dados completos dos usuários informados na lista de IDs enviada por query string."
+    )
+    @ApiResponses({
+            @ApiResponse(responseCode = "200", description = "Usuários encontrados com sucesso",
+                    content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE,
+                            array = @ArraySchema(schema = @Schema(implementation = UsuarioResponse.class)))),
+            @ApiResponse(responseCode = "400", description = "Lista de IDs inválida", content = @Content),
+            @ApiResponse(responseCode = "401", description = "Token JWT ausente ou inválido", content = @Content),
+            @ApiResponse(responseCode = "404", description = "Um ou mais usuários não foram encontrados", content = @Content)
+    })
+    @GetMapping(params = "ids")
+    public List<UsuarioResponse> buscarPorIds(
+            @Parameter(description = "Lista de IDs de usuários separados por vírgula", required = true, example = "1,2,3")
+            @RequestParam List<Long> ids) {
+        return service.buscarPorIds(ids);
+    }
+
+    @Operation(
             summary = "Dados do usuário autenticado",
             description = "Retorna os dados do usuário correspondente ao token JWT enviado no cabeçalho."
     )

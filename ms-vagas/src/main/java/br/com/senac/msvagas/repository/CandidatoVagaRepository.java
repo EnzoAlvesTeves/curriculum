@@ -12,5 +12,7 @@ public interface CandidatoVagaRepository extends JpaRepository<CandidatoVagaEnti
     Optional<CandidatoVagaEntity> findByIdUsuarioAndIdVaga(Long idUsuario, Long idVaga);
 
     List<CandidatoVagaEntity> findByIdUsuario(Long idUsuario);
+
+    List<CandidatoVagaEntity> findByIdVaga(Long idVaga);
 }
 

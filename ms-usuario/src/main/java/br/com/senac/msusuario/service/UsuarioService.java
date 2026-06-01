@@ -17,6 +17,10 @@ import org.springframework.web.server.ResponseStatusException;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Map;
+import java.util.Objects;
+import java.util.function.Function;
+import java.util.stream.Collectors;
 
 @Slf4j
 @Service
@@ -55,6 +59,38 @@ public class UsuarioService {
     @Transactional(readOnly = true)
     public List<UsuarioResponse> listar() {
         return repository.findAll().stream().map(this::toResponse).toList();
+    }
+
+    @Transactional(readOnly = true)
+    public List<UsuarioResponse> buscarPorIds(List<Long> ids) {
+        List<Long> idsNormalizados = ids == null
+                ? List.of()
+                : ids.stream()
+                .filter(Objects::nonNull)
+                .distinct()
+                .toList();
+
+        if (idsNormalizados.isEmpty()) {
+            return List.of();
+        }
+
+        Map<Long, UsuarioEntity> usuariosPorId = repository.findAllById(idsNormalizados)
+                .stream()
+                .collect(Collectors.toMap(UsuarioEntity::getId, Function.identity()));
+
+        List<Long> idsNaoEncontrados = idsNormalizados.stream()
+                .filter(id -> !usuariosPorId.containsKey(id))
+                .toList();
+
+        if (!idsNaoEncontrados.isEmpty()) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND,
+                    "Usuarios nao encontrados para os ids: " + idsNaoEncontrados);
+        }
+
+        return idsNormalizados.stream()
+                .map(usuariosPorId::get)
+                .map(this::toResponse)
+                .toList();
     }
 
     // READ BY ID

@@ -13,6 +13,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.server.ResponseStatusException;
 
+import java.util.Objects;
+
 @Service
 @Slf4j
 @RequiredArgsConstructor
@@ -48,17 +50,25 @@ public class CandidatoService {
         var candidatoCadastrado = candidatoRepository.save(candidato);
         log.info("Candidato cadastrado com sucesso. candidatoId={} usuarioId={}", candidatoCadastrado.getId(), usuario.id());
 
-        log.debug("Cadastrando endereço do candidatoId={}", candidatoCadastrado.getId());
-        enderecoService.cadastrar(candidatoCadastrado.getId(), request.getEndereco());
+        if (Objects.nonNull(request.getEndereco())) {
+            log.debug("Cadastrando endereço do candidatoId={}", candidatoCadastrado.getId());
+            enderecoService.cadastrar(candidatoCadastrado.getId(), request.getEndereco());
+        }
 
-        log.debug("Cadastrando {} habilidade(s) do candidatoId={}", request.getHabilidades().size(), candidatoCadastrado.getId());
-        request.getHabilidades().forEach(habilidadeDTO -> habilidadeService.cadastrar(candidatoCadastrado.getId(), habilidadeDTO));
+        if (Objects.nonNull(request.getHabilidades())) {
+            log.debug("Cadastrando {} habilidade(s) do candidatoId={}", request.getHabilidades().size(), candidatoCadastrado.getId());
+            request.getHabilidades().forEach(habilidadeDTO -> habilidadeService.cadastrar(candidatoCadastrado.getId(), habilidadeDTO));
+        }
 
-        log.debug("Cadastrando {} experiência(s) do candidatoId={}", request.getExperiencias().size(), candidatoCadastrado.getId());
-        request.getExperiencias().forEach(experienciaDTO -> experienciaService.cadastrar(candidatoCadastrado.getId(), experienciaDTO));
+        if (Objects.nonNull(request.getExperiencias())) {
+            log.debug("Cadastrando {} experiência(s) do candidatoId={}", request.getExperiencias().size(), candidatoCadastrado.getId());
+            request.getExperiencias().forEach(experienciaDTO -> experienciaService.cadastrar(candidatoCadastrado.getId(), experienciaDTO));
+        }
 
-        log.debug("Cadastrando {} educação(ões) do candidatoId={}", request.getEducacoes().size(), candidatoCadastrado.getId());
-        request.getEducacoes().forEach(educacaoDTO -> educacaoService.cadastrar(candidatoCadastrado.getId(), educacaoDTO));
+        if (Objects.nonNull(request.getEducacoes())) {
+            log.debug("Cadastrando {} educação(ões) do candidatoId={}", request.getEducacoes().size(), candidatoCadastrado.getId());
+            request.getEducacoes().forEach(educacaoDTO -> educacaoService.cadastrar(candidatoCadastrado.getId(), educacaoDTO));
+        }
 
         return carregarCandidatoCompleto(candidatoCadastrado.getId());
     }
@@ -125,5 +135,15 @@ public class CandidatoService {
 
         candidatoRepository.deleteById(candidato.getId());
         log.info("Candidato excluído com sucesso. candidatoId={} usuarioId={}", candidato.getId(), usuario.id());
+    }
+
+    public CandidatoDTO me(Jwt jwt) {
+        log.info("Buscando candidato autenticado");
+        var usuario = authorizationService.usuarioAtual(jwt);
+        var candidato = candidatoRepository.findByIdUsuario(usuario.id())
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Candidato não encontrado"));
+
+        log.debug("Candidato autenticado encontrado. candidatoId={} usuarioId={}", candidato.getId(), usuario.id());
+        return carregarCandidatoCompleto(candidato.getId());
     }
 }
