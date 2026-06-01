@@ -3,6 +3,7 @@ package br.com.senac.msvagas.controller;
 import br.com.senac.msvagas.dto.CandidaturaResponse;
 import br.com.senac.msvagas.dto.CreateVagaRequest;
 import br.com.senac.msvagas.dto.UpdateVagaRequest;
+import br.com.senac.msvagas.dto.UsuarioResponse;
 import br.com.senac.msvagas.dto.VagaResponse;
 import br.com.senac.msvagas.service.VagaService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -72,6 +73,16 @@ public class VagaController {
         vagaService.deletar(id, bearer(jwt));
     }
 
+    @GetMapping
+    @Operation(summary = "Listar vagas por empresa", description = "Retorna todas as vagas vinculadas à empresa informada.")
+    @ApiResponses({
+            @ApiResponse(responseCode = "200", description = "Lista de vagas retornada com sucesso"),
+            @ApiResponse(responseCode = "404", description = "Empresa não encontrada")
+    })
+    public List<VagaResponse> buscarVagas(@AuthenticationPrincipal Jwt jwt) {
+        return vagaService.buscarVagas(bearer(jwt));
+    }
+
     @GetMapping("/empresa/{idEmpresa}")
     @Operation(summary = "Listar vagas por empresa", description = "Retorna todas as vagas vinculadas à empresa informada.")
     @ApiResponses({
@@ -90,6 +101,20 @@ public class VagaController {
     })
     public List<VagaResponse> buscarMinhasCriadas(@AuthenticationPrincipal Jwt jwt) {
         return vagaService.buscarMinhasCriadas(bearer(jwt));
+    }
+
+    @GetMapping("/{idVaga}/candidatos")
+    @Operation(summary = "Listar candidatos de uma vaga", description = "Retorna os dados completos dos usuários candidatos vinculados à vaga informada.")
+    @ApiResponses({
+            @ApiResponse(responseCode = "200", description = "Lista de candidatos retornada com sucesso"),
+            @ApiResponse(responseCode = "401", description = "Não autenticado"),
+            @ApiResponse(responseCode = "403", description = "Usuário não autorizado"),
+            @ApiResponse(responseCode = "404", description = "Vaga não encontrada"),
+            @ApiResponse(responseCode = "502", description = "Falha ao consultar dados dos candidatos no ms-usuario")
+    })
+    public List<UsuarioResponse> buscarCandidatosPorVaga(@PathVariable Long idVaga,
+                                                         @AuthenticationPrincipal Jwt jwt) {
+        return vagaService.buscarCandidatosPorVaga(idVaga, bearer(jwt));
     }
 
     @PostMapping("/{idVaga}/candidaturas")

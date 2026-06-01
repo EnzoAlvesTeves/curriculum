@@ -152,6 +152,34 @@ public class VagaService {
                 .toList();
     }
 
+    @Transactional(readOnly = true)
+    public List<UsuarioResponse> buscarCandidatosPorVaga(Long idVaga, String authorization) {
+        UsuarioMeResponse usuario = usuarioContextService.buscarUsuarioMe(authorization);
+        validarRh(usuario);
+
+        buscarVaga(idVaga);
+
+        List<Long> usuariosIds = candidatoVagaRepository.findByIdVaga(idVaga)
+                .stream()
+                .map(CandidatoVagaEntity::getIdUsuario)
+                .distinct()
+                .toList();
+
+        if (usuariosIds.isEmpty()) {
+            return List.of();
+        }
+
+        return usuarioContextService.buscarUsuariosPorIds(usuariosIds, authorization);
+    }
+
+    @Transactional(readOnly = true)
+    public List<VagaResponse> buscarVagas(String bearer) {
+        return vagaRepository.findAll()
+                .stream()
+                .map(this::toResponse)
+                .toList();
+    }
+
     private VagaEntity buscarVaga(Long id) {
         return vagaRepository.findById(id)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Vaga nao encontrada"));

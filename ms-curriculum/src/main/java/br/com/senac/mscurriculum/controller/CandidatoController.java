@@ -64,6 +64,16 @@ public class CandidatoController {
         return candidatoService.buscarPorId(candidatoId);
     }
 
+    @GetMapping("/me")
+    @Operation(summary = "Buscar candidato autenticado", description = "Retorna o candidato com endereço, habilidades, experiências e educações.")
+    @ApiResponses({
+            @ApiResponse(responseCode = "200", description = "Candidato encontrado"),
+            @ApiResponse(responseCode = "404", description = "Candidato não encontrado")
+    })
+    public CandidatoDTO me(@AuthenticationPrincipal Jwt jwt) {
+        return candidatoService.me(jwt);
+    }
+
     @DeleteMapping
     @ResponseStatus(HttpStatus.NO_CONTENT)
     @Operation(summary = "Excluir candidato", description = "Remove o candidato autenticado e seus vínculos associados.")
