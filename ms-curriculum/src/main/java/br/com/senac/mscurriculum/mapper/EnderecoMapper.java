@@ -6,6 +6,7 @@ import br.com.senac.mscurriculum.repository.entity.EnderecoEntity;
 public final class EnderecoMapper {
 
     private EnderecoMapper() {
+        throw new IllegalStateException("Utility class");
     }
 
     public static EnderecoDTO toDTO(EnderecoEntity entity) {
