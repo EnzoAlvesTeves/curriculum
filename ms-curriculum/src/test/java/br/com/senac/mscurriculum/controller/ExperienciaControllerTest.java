@@ -1,94 +1,109 @@
 package br.com.senac.mscurriculum.controller;
 
-@org.junit.jupiter.api.DisplayName("Testes da Classe ExperienciaController")
-@org.junit.jupiter.api.extension.ExtendWith(org.mockito.junit.jupiter.MockitoExtension.class)
+import br.com.senac.mscurriculum.dto.ExperienciaDTO;
+import br.com.senac.mscurriculum.service.ExperienciaService;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.ArgumentMatchers;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.Mockito;
+import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.security.oauth2.jwt.Jwt;
+
+import java.util.List;
+
+@DisplayName("Testes da Classe ExperienciaController")
+@ExtendWith(MockitoExtension.class)
 class ExperienciaControllerTest {
 
-    @org.mockito.Mock
-    private br.com.senac.mscurriculum.service.ExperienciaService experienciaService;
+    @Mock
+    private ExperienciaService experienciaService;
 
-    @org.mockito.InjectMocks
+    @InjectMocks
     private ExperienciaController experienciaController;
 
-    @org.mockito.Mock
-    private org.springframework.security.oauth2.jwt.Jwt jwt;
+    @Mock
+    private Jwt jwt;
 
     private static final Long CANDIDATO_ID = 20L;
     private static final Long EXPERIENCIA_ID = 10L;
 
-    @org.junit.jupiter.api.Test
+    @Test
     void testCadastrarComSucesso() {
-        br.com.senac.mscurriculum.dto.ExperienciaDTO request = criarExperienciaDTO();
-        br.com.senac.mscurriculum.dto.ExperienciaDTO response = criarExperienciaDTOCompleto();
+        ExperienciaDTO request = criarExperienciaDTO();
+        ExperienciaDTO response = criarExperienciaDTOCompleto();
 
-        org.mockito.Mockito.when(experienciaService.cadastrar(
-                        org.mockito.ArgumentMatchers.eq(CANDIDATO_ID),
-                        org.mockito.ArgumentMatchers.any(br.com.senac.mscurriculum.dto.ExperienciaDTO.class),
-                        org.mockito.ArgumentMatchers.any(org.springframework.security.oauth2.jwt.Jwt.class)))
+        Mockito.when(experienciaService.cadastrar(
+                        ArgumentMatchers.eq(CANDIDATO_ID),
+                        ArgumentMatchers.any(ExperienciaDTO.class),
+                        ArgumentMatchers.any(Jwt.class)))
                 .thenReturn(response);
 
-        br.com.senac.mscurriculum.dto.ExperienciaDTO resultado = experienciaController.cadastrar(CANDIDATO_ID, request, jwt);
+        ExperienciaDTO resultado = experienciaController.cadastrar(CANDIDATO_ID, request, jwt);
 
-        org.junit.jupiter.api.Assertions.assertNotNull(resultado);
-        org.junit.jupiter.api.Assertions.assertEquals(EXPERIENCIA_ID, resultado.getId());
-        org.junit.jupiter.api.Assertions.assertEquals(CANDIDATO_ID, resultado.getIdCandidato());
-        org.junit.jupiter.api.Assertions.assertEquals("Desenvolvedor Pleno", resultado.getCargo());
-        org.mockito.Mockito.verify(experienciaService).cadastrar(
-                org.mockito.ArgumentMatchers.eq(CANDIDATO_ID),
-                org.mockito.ArgumentMatchers.any(br.com.senac.mscurriculum.dto.ExperienciaDTO.class),
-                org.mockito.ArgumentMatchers.any(org.springframework.security.oauth2.jwt.Jwt.class));
+        Assertions.assertNotNull(resultado);
+        Assertions.assertEquals(EXPERIENCIA_ID, resultado.getId());
+        Assertions.assertEquals(CANDIDATO_ID, resultado.getIdCandidato());
+        Assertions.assertEquals("Desenvolvedor Pleno", resultado.getCargo());
+        Mockito.verify(experienciaService).cadastrar(
+                ArgumentMatchers.eq(CANDIDATO_ID),
+                ArgumentMatchers.any(ExperienciaDTO.class),
+                ArgumentMatchers.any(Jwt.class));
     }
 
-    @org.junit.jupiter.api.Test
+    @Test
     void testAlterarComSucesso() {
-        br.com.senac.mscurriculum.dto.ExperienciaDTO request = criarExperienciaDTO();
-        br.com.senac.mscurriculum.dto.ExperienciaDTO response = criarExperienciaDTOCompleto();
+        ExperienciaDTO request = criarExperienciaDTO();
+        ExperienciaDTO response = criarExperienciaDTOCompleto();
 
-        org.mockito.Mockito.when(experienciaService.alterar(
-                        org.mockito.ArgumentMatchers.eq(CANDIDATO_ID),
-                        org.mockito.ArgumentMatchers.eq(EXPERIENCIA_ID),
-                        org.mockito.ArgumentMatchers.any(br.com.senac.mscurriculum.dto.ExperienciaDTO.class),
-                        org.mockito.ArgumentMatchers.any(org.springframework.security.oauth2.jwt.Jwt.class)))
+        Mockito.when(experienciaService.alterar(
+                        ArgumentMatchers.eq(CANDIDATO_ID),
+                        ArgumentMatchers.eq(EXPERIENCIA_ID),
+                        ArgumentMatchers.any(ExperienciaDTO.class),
+                        ArgumentMatchers.any(Jwt.class)))
                 .thenReturn(response);
 
-        br.com.senac.mscurriculum.dto.ExperienciaDTO resultado = experienciaController.alterar(CANDIDATO_ID, EXPERIENCIA_ID, request, jwt);
+        ExperienciaDTO resultado = experienciaController.alterar(CANDIDATO_ID, EXPERIENCIA_ID, request, jwt);
 
-        org.junit.jupiter.api.Assertions.assertNotNull(resultado);
-        org.junit.jupiter.api.Assertions.assertEquals(EXPERIENCIA_ID, resultado.getId());
-        org.junit.jupiter.api.Assertions.assertEquals("Desenvolvedor Pleno", resultado.getCargo());
-        org.mockito.Mockito.verify(experienciaService).alterar(
-                org.mockito.ArgumentMatchers.eq(CANDIDATO_ID),
-                org.mockito.ArgumentMatchers.eq(EXPERIENCIA_ID),
-                org.mockito.ArgumentMatchers.any(br.com.senac.mscurriculum.dto.ExperienciaDTO.class),
-                org.mockito.ArgumentMatchers.any(org.springframework.security.oauth2.jwt.Jwt.class));
+        Assertions.assertNotNull(resultado);
+        Assertions.assertEquals(EXPERIENCIA_ID, resultado.getId());
+        Assertions.assertEquals("Desenvolvedor Pleno", resultado.getCargo());
+        Mockito.verify(experienciaService).alterar(
+                ArgumentMatchers.eq(CANDIDATO_ID),
+                ArgumentMatchers.eq(EXPERIENCIA_ID),
+                ArgumentMatchers.any(ExperienciaDTO.class),
+                ArgumentMatchers.any(Jwt.class));
     }
 
-    @org.junit.jupiter.api.Test
+    @Test
     void testBuscarComSucesso() {
-        java.util.List<br.com.senac.mscurriculum.dto.ExperienciaDTO> response = criarListaExperienciasDTO();
+        List<ExperienciaDTO> response = criarListaExperienciasDTO();
 
-        org.mockito.Mockito.when(experienciaService.buscarPorCandidato(CANDIDATO_ID)).thenReturn(response);
+        Mockito.when(experienciaService.buscarPorCandidato(CANDIDATO_ID)).thenReturn(response);
 
-        java.util.List<br.com.senac.mscurriculum.dto.ExperienciaDTO> resultado = experienciaController.buscar(CANDIDATO_ID);
+        List<ExperienciaDTO> resultado = experienciaController.buscar(CANDIDATO_ID);
 
-        org.junit.jupiter.api.Assertions.assertNotNull(resultado);
-        org.junit.jupiter.api.Assertions.assertEquals(1, resultado.size());
-        org.junit.jupiter.api.Assertions.assertEquals(EXPERIENCIA_ID, resultado.get(0).getId());
-        org.mockito.Mockito.verify(experienciaService).buscarPorCandidato(CANDIDATO_ID);
+        Assertions.assertNotNull(resultado);
+        Assertions.assertEquals(1, resultado.size());
+        Assertions.assertEquals(EXPERIENCIA_ID, resultado.get(0).getId());
+        Mockito.verify(experienciaService).buscarPorCandidato(CANDIDATO_ID);
     }
 
-    @org.junit.jupiter.api.Test
+    @Test
     void testDeletarComSucesso() {
         experienciaController.deletar(CANDIDATO_ID, EXPERIENCIA_ID, jwt);
 
-        org.mockito.Mockito.verify(experienciaService).deletar(
-                org.mockito.ArgumentMatchers.eq(CANDIDATO_ID),
-                org.mockito.ArgumentMatchers.eq(EXPERIENCIA_ID),
-                org.mockito.ArgumentMatchers.any(org.springframework.security.oauth2.jwt.Jwt.class));
+        Mockito.verify(experienciaService).deletar(
+                ArgumentMatchers.eq(CANDIDATO_ID),
+                ArgumentMatchers.eq(EXPERIENCIA_ID),
+                ArgumentMatchers.any(Jwt.class));
     }
 
-    private br.com.senac.mscurriculum.dto.ExperienciaDTO criarExperienciaDTO() {
-        return new br.com.senac.mscurriculum.dto.ExperienciaDTO(
+    private ExperienciaDTO criarExperienciaDTO() {
+        return new ExperienciaDTO(
                 null,
                 CANDIDATO_ID,
                 "Desenvolvedor Pleno",
@@ -99,8 +114,8 @@ class ExperienciaControllerTest {
         );
     }
 
-    private br.com.senac.mscurriculum.dto.ExperienciaDTO criarExperienciaDTOCompleto() {
-        return new br.com.senac.mscurriculum.dto.ExperienciaDTO(
+    private ExperienciaDTO criarExperienciaDTOCompleto() {
+        return new ExperienciaDTO(
                 EXPERIENCIA_ID,
                 CANDIDATO_ID,
                 "Desenvolvedor Pleno",
@@ -111,7 +126,7 @@ class ExperienciaControllerTest {
         );
     }
 
-    private java.util.List<br.com.senac.mscurriculum.dto.ExperienciaDTO> criarListaExperienciasDTO() {
-        return java.util.List.of(criarExperienciaDTOCompleto());
+    private List<ExperienciaDTO> criarListaExperienciasDTO() {
+        return List.of(criarExperienciaDTOCompleto());
     }
 }

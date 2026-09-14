@@ -21,6 +21,7 @@ import org.springframework.web.server.ResponseStatusException;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Arrays;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -118,7 +119,7 @@ class UsuarioServiceTest {
 
     @Test
     void testBuscarPorIdsComSucessoENormalizacao() {
-        List<Long> ids = List.of(3L, null, 1L, 3L, 2L);
+        List<Long> ids = Arrays.asList(3L, null, 1L, 3L, 2L);
         UsuarioEntity usuario3 = criarUsuarioEntity(3L, "kc-3", "A", "A", "a@email.com", "111", "CANDIDATO");
         UsuarioEntity usuario1 = criarUsuarioEntity(1L, "kc-1", "B", "B", "b@email.com", "222", "RH");
         UsuarioEntity usuario2 = criarUsuarioEntity(2L, "kc-2", "C", "C", "c@email.com", "333", "CANDIDATO");
@@ -138,7 +139,7 @@ class UsuarioServiceTest {
     @Test
     void testBuscarPorIdsVazioOuNulo() {
         List<UsuarioResponse> resultadoNulo = service.buscarPorIds(null);
-        List<UsuarioResponse> resultadoVazio = service.buscarPorIds(List.of(null, null));
+        List<UsuarioResponse> resultadoVazio = service.buscarPorIds(Arrays.asList(null, null));
 
         assertTrue(resultadoNulo.isEmpty());
         assertTrue(resultadoVazio.isEmpty());
