@@ -1,89 +1,102 @@
 package br.com.senac.mscurriculum.controller;
 
-@org.junit.jupiter.api.DisplayName("Testes da Classe EnderecoController")
-@org.junit.jupiter.api.extension.ExtendWith(org.mockito.junit.jupiter.MockitoExtension.class)
+import br.com.senac.mscurriculum.dto.EnderecoDTO;
+import br.com.senac.mscurriculum.service.EnderecoService;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.ArgumentMatchers;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.Mockito;
+import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.security.oauth2.jwt.Jwt;
+
+@DisplayName("Testes da Classe EnderecoController")
+@ExtendWith(MockitoExtension.class)
 class EnderecoControllerTest {
 
-    @org.mockito.Mock
-    private br.com.senac.mscurriculum.service.EnderecoService enderecoService;
+    @Mock
+    private EnderecoService enderecoService;
 
-    @org.mockito.InjectMocks
+    @InjectMocks
     private EnderecoController enderecoController;
 
-    @org.mockito.Mock
-    private org.springframework.security.oauth2.jwt.Jwt jwt;
+    @Mock
+    private Jwt jwt;
 
     private static final Long CANDIDATO_ID = 20L;
 
-    @org.junit.jupiter.api.Test
+    @Test
     void testCadastrarComSucesso() {
-        br.com.senac.mscurriculum.dto.EnderecoDTO request = criarEnderecoDTO();
-        br.com.senac.mscurriculum.dto.EnderecoDTO response = criarEnderecoDTOCompleto();
+        EnderecoDTO request = criarEnderecoDTO();
+        EnderecoDTO response = criarEnderecoDTOCompleto();
 
-        org.mockito.Mockito.when(enderecoService.cadastrar(
-                        org.mockito.ArgumentMatchers.eq(CANDIDATO_ID),
-                        org.mockito.ArgumentMatchers.any(br.com.senac.mscurriculum.dto.EnderecoDTO.class),
-                        org.mockito.ArgumentMatchers.any(org.springframework.security.oauth2.jwt.Jwt.class)))
+        Mockito.when(enderecoService.cadastrar(
+                        ArgumentMatchers.eq(CANDIDATO_ID),
+                        ArgumentMatchers.any(EnderecoDTO.class),
+                        ArgumentMatchers.any(Jwt.class)))
                 .thenReturn(response);
 
-        br.com.senac.mscurriculum.dto.EnderecoDTO resultado = enderecoController.cadastrar(CANDIDATO_ID, request, jwt);
+        EnderecoDTO resultado = enderecoController.cadastrar(CANDIDATO_ID, request, jwt);
 
-        org.junit.jupiter.api.Assertions.assertNotNull(resultado);
-        org.junit.jupiter.api.Assertions.assertEquals(CANDIDATO_ID, resultado.getIdCandidato());
-        org.junit.jupiter.api.Assertions.assertEquals("Rua A", resultado.getRua());
-        org.mockito.Mockito.verify(enderecoService).cadastrar(
-                org.mockito.ArgumentMatchers.eq(CANDIDATO_ID),
-                org.mockito.ArgumentMatchers.any(br.com.senac.mscurriculum.dto.EnderecoDTO.class),
-                org.mockito.ArgumentMatchers.any(org.springframework.security.oauth2.jwt.Jwt.class));
+        Assertions.assertNotNull(resultado);
+        Assertions.assertEquals(CANDIDATO_ID, resultado.getIdCandidato());
+        Assertions.assertEquals("Rua A", resultado.getRua());
+        Mockito.verify(enderecoService).cadastrar(
+                ArgumentMatchers.eq(CANDIDATO_ID),
+                ArgumentMatchers.any(EnderecoDTO.class),
+                ArgumentMatchers.any(Jwt.class));
     }
 
-    @org.junit.jupiter.api.Test
+    @Test
     void testAlterarComSucesso() {
-        br.com.senac.mscurriculum.dto.EnderecoDTO request = criarEnderecoDTO();
-        br.com.senac.mscurriculum.dto.EnderecoDTO response = criarEnderecoDTOCompleto();
+        EnderecoDTO request = criarEnderecoDTO();
+        EnderecoDTO response = criarEnderecoDTOCompleto();
 
-        org.mockito.Mockito.when(enderecoService.alterar(
-                        org.mockito.ArgumentMatchers.eq(CANDIDATO_ID),
-                        org.mockito.ArgumentMatchers.any(br.com.senac.mscurriculum.dto.EnderecoDTO.class),
-                        org.mockito.ArgumentMatchers.any(org.springframework.security.oauth2.jwt.Jwt.class)))
+        Mockito.when(enderecoService.alterar(
+                        ArgumentMatchers.eq(CANDIDATO_ID),
+                        ArgumentMatchers.any(EnderecoDTO.class),
+                        ArgumentMatchers.any(Jwt.class)))
                 .thenReturn(response);
 
-        br.com.senac.mscurriculum.dto.EnderecoDTO resultado = enderecoController.alterar(CANDIDATO_ID, request, jwt);
+        EnderecoDTO resultado = enderecoController.alterar(CANDIDATO_ID, request, jwt);
 
-        org.junit.jupiter.api.Assertions.assertNotNull(resultado);
-        org.junit.jupiter.api.Assertions.assertEquals(CANDIDATO_ID, resultado.getIdCandidato());
-        org.junit.jupiter.api.Assertions.assertEquals("Rua A", resultado.getRua());
-        org.mockito.Mockito.verify(enderecoService).alterar(
-                org.mockito.ArgumentMatchers.eq(CANDIDATO_ID),
-                org.mockito.ArgumentMatchers.any(br.com.senac.mscurriculum.dto.EnderecoDTO.class),
-                org.mockito.ArgumentMatchers.any(org.springframework.security.oauth2.jwt.Jwt.class));
+        Assertions.assertNotNull(resultado);
+        Assertions.assertEquals(CANDIDATO_ID, resultado.getIdCandidato());
+        Assertions.assertEquals("Rua A", resultado.getRua());
+        Mockito.verify(enderecoService).alterar(
+                ArgumentMatchers.eq(CANDIDATO_ID),
+                ArgumentMatchers.any(EnderecoDTO.class),
+                ArgumentMatchers.any(Jwt.class));
     }
 
-    @org.junit.jupiter.api.Test
+    @Test
     void testBuscarComSucesso() {
-        br.com.senac.mscurriculum.dto.EnderecoDTO response = criarEnderecoDTOCompleto();
+        EnderecoDTO response = criarEnderecoDTOCompleto();
 
-        org.mockito.Mockito.when(enderecoService.buscarPorCandidato(CANDIDATO_ID)).thenReturn(response);
+        Mockito.when(enderecoService.buscarPorCandidato(CANDIDATO_ID)).thenReturn(response);
 
-        br.com.senac.mscurriculum.dto.EnderecoDTO resultado = enderecoController.buscar(CANDIDATO_ID);
+        EnderecoDTO resultado = enderecoController.buscar(CANDIDATO_ID);
 
-        org.junit.jupiter.api.Assertions.assertNotNull(resultado);
-        org.junit.jupiter.api.Assertions.assertEquals(CANDIDATO_ID, resultado.getIdCandidato());
-        org.junit.jupiter.api.Assertions.assertEquals("Rua A", resultado.getRua());
-        org.mockito.Mockito.verify(enderecoService).buscarPorCandidato(CANDIDATO_ID);
+        Assertions.assertNotNull(resultado);
+        Assertions.assertEquals(CANDIDATO_ID, resultado.getIdCandidato());
+        Assertions.assertEquals("Rua A", resultado.getRua());
+        Mockito.verify(enderecoService).buscarPorCandidato(CANDIDATO_ID);
     }
 
-    @org.junit.jupiter.api.Test
+    @Test
     void testDeletarComSucesso() {
         enderecoController.deletar(CANDIDATO_ID, jwt);
 
-        org.mockito.Mockito.verify(enderecoService).deletar(
-                org.mockito.ArgumentMatchers.eq(CANDIDATO_ID),
-                org.mockito.ArgumentMatchers.any(org.springframework.security.oauth2.jwt.Jwt.class));
+        Mockito.verify(enderecoService).deletar(
+                ArgumentMatchers.eq(CANDIDATO_ID),
+                ArgumentMatchers.any(Jwt.class));
     }
 
-    private br.com.senac.mscurriculum.dto.EnderecoDTO criarEnderecoDTO() {
-        return new br.com.senac.mscurriculum.dto.EnderecoDTO(
+    private EnderecoDTO criarEnderecoDTO() {
+        return new EnderecoDTO(
                 null,
                 CANDIDATO_ID,
                 "Rua A",
@@ -98,8 +111,8 @@ class EnderecoControllerTest {
         );
     }
 
-    private br.com.senac.mscurriculum.dto.EnderecoDTO criarEnderecoDTOCompleto() {
-        return new br.com.senac.mscurriculum.dto.EnderecoDTO(
+    private EnderecoDTO criarEnderecoDTOCompleto() {
+        return new EnderecoDTO(
                 1L,
                 CANDIDATO_ID,
                 "Rua A",
