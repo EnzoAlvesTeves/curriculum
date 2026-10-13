@@ -5,7 +5,6 @@ import br.com.senac.mscurriculum.dto.TipoUsuario;
 import br.com.senac.mscurriculum.dto.UsuarioMeResponse;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.*;
-import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.mock.mockito.MockBean;
@@ -43,7 +42,7 @@ class CandidatoIntegrationTest extends AbstractIntegrationTest {
     @Autowired
     private ObjectMapper objectMapper;
 
-    @Mock
+    @MockBean
     private MsUsuarioClient msUsuarioClient;
 
     private static TokenHelper tokenHelper;
@@ -205,7 +204,8 @@ class CandidatoIntegrationTest extends AbstractIntegrationTest {
                     "email": "candidato@curriculum-test.com",
                     "sexo": "MASCULINO",
                     "telefone": "(11) 98888-8888",
-                    "resumoProfissional": "Desenvolvedor Java Sênior com 7 anos de experiência"
+                    "resumoProfissional": "Desenvolvedor Java Sênior com 7 anos de experiência",
+                    "dataNascimento": "1995-06-15"
                 }
                 """.formatted(candidatoId);
 
