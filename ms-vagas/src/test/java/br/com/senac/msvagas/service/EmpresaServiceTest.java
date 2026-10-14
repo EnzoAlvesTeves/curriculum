@@ -202,4 +202,33 @@ class EmpresaServiceTest {
     private UsuarioMeResponse novoUsuarioCandidato() {
         return new UsuarioMeResponse(2L, TipoUsuario.CANDIDATO, "João", "Souza", "joao@email.com");
     }
+
+    @Test
+    @DisplayName("Deve lancar FORBIDDEN quando tipo de usuario eh null ao atualizar empresa")
+    void deveLancarForbiddenQuandoTipoUsuarioEhNullAoAtualizarEmpresa() {
+        UpdateEmpresaRequest request = new UpdateEmpresaRequest("Empresa Atualizada", "MG", "Belo Horizonte", "Savassi");
+        UsuarioMeResponse usuarioComTipoNull = new UsuarioMeResponse(2L, null, "João", "Souza", "joao@email.com");
+        when(usuarioContextService.buscarUsuarioMe(AUTHORIZATION)).thenReturn(usuarioComTipoNull);
+
+        ResponseStatusException exception = assertThrows(ResponseStatusException.class, () -> empresaService.atualizar(5L, request, AUTHORIZATION));
+
+        assertEquals(HttpStatus.FORBIDDEN, exception.getStatusCode());
+        assertEquals("Apenas usuarios do tipo RH podem cadastrar, alterar e deletar empresas", exception.getReason());
+        verify(usuarioContextService).buscarUsuarioMe(AUTHORIZATION);
+        verifyNoInteractions(empresaRepository);
+    }
+
+    @Test
+    @DisplayName("Deve lancar FORBIDDEN quando tipo de usuario eh null ao excluir empresa")
+    void deveLancarForbiddenQuandoTipoUsuarioEhNullAoExcluirEmpresa() {
+        UsuarioMeResponse usuarioComTipoNull = new UsuarioMeResponse(2L, null, "João", "Souza", "joao@email.com");
+        when(usuarioContextService.buscarUsuarioMe(AUTHORIZATION)).thenReturn(usuarioComTipoNull);
+
+        ResponseStatusException exception = assertThrows(ResponseStatusException.class, () -> empresaService.excluir(7L, AUTHORIZATION));
+
+        assertEquals(HttpStatus.FORBIDDEN, exception.getStatusCode());
+        assertEquals("Apenas usuarios do tipo RH podem cadastrar, alterar e deletar empresas", exception.getReason());
+        verify(usuarioContextService).buscarUsuarioMe(AUTHORIZATION);
+        verifyNoInteractions(empresaRepository);
+    }
 }

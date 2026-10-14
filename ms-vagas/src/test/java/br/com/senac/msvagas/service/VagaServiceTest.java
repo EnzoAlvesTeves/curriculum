@@ -570,4 +570,62 @@ class VagaServiceTest {
         entity.setUpdatedAt(UPDATED_AT);
         return entity;
     }
+
+    @Test
+    @DisplayName("Deve lancar FORBIDDEN quando tipo de usuario eh null ao validar RH para criar vaga")
+    void deveLancarForbiddenQuandoTipoUsuarioEhNullAoValidarRhCriarVaga() {
+        CreateVagaRequest request = novaCreateVagaRequest();
+        UsuarioMeResponse usuarioComTipoNull = new UsuarioMeResponse(2L, null, "João", "Souza", "joao@email.com");
+        when(usuarioContextService.buscarUsuarioMe(AUTHORIZATION)).thenReturn(usuarioComTipoNull);
+
+        ResponseStatusException exception = assertThrows(ResponseStatusException.class, () -> vagaService.criar(request, AUTHORIZATION));
+
+        assertEquals(HttpStatus.FORBIDDEN, exception.getStatusCode());
+        assertEquals("Apenas usuarios do tipo RH podem cadastrar, alterar e deletar vagas", exception.getReason());
+        verify(usuarioContextService).buscarUsuarioMe(AUTHORIZATION);
+        verifyNoInteractions(empresaRepository, vagaRepository);
+    }
+
+    @Test
+    @DisplayName("Deve lancar FORBIDDEN quando tipo de usuario eh null ao deletar vaga")
+    void deveLancarForbiddenQuandoTipoUsuarioEhNullAoDeletarVaga() {
+        UsuarioMeResponse usuarioComTipoNull = new UsuarioMeResponse(2L, null, "João", "Souza", "joao@email.com");
+        when(usuarioContextService.buscarUsuarioMe(AUTHORIZATION)).thenReturn(usuarioComTipoNull);
+
+        ResponseStatusException exception = assertThrows(ResponseStatusException.class, () -> vagaService.deletar(7L, AUTHORIZATION));
+
+        assertEquals(HttpStatus.FORBIDDEN, exception.getStatusCode());
+        assertEquals("Apenas usuarios do tipo RH podem cadastrar, alterar e deletar vagas", exception.getReason());
+        verify(usuarioContextService).buscarUsuarioMe(AUTHORIZATION);
+        verifyNoInteractions(vagaRepository);
+    }
+
+    @Test
+    @DisplayName("Deve lancar FORBIDDEN quando tipo de usuario eh null ao remover candidatura")
+    void deveLancarForbiddenQuandoTipoUsuarioEhNullAoRemoverCandidatura() {
+        UsuarioMeResponse usuarioComTipoNull = new UsuarioMeResponse(2L, null, "João", "Souza", "joao@email.com");
+        when(usuarioContextService.buscarUsuarioMe(AUTHORIZATION)).thenReturn(usuarioComTipoNull);
+
+        ResponseStatusException exception = assertThrows(ResponseStatusException.class, () -> vagaService.removerCandidatura(11L, AUTHORIZATION));
+
+        assertEquals(HttpStatus.FORBIDDEN, exception.getStatusCode());
+        assertEquals("Apenas usuarios do tipo CANDIDATO podem se candidatar ou remover candidatura", exception.getReason());
+        verify(usuarioContextService).buscarUsuarioMe(AUTHORIZATION);
+        verifyNoInteractions(vagaRepository, candidatoVagaRepository);
+    }
+
+    @Test
+    @DisplayName("Deve lancar FORBIDDEN quando tipo de usuario eh null ao buscar candidatos por vaga")
+    void deveLancarForbiddenQuandoTipoUsuarioEhNullAoBuscarCandidatosPorVaga() {
+        UsuarioMeResponse usuarioComTipoNull = new UsuarioMeResponse(2L, null, "João", "Souza", "joao@email.com");
+        when(usuarioContextService.buscarUsuarioMe(AUTHORIZATION)).thenReturn(usuarioComTipoNull);
+
+        ResponseStatusException exception = assertThrows(ResponseStatusException.class, () -> vagaService.buscarCandidatosPorVaga(11L, AUTHORIZATION));
+
+        assertEquals(HttpStatus.FORBIDDEN, exception.getStatusCode());
+        assertEquals("Apenas usuarios do tipo RH podem cadastrar, alterar e deletar vagas", exception.getReason());
+        verify(usuarioContextService).buscarUsuarioMe(AUTHORIZATION);
+        verifyNoInteractions(vagaRepository, candidatoVagaRepository);
+    }
 }
+
