@@ -304,6 +304,14 @@ configuração, recrie-o: `docker compose up -d jenkins`.
 **`Invalid URL: ... site-local ... not allowed` ao criar o webhook do Sonar**
 Ver o passo 2.3 acima — o `docker-compose.yaml` define `SONAR_VALIDATEWEBHOOKS=false`.
 
+**`No plugin found for prefix 'sonar'` no pipeline**
+O prefixo curto `sonar:sonar` depende de o Maven conhecer o grupo
+`org.sonarsource.scanner.maven`, o que nem sempre acontece. O `Jenkinsfile` usa o goal
+totalmente qualificado
+(`org.sonarsource.scanner.maven:sonar-maven-plugin:5.1.0.4751:sonar`), que não depende
+disso. Confirme também que o servidor Sonar está cadastrado com o nome `SonarQube`
+(passo 3.2) — é o nome usado em `withSonarQubeEnv` no `Jenkinsfile`.
+
 **Quality Gate fica "pendurado" no Jenkins**
 O `waitForQualityGate` depende do webhook do SonarQube (passo 2.3). Sem ele, o estágio
 espera até o timeout (10 min).

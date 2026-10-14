@@ -52,7 +52,7 @@ pipeline {
                         dir('ms-usuario') {
                             sh './mvnw -B clean verify'
                             withSonarQubeEnv('SonarQube') {
-                                sh './mvnw -B sonar:sonar'
+                                sh './mvnw -B org.sonarsource.scanner.maven:sonar-maven-plugin:5.1.0.4751:sonar'
                             }
                         }
                         timeout(time: 10, unit: 'MINUTES') {
@@ -66,7 +66,7 @@ pipeline {
                         dir('ms-curriculum') {
                             sh './mvnw -B clean verify'
                             withSonarQubeEnv('SonarQube') {
-                                sh './mvnw -B sonar:sonar'
+                                sh './mvnw -B org.sonarsource.scanner.maven:sonar-maven-plugin:5.1.0.4751:sonar'
                             }
                         }
                         timeout(time: 10, unit: 'MINUTES') {
@@ -80,7 +80,7 @@ pipeline {
                         dir('ms-vagas') {
                             sh './mvnw -B clean verify'
                             withSonarQubeEnv('SonarQube') {
-                                sh './mvnw -B sonar:sonar'
+                                sh './mvnw -B org.sonarsource.scanner.maven:sonar-maven-plugin:5.1.0.4751:sonar'
                             }
                         }
                         timeout(time: 10, unit: 'MINUTES') {
@@ -94,7 +94,7 @@ pipeline {
                         dir('bff-curriculum') {
                             sh './mvnw -B clean verify'
                             withSonarQubeEnv('SonarQube') {
-                                sh './mvnw -B sonar:sonar'
+                                sh './mvnw -B org.sonarsource.scanner.maven:sonar-maven-plugin:5.1.0.4751:sonar'
                             }
                         }
                         timeout(time: 10, unit: 'MINUTES') {
