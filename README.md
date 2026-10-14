@@ -162,20 +162,24 @@ seguintes (containers reutilizados na mesma sessão Docker).
 
 ## Esteira CI/CD (Jenkins + SonarQube)
 
-Esteira local que, a cada commit numa branch `release/*`, roda as fases:
+Esteira local que, a cada commit numa branch `release/*`, processa **um módulo por
+vez** (sequencial), com as fases abaixo em cada um, e termina com o Deploy:
 
 ```
-Checkout → Build → Testes Unitários → Testes de Integração
-         → Análise Sonar (Quality Gate) → Deploy
+ms-usuario     → Build → Unitários → Integração → Sonar
+ms-curriculum  → Build → Unitários → Integração → Sonar
+ms-vagas       → Build → Unitários → Integração → Sonar
+bff-curriculum → Build → Unitários → Sonar          (sem testes de integração)
+Deploy
 ```
 
-1. É disparada pelo Jenkins (polling do GitHub a cada 1 minuto)
-2. **Build** — compila e empacota os 4 módulos uma única vez (`clean install -DskipTests`)
-3. **Testes Unitários** e **Testes de Integração** — rodam em fases separadas
-   (filtro por nome `*IntegrationTest`), **reusando o build** (sem novo `clean`),
-   com cobertura via JaCoCo acumulada
-4. **Análise Sonar** — envia a análise e **bloqueia** se o Quality Gate reprovar
-5. **Deploy** — reconstrói e sobe os containers (só se os 4 Quality Gates passarem)
+- É disparada pelo Jenkins (polling do GitHub a cada 1 minuto)
+- **Build** — compila e empacota o módulo (`clean install -DskipTests`); é o único
+  passo com `clean`
+- **Testes Unitários / Integração** — filtro por nome `*IntegrationTest`, **reusando o
+  build** (sem novo `clean`), com cobertura JaCoCo acumulada
+- **Análise Sonar** — envia a análise e **bloqueia** se o Quality Gate reprovar
+- **Deploy** — reconstrói e sobe os containers (só se os 4 Quality Gates passarem)
 5. Se aprovado, reconstrói e sobe os containers (deploy)
 
 ### Componentes
@@ -264,7 +268,7 @@ git push -u origin release/1.0.0
 ```
 
 Em ~1 min o Jenkins detecta a branch e roda a pipeline. Acompanhe em **Stage View**
-as fases Build → Testes Unitários → Testes de Integração → Análise Sonar → Deploy.
+cada módulo (Build → Unitários → Integração → Sonar) e, ao final, o Deploy.
 Se algum Quality Gate reprovar, a pipeline aborta e nada é deployado. Branches que
 não sejam `release/*` são ignoradas.
 
