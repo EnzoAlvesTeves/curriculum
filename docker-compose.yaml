@@ -195,9 +195,19 @@ services:
     restart: unless-stopped
     networks:
       - curriculum-net
+    extra_hosts:
+      # Garante a resolução de host.docker.internal dentro do container (Linux).
+      - "host.docker.internal:host-gateway"
     environment:
       # URL interna do SonarQube na rede do compose (usada pelo pipeline)
       SONAR_HOST_URL: http://sonarqube:9000
+      # ── Testcontainers em cenário Docker-out-of-Docker ───────────────────────
+      # Os containers de teste sobem como irmãos do Jenkins (no host). O Jenkins
+      # não alcança o gateway da bridge default (172.17.0.1) onde o Ryuk fica,
+      # então: (1) desabilitamos o Ryuk e (2) acessamos os containers de teste
+      # via host.docker.internal (porta publicada no host pelo Testcontainers).
+      TESTCONTAINERS_RYUK_DISABLED: "true"
+      TESTCONTAINERS_HOST_OVERRIDE: "host.docker.internal"
     ports:
       - "8080:8080"   # UI do Jenkins
       - "50000:50000" # agentes JNLP

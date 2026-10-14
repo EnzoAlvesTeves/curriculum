@@ -44,6 +44,7 @@ serviços se comunicam internamente pela rede Docker `curriculum-net`.
 
 ---
 
+
 ## Serviços e portas
 
 | Serviço         | Porta (host) | URL / Swagger                                      |
@@ -291,6 +292,17 @@ de cada módulo (cópia de `keycloak/realm-export.json` na raiz). Já está vers
 **`Connection refused ... localhost:9999` nos testes de integração**
 O cliente Feign do `ms-usuario` deve ser `@MockBean` (não `@Mock`) nos testes de
 integração, para o Spring injetar o mock no contexto.
+
+**`Can not connect to Ryuk at 172.17.0.1:...` no pipeline do Jenkins**
+Cenário "Docker-out-of-Docker": os containers de teste sobem como irmãos do Jenkins
+(no host) e o Jenkins não alcança o gateway da bridge default onde o Ryuk escuta. O
+`docker-compose.yaml` já resolve isso no serviço `jenkins` com
+`TESTCONTAINERS_RYUK_DISABLED=true`, `TESTCONTAINERS_HOST_OVERRIDE=host.docker.internal`
+e `extra_hosts: host.docker.internal:host-gateway`. Se o container subiu antes dessa
+configuração, recrie-o: `docker compose up -d jenkins`.
+
+**`Invalid URL: ... site-local ... not allowed` ao criar o webhook do Sonar**
+Ver o passo 2.3 acima — o `docker-compose.yaml` define `SONAR_VALIDATEWEBHOOKS=false`.
 
 **Quality Gate fica "pendurado" no Jenkins**
 O `waitForQualityGate` depende do webhook do SonarQube (passo 2.3). Sem ele, o estágio
