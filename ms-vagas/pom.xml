@@ -32,6 +32,11 @@
              with Docker Engine 29+ (defaults to API 1.32, rejected with HTTP 400).
              1.21.4 defaults the docker-java client to API 1.44. -->
         <testcontainers.version>1.21.4</testcontainers.version>
+
+        <!-- SonarQube + JaCoCo -->
+        <sonar.projectKey>ms-vagas</sonar.projectKey>
+        <sonar.projectName>ms-vagas</sonar.projectName>
+        <sonar.coverage.jacoco.xmlReportPaths>${project.build.directory}/site/jacoco/jacoco.xml</sonar.coverage.jacoco.xmlReportPaths>
     </properties>
 
     <dependencies>
@@ -155,6 +160,27 @@
                         </exclude>
                     </excludes>
                 </configuration>
+            </plugin>
+            <!-- JaCoCo: gera relatório de cobertura consumido pelo SonarQube -->
+            <plugin>
+                <groupId>org.jacoco</groupId>
+                <artifactId>jacoco-maven-plugin</artifactId>
+                <version>0.8.12</version>
+                <executions>
+                    <execution>
+                        <id>prepare-agent</id>
+                        <goals>
+                            <goal>prepare-agent</goal>
+                        </goals>
+                    </execution>
+                    <execution>
+                        <id>report</id>
+                        <phase>test</phase>
+                        <goals>
+                            <goal>report</goal>
+                        </goals>
+                    </execution>
+                </executions>
             </plugin>
         </plugins>
     </build>
