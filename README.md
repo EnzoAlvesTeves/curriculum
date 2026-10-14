@@ -162,12 +162,20 @@ seguintes (containers reutilizados na mesma sessão Docker).
 
 ## Esteira CI/CD (Jenkins + SonarQube)
 
-Esteira local que, a cada commit numa branch `release/*`:
+Esteira local que, a cada commit numa branch `release/*`, roda as fases:
+
+```
+Checkout → Build → Testes Unitários → Testes de Integração
+         → Análise Sonar (Quality Gate) → Deploy
+```
 
 1. É disparada pelo Jenkins (polling do GitHub a cada 1 minuto)
-2. Builda e testa os 4 módulos, com cobertura via JaCoCo
-3. Envia a análise ao SonarQube
-4. **Bloqueia** se o Quality Gate reprovar
+2. **Build** — compila e empacota os 4 módulos uma única vez (`clean install -DskipTests`)
+3. **Testes Unitários** e **Testes de Integração** — rodam em fases separadas
+   (filtro por nome `*IntegrationTest`), **reusando o build** (sem novo `clean`),
+   com cobertura via JaCoCo acumulada
+4. **Análise Sonar** — envia a análise e **bloqueia** se o Quality Gate reprovar
+5. **Deploy** — reconstrói e sobe os containers (só se os 4 Quality Gates passarem)
 5. Se aprovado, reconstrói e sobe os containers (deploy)
 
 ### Componentes
@@ -255,10 +263,10 @@ git commit -am "release 1.0.0"
 git push -u origin release/1.0.0
 ```
 
-Em ~1 min o Jenkins detecta a branch e roda a pipeline. Acompanhe em **Stage View**.
-Por módulo: `clean verify` → `sonar:sonar` → **Quality Gate** (se reprovar, aborta e
-nada é deployado). Passando os 4, o estágio **Deploy** reconstrói e sobe os containers.
-Branches que não sejam `release/*` são ignoradas.
+Em ~1 min o Jenkins detecta a branch e roda a pipeline. Acompanhe em **Stage View**
+as fases Build → Testes Unitários → Testes de Integração → Análise Sonar → Deploy.
+Se algum Quality Gate reprovar, a pipeline aborta e nada é deployado. Branches que
+não sejam `release/*` são ignoradas.
 
 ### Análise manual sem Jenkins (teste rápido)
 

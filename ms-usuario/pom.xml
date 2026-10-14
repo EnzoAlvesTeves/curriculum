@@ -156,6 +156,11 @@
                         <goals>
                             <goal>prepare-agent</goal>
                         </goals>
+                        <configuration>
+                            <!-- Acumula cobertura entre as execuções de teste
+                                 (unitários e integração rodam em fases separadas). -->
+                            <append>true</append>
+                        </configuration>
                     </execution>
                     <execution>
                         <id>report</id>
