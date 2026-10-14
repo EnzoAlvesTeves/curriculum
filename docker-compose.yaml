@@ -24,6 +24,10 @@ services:
       SONAR_JDBC_URL: jdbc:postgresql://sonarqube-db:5432/sonarqube
       SONAR_JDBC_USERNAME: sonar
       SONAR_JDBC_PASSWORD: sonar
+      # Permite webhook para endereços de rede interna (Jenkins na rede Docker).
+      # A validação SSRF do Sonar 26+ bloqueia IPs privados por padrão; aqui a
+      # rede é local e controlada, então desabilitamos. (não usar em produção)
+      SONAR_VALIDATEWEBHOOKS: "false"
     ports:
       - "9000:9000"
 
@@ -139,6 +143,26 @@ services:
     ports:
       - "8092:8092"
 
+  bff-curriculum:
+    build: './bff-curriculum'
+    container_name: bff-curriculum
+    restart: on-failure
+    depends_on:
+      ms-usuario:
+        condition: service_started
+      ms-curriculum:
+        condition: service_started
+      ms-vagas:
+        condition: service_started
+    networks:
+      - curriculum-net
+    environment:
+      - MS_USUARIO=http://ms-usuario:8091
+      - MS_CURRICULUM=http://ms-curriculum:8090
+      - MS_VAGAS=http://ms-vagas:8092
+    ports:
+      - "8095:8080"
+
   kong:
     image: kong:3.7
     container_name: curriculum-kong
@@ -165,9 +189,31 @@ services:
       - "8000:8000"
       - "8001:8001"
 
+  jenkins:
+    build: './jenkins'
+    container_name: jenkins
+    restart: unless-stopped
+    networks:
+      - curriculum-net
+    environment:
+      # URL interna do SonarQube na rede do compose (usada pelo pipeline)
+      SONAR_HOST_URL: http://sonarqube:9000
+    ports:
+      - "8080:8080"   # UI do Jenkins
+      - "50000:50000" # agentes JNLP
+    volumes:
+      - jenkins-home:/var/jenkins_home
+      # Socket do Docker do host: permite ao pipeline subir Testcontainers
+      - /var/run/docker.sock:/var/run/docker.sock
+      # Repositório montado para builds locais (opcional, útil sem SCM remoto)
+      - ./:/workspace:cached
+    group_add:
+      - "0"
+
 networks:
   curriculum-net:
     driver: bridge
 
 volumes:
   sonarqube-db-data:
+  jenkins-home:
