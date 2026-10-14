@@ -1,14 +1,20 @@
 // Esteira CI/CD local para branches release/*.
 //
-// Fluxo (fases agrupadas, build reaproveitado entre as fases):
-//   Checkout → Build → Testes Unitários → Testes de Integração
-//            → Análise Sonar + Quality Gate → Deploy
+// Estrutura: um bloco por módulo (Build → Unitários → Integração → Sonar),
+// seguido do Deploy. Execução sequencial.
 //
-// Reaproveitamento: só a fase Build roda `clean` (compila + empacota uma vez
-// com install -DskipTests). As fases seguintes NÃO chamam `clean`, então o
-// Maven reusa o target/ já compilado em vez de recompilar.
+//   ms-usuario    → Build → Unitários → Integração → Sonar
+//   ms-curriculum → Build → Unitários → Integração → Sonar
+//   ms-vagas      → Build → Unitários → Integração → Sonar
+//   bff-curriculum→ Build → Unitários → Sonar   (não tem testes de integração)
+//   Deploy
 //
-// Separação de testes (os projetos não usam Failsafe; a distinção é por nome):
+// Reaproveitamento: dentro de cada módulo só o Build roda `clean` (compila +
+// empacota com install -DskipTests). As fases de teste e o Sonar NÃO chamam
+// `clean`, reusando o target/ já compilado. O JaCoCo acumula a cobertura entre
+// unitários e integração (append=true nos poms).
+//
+// Separação de testes (sem Failsafe; distinção por nome):
 //   - unitários:  -Dtest='!*IntegrationTest'
 //   - integração: -Dtest='*IntegrationTest'
 //
@@ -32,8 +38,6 @@ pipeline {
 
     environment {
         DOCKER_HOST = 'unix:///var/run/docker.sock'
-        // Lista de módulos Maven, reutilizada nas fases via loop.
-        MODULOS = 'ms-usuario ms-curriculum ms-vagas bff-curriculum'
         SONAR_PLUGIN = 'org.sonarsource.scanner.maven:sonar-maven-plugin:5.1.0.4751:sonar'
     }
 
@@ -51,70 +55,89 @@ pipeline {
                     }
                 }
 
-                // ── Build: compila e empacota uma vez (sem testes). Único `clean`. ──
-                stage('Build') {
-                    steps {
-                        script {
-                            for (m in env.MODULOS.split()) {
-                                dir(m) {
-                                    sh './mvnw -B clean install -DskipTests'
-                                }
+                // ── ms-usuario ─────────────────────────────────────────────────────
+                stage('ms-usuario') {
+                    stages {
+                        stage('Build') {
+                            steps { dir('ms-usuario') { sh './mvnw -B clean install -DskipTests' } }
+                        }
+                        stage('Testes Unitários') {
+                            steps { dir('ms-usuario') { sh "./mvnw -B test -Dtest='!*IntegrationTest' -DfailIfNoTests=false" } }
+                            post { always { junit testResults: 'ms-usuario/target/surefire-reports/*.xml', allowEmptyResults: true } }
+                        }
+                        stage('Testes de Integração') {
+                            steps { dir('ms-usuario') { sh "./mvnw -B test -Dtest='*IntegrationTest' -DfailIfNoTests=false" } }
+                            post { always { junit testResults: 'ms-usuario/target/surefire-reports/*.xml', allowEmptyResults: true } }
+                        }
+                        stage('Análise Sonar') {
+                            steps {
+                                dir('ms-usuario') { withSonarQubeEnv('SonarQube') { sh "./mvnw -B ${env.SONAR_PLUGIN}" } }
+                                timeout(time: 10, unit: 'MINUTES') { waitForQualityGate abortPipeline: true }
                             }
                         }
                     }
                 }
 
-                // ── Testes unitários: reusa o target/ (sem clean) ──────────────────
-                stage('Testes Unitários') {
-                    steps {
-                        script {
-                            for (m in env.MODULOS.split()) {
-                                dir(m) {
-                                    sh "./mvnw -B test -Dtest='!*IntegrationTest' -DfailIfNoTests=false"
-                                }
-                            }
+                // ── ms-curriculum ──────────────────────────────────────────────────
+                stage('ms-curriculum') {
+                    stages {
+                        stage('Build') {
+                            steps { dir('ms-curriculum') { sh './mvnw -B clean install -DskipTests' } }
                         }
-                    }
-                    post {
-                        always {
-                            junit testResults: '**/target/surefire-reports/*.xml', allowEmptyResults: true
+                        stage('Testes Unitários') {
+                            steps { dir('ms-curriculum') { sh "./mvnw -B test -Dtest='!*IntegrationTest' -DfailIfNoTests=false" } }
+                            post { always { junit testResults: 'ms-curriculum/target/surefire-reports/*.xml', allowEmptyResults: true } }
+                        }
+                        stage('Testes de Integração') {
+                            steps { dir('ms-curriculum') { sh "./mvnw -B test -Dtest='*IntegrationTest' -DfailIfNoTests=false" } }
+                            post { always { junit testResults: 'ms-curriculum/target/surefire-reports/*.xml', allowEmptyResults: true } }
+                        }
+                        stage('Análise Sonar') {
+                            steps {
+                                dir('ms-curriculum') { withSonarQubeEnv('SonarQube') { sh "./mvnw -B ${env.SONAR_PLUGIN}" } }
+                                timeout(time: 10, unit: 'MINUTES') { waitForQualityGate abortPipeline: true }
+                            }
                         }
                     }
                 }
 
-                // ── Testes de integração: reusa o target/ (sem clean) ──────────────
-                // bff-curriculum não tem *IntegrationTest; o filtro simplesmente não acha nada.
-                stage('Testes de Integração') {
-                    steps {
-                        script {
-                            for (m in ['ms-usuario', 'ms-curriculum', 'ms-vagas']) {
-                                dir(m) {
-                                    sh "./mvnw -B test -Dtest='*IntegrationTest' -DfailIfNoTests=false"
-                                }
-                            }
+                // ── ms-vagas ───────────────────────────────────────────────────────
+                stage('ms-vagas') {
+                    stages {
+                        stage('Build') {
+                            steps { dir('ms-vagas') { sh './mvnw -B clean install -DskipTests' } }
                         }
-                    }
-                    post {
-                        always {
-                            junit testResults: '**/target/surefire-reports/*.xml', allowEmptyResults: true
+                        stage('Testes Unitários') {
+                            steps { dir('ms-vagas') { sh "./mvnw -B test -Dtest='!*IntegrationTest' -DfailIfNoTests=false" } }
+                            post { always { junit testResults: 'ms-vagas/target/surefire-reports/*.xml', allowEmptyResults: true } }
+                        }
+                        stage('Testes de Integração') {
+                            steps { dir('ms-vagas') { sh "./mvnw -B test -Dtest='*IntegrationTest' -DfailIfNoTests=false" } }
+                            post { always { junit testResults: 'ms-vagas/target/surefire-reports/*.xml', allowEmptyResults: true } }
+                        }
+                        stage('Análise Sonar') {
+                            steps {
+                                dir('ms-vagas') { withSonarQubeEnv('SonarQube') { sh "./mvnw -B ${env.SONAR_PLUGIN}" } }
+                                timeout(time: 10, unit: 'MINUTES') { waitForQualityGate abortPipeline: true }
+                            }
                         }
                     }
                 }
 
-                // ── Análise Sonar + Quality Gate bloqueante (por módulo) ───────────
-                // Reusa o target/ (incluindo o jacoco.xml gerado nas fases de teste).
-                stage('Análise Sonar') {
-                    steps {
-                        script {
-                            for (m in env.MODULOS.split()) {
-                                dir(m) {
-                                    withSonarQubeEnv('SonarQube') {
-                                        sh "./mvnw -B ${env.SONAR_PLUGIN}"
-                                    }
-                                }
-                                timeout(time: 10, unit: 'MINUTES') {
-                                    waitForQualityGate abortPipeline: true
-                                }
+                // ── bff-curriculum (sem testes de integração) ───────────────────────
+                stage('bff-curriculum') {
+                    stages {
+                        stage('Build') {
+                            steps { dir('bff-curriculum') { sh './mvnw -B clean install -DskipTests' } }
+                        }
+                        stage('Testes Unitários') {
+                            steps { dir('bff-curriculum') { sh "./mvnw -B test -Dtest='!*IntegrationTest' -DfailIfNoTests=false" } }
+                            post { always { junit testResults: 'bff-curriculum/target/surefire-reports/*.xml', allowEmptyResults: true } }
+                        }
+                        stage('Análise Sonar') {
+                            steps {
+                                dir('bff-curriculum') { withSonarQubeEnv('SonarQube') { sh "./mvnw -B ${env.SONAR_PLUGIN}" } }
+                                timeout(time: 10, unit: 'MINUTES') { waitForQualityGate abortPipeline: true }
                             }
                         }
                     }
