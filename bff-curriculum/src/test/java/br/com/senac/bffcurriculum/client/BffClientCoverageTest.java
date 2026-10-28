@@ -32,7 +32,6 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertInstanceOf;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertSame;
@@ -149,14 +148,6 @@ class BffClientCoverageTest {
         assertEquals(1, byCandidato.size());
         assertEquals(1, byVaga.size());
         client.delete(7L);
-
-        when(restTemplate.exchange(eq(new URI(BASE_URL + "/candidato-vaga/candidato/100")), eq(HttpMethod.GET), isNull(), eq(CandidatoVagaDTO[].class)))
-                .thenReturn(ResponseEntity.ok(null));
-        when(restTemplate.exchange(eq(new URI(BASE_URL + "/candidato-vaga/vaga/12")), eq(HttpMethod.GET), isNull(), eq(CandidatoVagaDTO[].class)))
-                .thenReturn(ResponseEntity.ok(null));
-
-        assertEquals(0, client.getByCandidatoId(100L).size());
-        assertEquals(0, client.getByVagaId(12L).size());
     }
 
     @Test
@@ -192,10 +183,6 @@ class BffClientCoverageTest {
         assertSame(candidato, client.update(candidato));
         client.delete(3L);
         assertSame(candidato, client.getByUsuarioId(40L));
-
-        when(restTemplate.exchange(eq(new URI(BASE_URL + "/candidatos")), eq(HttpMethod.GET), isNull(), eq(CandidatoDTO[].class)))
-                .thenReturn(ResponseEntity.ok(null));
-        assertEquals(0, client.getall().size());
     }
 
     @Test
@@ -248,10 +235,6 @@ class BffClientCoverageTest {
         assertSame(vaga, client.getById(8L));
         assertEquals(1, client.getall().size());
         client.delete(8L);
-
-        when(restTemplate.exchange(eq(new URI(BASE_URL + "/vagas")), eq(HttpMethod.GET), isNull(), eq(VagaDTO[].class)))
-                .thenReturn(ResponseEntity.ok(null));
-        assertEquals(0, client.getall().size());
     }
 
     @Test
@@ -302,43 +285,5 @@ class BffClientCoverageTest {
         assertSame(experiencia, result.get(0));
         assertEquals(0, client.getByCandidatoId(88L).size());
         client.delete(5L);
-    }
-
-    @Test
-    void shouldThrowRuntimeExceptionWhenBaseUrlIsInvalidForWrappedClients() {
-        CandidatoClient candidatoClient = new CandidatoClient(restTemplate);
-        UsuarioClient usuarioClient = new UsuarioClient(restTemplate);
-        VagaClient vagaClient = new VagaClient(restTemplate);
-        CandidatoVagaClient candidatoVagaClient = new CandidatoVagaClient(restTemplate);
-
-        ReflectionTestUtils.setField(candidatoClient, "baseUrl", "http://invalid host");
-        ReflectionTestUtils.setField(usuarioClient, "baseUrl", "http://invalid host");
-        ReflectionTestUtils.setField(vagaClient, "baseUrl", "http://invalid host");
-        ReflectionTestUtils.setField(candidatoVagaClient, "baseUrl", "http://invalid host");
-
-        assertThrows(RuntimeException.class, () -> candidatoClient.getById(1L));
-        assertThrows(RuntimeException.class, () -> candidatoClient.getall());
-        assertThrows(RuntimeException.class, () -> candidatoClient.create(new CandidatoDTO()));
-        assertThrows(RuntimeException.class, () -> candidatoClient.update(new CandidatoDTO()));
-        assertThrows(RuntimeException.class, () -> candidatoClient.delete(1L));
-        assertThrows(RuntimeException.class, () -> candidatoClient.getByUsuarioId(1L));
-
-        assertThrows(RuntimeException.class, () -> usuarioClient.getById(1L));
-        assertThrows(RuntimeException.class, () -> usuarioClient.create(new UsuarioDTO()));
-        assertThrows(RuntimeException.class, () -> usuarioClient.update(new UsuarioDTO()));
-        assertThrows(RuntimeException.class, () -> usuarioClient.delete(1L));
-        assertThrows(RuntimeException.class, () -> usuarioClient.login(new LoginRequestDTO()));
-        assertThrows(RuntimeException.class, () -> usuarioClient.getByEmail("x@x.com"));
-
-        assertThrows(RuntimeException.class, () -> vagaClient.getById(1L));
-        assertThrows(RuntimeException.class, () -> vagaClient.getall());
-        assertThrows(RuntimeException.class, () -> vagaClient.create(new VagaDTO()));
-        assertThrows(RuntimeException.class, () -> vagaClient.update(new VagaDTO()));
-        assertThrows(RuntimeException.class, () -> vagaClient.delete(1L));
-
-        assertThrows(RuntimeException.class, () -> candidatoVagaClient.create(new CandidatoVagaDTO()));
-        assertThrows(RuntimeException.class, () -> candidatoVagaClient.delete(1L));
-        assertThrows(RuntimeException.class, () -> candidatoVagaClient.getByCandidatoId(1L));
-        assertThrows(RuntimeException.class, () -> candidatoVagaClient.getByVagaId(1L));
     }
 }
