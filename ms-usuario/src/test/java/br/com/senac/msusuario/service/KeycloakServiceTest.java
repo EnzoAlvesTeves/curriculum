@@ -222,9 +222,9 @@ class KeycloakServiceTest {
         lenient().when(requestBodyUriSpec.body(any(MultiValueMap.class))).thenReturn(requestBodyUriSpec);
         when(requestBodyUriSpec.retrieve()).thenReturn(responseSpec);
         lenient().when(responseSpec.onStatus(any(), any())).thenReturn(responseSpec);
-        when(responseSpec.body(Map.class)).thenReturn(Map.of("access_token", "admin-token"));
+        lenient().when(responseSpec.body(Map.class)).thenReturn(Map.of("access_token", "admin-token"));
 
-        when(restClient.delete()).thenReturn((RestClient.RequestHeadersUriSpec) requestHeadersUriSpec);
+        lenient().when(restClient.delete()).thenReturn((RestClient.RequestHeadersUriSpec) requestHeadersUriSpec);
         lenient().when(((RestClient.RequestHeadersUriSpec) requestHeadersUriSpec).uri(anyString())).thenReturn((RestClient.RequestHeadersUriSpec) requestHeadersUriSpec);
         lenient().when(((RestClient.RequestHeadersUriSpec) requestHeadersUriSpec).header(anyString(), anyString())).thenReturn((RestClient.RequestHeadersUriSpec) requestHeadersUriSpec);
         lenient().when(((RestClient.RequestHeadersUriSpec) requestHeadersUriSpec).retrieve()).thenReturn(responseSpec);
@@ -248,9 +248,9 @@ class KeycloakServiceTest {
         lenient().when(requestBodyUriSpec.body(any(MultiValueMap.class))).thenReturn(requestBodyUriSpec);
         when(requestBodyUriSpec.retrieve()).thenReturn(responseSpec);
         lenient().when(responseSpec.onStatus(any(), any())).thenReturn(responseSpec);
-        when(responseSpec.body(Map.class)).thenReturn(Map.of("access_token", "admin-token"));
+        lenient().when(responseSpec.body(Map.class)).thenReturn(Map.of("access_token", "admin-token"));
 
-        when(restClient.put()).thenReturn((RestClient.RequestBodyUriSpec) requestBodyUriSpec);
+        lenient().when(restClient.put()).thenReturn((RestClient.RequestBodyUriSpec) requestBodyUriSpec);
         lenient().when(((RestClient.RequestBodyUriSpec) requestBodyUriSpec).uri(anyString())).thenReturn((RestClient.RequestBodyUriSpec) requestBodyUriSpec);
         lenient().when(((RestClient.RequestBodyUriSpec) requestBodyUriSpec).header(anyString(), anyString())).thenReturn((RestClient.RequestBodyUriSpec) requestBodyUriSpec);
         lenient().when(((RestClient.RequestBodyUriSpec) requestBodyUriSpec).contentType(any(MediaType.class))).thenReturn((RestClient.RequestBodyUriSpec) requestBodyUriSpec);
