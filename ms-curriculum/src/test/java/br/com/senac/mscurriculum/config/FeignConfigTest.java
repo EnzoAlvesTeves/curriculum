@@ -2,7 +2,6 @@ package br.com.senac.mscurriculum.config;
 
 import br.com.senac.mscurriculum.client.MsUsuarioClient;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import feign.Logger;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
