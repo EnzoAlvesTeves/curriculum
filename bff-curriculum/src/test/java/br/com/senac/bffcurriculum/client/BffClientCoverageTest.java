@@ -2,25 +2,13 @@ package br.com.senac.bffcurriculum.client;
 
 import br.com.senac.bffcurriculum.config.RestTemplateConfig;
 import br.com.senac.bffcurriculum.config.RestTemplateLoggingInterceptor;
-import br.com.senac.bffcurriculum.dto.CandidatoDTO;
-import br.com.senac.bffcurriculum.dto.CandidatoVagaDTO;
-import br.com.senac.bffcurriculum.dto.EducacaoDTO;
-import br.com.senac.bffcurriculum.dto.EnderecoDTO;
-import br.com.senac.bffcurriculum.dto.ExperienciaDTO;
-import br.com.senac.bffcurriculum.dto.HabilidadeDTO;
-import br.com.senac.bffcurriculum.dto.LoginRequestDTO;
-import br.com.senac.bffcurriculum.dto.UsuarioDTO;
-import br.com.senac.bffcurriculum.dto.VagaDTO;
+import br.com.senac.bffcurriculum.dto.*;
 import br.com.senac.bffcurriculum.enums.Sexo;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import org.springframework.http.HttpEntity;
-import org.springframework.http.HttpMethod;
-import org.springframework.http.HttpRequest;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
+import org.springframework.http.*;
 import org.springframework.http.client.ClientHttpRequestExecution;
 import org.springframework.http.client.ClientHttpResponse;
 import org.springframework.test.util.ReflectionTestUtils;
@@ -31,16 +19,9 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertInstanceOf;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
-import static org.junit.jupiter.api.Assertions.assertSame;
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.eq;
-import static org.mockito.ArgumentMatchers.isNull;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
+import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.ArgumentMatchers.*;
+import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
 class BffClientCoverageTest {
@@ -51,7 +32,7 @@ class BffClientCoverageTest {
     private RestTemplate restTemplate;
 
     @Test
-    void restTemplateConfigShouldIncludeLoggingInterceptor() throws Exception {
+    void restTemplateConfigShouldIncludeLoggingInterceptor() {
         RestTemplateConfig config = new RestTemplateConfig();
 
         RestTemplate template = config.restTemplate();
