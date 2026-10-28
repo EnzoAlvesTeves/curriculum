@@ -1,0 +1,10 @@
+server:
+  port: 8080
+spring:
+  application:
+    name: bff-curriculum
+
+base-url:
+  ms-curriculum: ${MS_CURRICULUM:http://localhost:8090}
+  ms-usuario: ${MS_USUARIO:http://localhost:8091}
+  ms-vagas: ${MS_VAGAS:http://localhost:8092}

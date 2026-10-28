@@ -1,0 +1,36 @@
+server:
+  port: 8092
+spring:
+  application:
+    name: ms-vagas
+  datasource:
+    url: jdbc:h2:mem:ms_vagas_test;MODE=MySQL;DB_CLOSE_DELAY=-1;DB_CLOSE_ON_EXIT=FALSE
+    username: sa
+    password:
+    driver-class-name: org.h2.Driver
+  jpa:
+    hibernate:
+      ddl-auto: create-drop
+    show-sql: true
+    database-platform: org.hibernate.dialect.H2Dialect
+  flyway:
+    enabled: false
+  security:
+    oauth2:
+      resourceserver:
+        jwt:
+          issuer-uri: ${KEYCLOAK_ISSUER_URI:http://localhost:8093/realms/curriculum}
+          jwk-set-uri: ${KEYCLOAK_JWK_SET_URI:http://localhost:8093/realms/curriculum/protocol/openid-connect/certs}
+
+feign:
+  ms-usuario:
+    url: ${MS_USUARIO_URL:http://localhost:8091}
+    logger-level: ${FEIGN_MS_USUARIO_LOGGER_LEVEL:FULL}
+    connect-timeout: ${FEIGN_MS_USUARIO_CONNECT_TIMEOUT:5000}
+    read-timeout: ${FEIGN_MS_USUARIO_READ_TIMEOUT:10000}
+
+logging:
+  level:
+    br.com.senac.msvagas: DEBUG
+    br.com.senac.msvagas.client.MsUsuarioClient: DEBUG
+

@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="pt-BR" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8" />
+    <title>Minhas Candidaturas</title>
+		<link rel="icon" href="/img/logo.jpg" type="image/jpg">
+		<link rel="stylesheet" href="/styles/header.css">
+		<link rel="stylesheet" href="/styles/main.css">
+		<link rel="stylesheet" href="/styles/vaga.css">
+</head>
+<body class="wise-background">
+		<header>
+				<div class="logo" >
+						<a th:href="@{/usuario/home/{id}(id=${usuario.id})}">
+								WiseCorp
+						</a>
+				</div>
+
+				<nav>
+						<ul>
+								<li th:if="${usuario != null}">
+										<span style="font-weight:bold;">Olá, <span th:text="${usuario.nome}"></span></span>
+								</li>
+
+								<li th:if="${usuario != null && candidato == null && usuario.id != 1}">
+										<a th:href="@{/candidato/cadastrar(usuarioId=${usuario.id})}">Cadastrar Currículo</a>
+								</li>
+
+								<li th:if="${usuario != null && candidato != null && usuario.id != 1}">
+										<a th:href="@{/candidato/{id}(id=${candidato.id})}">Meu Currículo</a>
+								</li>
+
+								<li th:if="${candidato != null && usuario.id != 1}">
+										<a th:href="@{/candidato-vaga/candidato/{id}(id=${candidato.id})}">Minhas Candidaturas</a>
+								</li>
+
+								<li th:if="${usuario != null}">
+										<a th:href="@{/vaga/lista/usuario/{id}(id=${usuario.id})}">Vagas</a>
+								</li>
+
+								<li th:if="${usuario.id == 1}">
+										<a th:href="@{/vaga/cadastrar/usuario/{id}(id=${usuario.id})}">Cadastrar Vagas</a>
+								</li>
+						</ul>
+				</nav>
+		</header>
+
+		<div id="lista-vagas">
+				<div class="vaga wise-background" th:each="vaga : ${vagas}" onclick="this.classList.toggle('ativa')">
+						<h2 th:text="${vaga.titulo}"></h2>
+						<p th:text="${vaga.empresa}"></p>
+						<div class="detalhes">
+								<p><strong>Descrição:</strong> <span th:text=" ${vaga.descricao}"></span></p>
+								<p><strong>Benefícios:</strong> <span th:text="${vaga.beneficios}"></span></p>
+								<p><strong>Salário:</strong> R$ <span th:text="${vaga.salario}"></span></p>
+						</div>
+				</div>
+		</div>
+</body>
+</html>

@@ -1,0 +1,38 @@
+server:
+  port: 8091
+
+spring:
+  application:
+    name: ms-usuario
+  datasource:
+    url: jdbc:h2:mem:ms_usuario_test;MODE=MySQL;DB_CLOSE_DELAY=-1;DB_CLOSE_ON_EXIT=FALSE
+    username: sa
+    password:
+    driver-class-name: org.h2.Driver
+  jpa:
+    hibernate:
+      ddl-auto: create-drop
+    show-sql: true
+    database-platform: org.hibernate.dialect.H2Dialect
+  flyway:
+    enabled: false
+  security:
+    oauth2:
+      resourceserver:
+        jwt:
+          issuer-uri: ${KEYCLOAK_ISSUER_URI:http://localhost:8093/realms/curriculum}
+          jwk-set-uri: ${KEYCLOAK_JWK_SET_URI:http://localhost:8093/realms/curriculum/protocol/openid-connect/certs}
+
+keycloak:
+  server-url: ${KEYCLOAK_SERVER_URL:http://localhost:8093}
+  realm: ${KEYCLOAK_REALM:curriculum}
+  # Client com client_credentials — gerencia usuários via Admin API
+  admin-client-id: ${KEYCLOAK_ADMIN_CLIENT_ID:curriculum-app-admin}
+  admin-client-secret: ${KEYCLOAK_ADMIN_CLIENT_SECRET:cJLeqvJ5KE8OUCPIUuIhULXmx3CCdwGO}
+  # Client público — autentica usuários via password grant
+  user-client-id: ${KEYCLOAK_USER_CLIENT_ID:curriculum-app-user}
+
+logging:
+  level:
+    br.com.senac.msusuario: DEBUG
+    org.springframework.security: INFO
